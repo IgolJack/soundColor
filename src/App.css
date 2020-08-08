@@ -1,0 +1,36 @@
+.App{
+
+}
+
+.nameOfStudent{
+ text-align: left;
+}
+
+.studentBlock{
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-block: 20px;
+    margin: 1.5vh;
+    border: solid black 1px;
+}
+
+
+
+.o1{
+    background-color: brown;
+}
+.o2{
+    background-color: blue;
+}
+.o3{
+    background-color: darkorange;
+}
+.o4{
+    background-color: darkgreen;
+}
+.o5{
+    background-color: gold;
+}
+.o6{
+    background-color: cyan;
+}
