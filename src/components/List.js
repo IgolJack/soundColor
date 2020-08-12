@@ -18,6 +18,7 @@ var bgColors = {
 }
 
 var colorPick
+var person
 
 class List extends React.Component{
     state = {
@@ -35,7 +36,13 @@ class List extends React.Component{
                 const students = []
                 snapshot.forEach( doc => {
                     const data = doc.data()
+                    
+                    person=doc.data()
+                    person.id=doc.id
+                    console.log(person.id)
+
                     students.push(data)
+                    console.log(doc.id)
                 })
                 students.sort(function(a, b){
                     var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase()
@@ -73,6 +80,7 @@ class List extends React.Component{
     }
 
     render(){
+        
         return(
             <div className="App">
                 <h1>Студенты</h1>
@@ -156,10 +164,15 @@ class List extends React.Component{
                         if (student.lvl == 3){
                             colorPick = bgColors.Cyan
                         }
+                        console.log(student.name)
                         return (
                             <div className="studentBlock" style={{borderColor: colorPick}}>
                                 <div className = "nameOfStudent" >
-                                    <h4>{student.name}</h4>
+                                    <h4>
+                                        <NavLink to={`/list/${person.id}`}>
+                                            {student.name}
+                                        </NavLink>
+                                    </h4>
                                 </div>
                                 <div>
                                     <p>Уровень - {student.lvl}</p>

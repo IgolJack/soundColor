@@ -12,6 +12,7 @@ import {
 import List from './components/List'
 import NotFound from './components/NotFound'
 import Home from './components/Home'
+import InfoStudent from './components/InfoStudent'
 
 
 class App extends React.Component{
@@ -23,6 +24,7 @@ class App extends React.Component{
                     <Switch>
                         <Route exact path="/" component={Home} />
                         <Route exact path="/list" component={List} />
+                        <Route exact path='/list/:studentId' component={InfoStudent} />
                         <Route component={NotFound} />
                     </Switch>
                 </Router>

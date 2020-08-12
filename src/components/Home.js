@@ -11,9 +11,9 @@ class Home extends React.Component{
         return(
             <div>
                 
-                <button>
+                <h1>
                     <NavLink to="/list">Список студентов</NavLink>
-                </button>
+                </h1>
             </div>
 
         )
