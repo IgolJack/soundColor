@@ -1,22 +1,24 @@
 import React from 'react'
-import Button from "@material-ui/core/Button";
+import Calendar from './calendar/calendar'
 import {
+    BrowserRouter as Router,
+    Route,
+    Switch,
     NavLink
 } from 'react-router-dom'
+import Button from "@material-ui/core/Button";
 
-class NotFound extends React.Component{
-    
-    render(){
+export default class CalendarPage extends React.Component{
+    render() {
         return(
-            <div>
-                <p>СТРАНИЦА НЕ НАЙДЕНА</p>
+            <div className="CalendarPage">
                 <Button  variant="contained">
                     <NavLink to="/">Вернуться на главную страницу</NavLink>
                 </Button>
+                <Calendar/>
             </div>
+
 
         )
     }
 }
-
-export default NotFound
