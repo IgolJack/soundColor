@@ -1,6 +1,6 @@
 import React from 'react'
 import './App.css';
-
+import CalendarPage from './components/CalendarPage'
 import {
     BrowserRouter as Router,
     Route,
@@ -23,6 +23,7 @@ class App extends React.Component{
                 <Router>
                     <Switch>
                         <Route exact path="/" component={Home} />
+                        <Route exact path="/CalendarPage" component={CalendarPage} />
                         <Route exact path="/list" component={List} />
                         <Route exact path='/list/:studentId' component={InfoStudent} />
                         <Route component={NotFound} />

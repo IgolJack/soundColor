@@ -84,9 +84,9 @@ class List extends React.Component{
         return(
             <div className="App">
                 <h1>Студенты</h1>
-                <button>
+                <Button  variant="contained">
                     <NavLink to="/">Вернуться на главную страницу</NavLink>
-                </button>
+                </Button>
                 <div>
                     <form action="" className="inputForm">
                         <p>
@@ -144,26 +144,15 @@ class List extends React.Component{
                                 onChange={this.onInputChange}
                             />
                         </p>
-
-                <Button variant="contained" onClick={this.addNewStudent}>Добавить студента</Button>
-                </form>
-
+                        <Button variant="contained" onClick={this.addNewStudent}>Добавить студента</Button>
+                     </form>
                 </div>
                 {
                     this.state.students &&
                     this.state.students.map( student => {
-                        // eslint-disable-next-line
-                        if (student.lvl == 1 ){
-                            colorPick = bgColors.Red
-                        }
-                        // eslint-disable-next-line
-                        if (student.lvl == 2){
-                            colorPick = bgColors.Yellow
-                        }
-                        // eslint-disable-next-line
-                        if (student.lvl == 3){
-                            colorPick = bgColors.Cyan
-                        }
+                         (student.lvl == 1 ) ? colorPick = bgColors.Red :
+                         (student.lvl == 2 ) ? colorPick = bgColors.Yellow :
+                         (student.lvl == 3 ) ? colorPick = bgColors.Cyan :
                         console.log(student.name)
                         return (
                             <div className="studentBlock" style={{borderColor: colorPick}}>
