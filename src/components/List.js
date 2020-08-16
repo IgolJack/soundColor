@@ -18,33 +18,21 @@ var bgColors = {
 }
 
 var colorPick
-var person
+var lastId
+
 
 class List extends React.Component{
+    
     state = {
         students: null,
         name: "",
         lvl: 0,
-        missed: 0
+        missed: 0,
+        id: ""
     }
 
-    componentDidMount(){
-
-        db.collection('students')
-            .get()
-            .then( snapshot =>{
-                const students = []
-                snapshot.forEach( doc => {
-                    const data = doc.data()
-                    
-                    person=doc.data()
-                    person.id=doc.id
-                    console.log(person.id)
-
-                    students.push(data)
-                    console.log(doc.id)
-                })
-                students.sort(function(a, b){
+    sortStudents(students) {
+        students.sort(function(a, b){
                     var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase()
                     if (nameA < nameB) //сортируем строки по возрастанию
                         return -1
@@ -52,6 +40,24 @@ class List extends React.Component{
                         return 1
                     return 0 // Никакой сортировки
                 })
+    }
+    
+    componentDidMount(){
+
+        db.collection('students')
+            .get()
+            .then( snapshot =>{
+                const students = []
+                snapshot.forEach( doc => {
+                    const data = doc.data()                                   
+                    lastId=doc.id
+                    //console.log("lastId: ",lastId)
+                    students.push(data)
+                    //console.log(doc.id)
+                })
+                //console.log("lastId: ",lastId)
+                //lastId=Number(lastId)                
+                this.sortStudents(students)
                 this.setState({ students: students })
                 console.log(snapshot)
             })
@@ -61,13 +67,19 @@ class List extends React.Component{
 
     addNewStudent = () => {
         if ((this.state.name != null & this.state.lvl != null) & this.state.missed != null){
+            lastId=Number(lastId)
+            lastId+=1
+            lastId=String(lastId)
             db.collection('students')
-                .add({
+                .doc(lastId)
+                .set({
+                    id: lastId,
                     name: this.state.name,
                     lvl: this.state.lvl,
                     missed: this.state.missed
                 });
             this.componentDidMount()
+            
         }
 
     }
@@ -79,16 +91,50 @@ class List extends React.Component{
         this.setState({ [name]: value });
     }
 
-    render(){
-        
+    outputTextField(id, label, placeholder, className, type, name, value){
         return(
+            <p>
+                            <TextField
+                                id={`${id}`}
+                                label={`${label}`}
+                                style={{ margin: 8 }}
+                                placeholder={`${placeholder}`}
+                                fullWidth
+                                margin="normal"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                className={`input${className}`}
+                                required
+                                type={`${type}`}
+                                name={`${name}`}
+                                value={value}
+                                onChange={this.onInputChange}
+                            /></p>
+        )
+    }
+
+    render() {
+
+        return (
             <div className="App">
                 <h1>Студенты</h1>
-                <button>
+                <Button variant="contained">
                     <NavLink to="/">Вернуться на главную страницу</NavLink>
-                </button>
+                </Button>
                 <div>
                     <form action="" className="inputForm">
+                        
+                        <this.outputTextField 
+                            id="standard-full-width"
+                            label="ФИО"
+                            placeholder="Иванов Иван Иванович"
+                            className="Name"
+                            type="text"
+                            name="name"
+                            value={this.state.name}
+                        />
+
                         <p>
                             <TextField
                                 id="standard-full-width"
@@ -145,31 +191,31 @@ class List extends React.Component{
                             />
                         </p>
 
-                <Button variant="contained" onClick={this.addNewStudent}>Добавить студента</Button>
-                </form>
+                        <Button variant="contained" onClick={this.addNewStudent}>Добавить студента</Button>
+                    </form>
 
                 </div>
                 {
                     this.state.students &&
-                    this.state.students.map( student => {
+                    this.state.students.map(student => {
                         // eslint-disable-next-line
-                        if (student.lvl == 1 ){
+                        if (student.lvl == 1) {
                             colorPick = bgColors.Red
                         }
                         // eslint-disable-next-line
-                        if (student.lvl == 2){
+                        if (student.lvl == 2) {
                             colorPick = bgColors.Yellow
                         }
                         // eslint-disable-next-line
-                        if (student.lvl == 3){
+                        if (student.lvl == 3) {
                             colorPick = bgColors.Cyan
                         }
                         console.log(student.name)
                         return (
-                            <div className="studentBlock" style={{borderColor: colorPick}}>
-                                <div className = "nameOfStudent" >
-                                    <h4>
-                                        <NavLink to={`/list/${person.id}`}>
+                            <div className="studentBlock" style={{ borderColor: colorPick }}>
+                                <div className="nameOfStudent" >
+                                    <h4 key={student.id}>
+                                        <NavLink to={`/list/${student.id}`}>
                                             {student.name}
                                         </NavLink>
                                     </h4>
@@ -178,13 +224,13 @@ class List extends React.Component{
                                     <p>Уровень - {student.lvl}</p>
                                 </div>
                                 <div>
-                                    <p>Пропусков- {student.missed}</p>
+                                    <p>Пропусков - {student.missed}</p>
                                 </div>
                             </div>
                         )
                     })
                 }
-                </div>
+            </div>
 
 
         )
