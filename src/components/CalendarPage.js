@@ -1,18 +1,16 @@
 import React from 'react'
 import Calendar from './calendar/calendar'
 import {
-    BrowserRouter as Router,
-    Route,
-    Switch,
+    BrowserRouter,
     NavLink
 } from 'react-router-dom'
 import Button from "@material-ui/core/Button";
 
-export default class CalendarPage extends React.Component{
+export default class CalendarPage extends React.Component {
     render() {
-        return(
+        return (
             <div className="CalendarPage">
-                <Button  variant="contained">
+                <Button variant="contained">
                     <NavLink to="/">Вернуться на главную страницу</NavLink>
                 </Button>
                 <Calendar/>
