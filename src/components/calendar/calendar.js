@@ -26,7 +26,7 @@ class Calendar extends React.Component {
             //Важно - https://fullcalendar.io/docs/event-source-object
 
             <FullCalendar
-                plugins={[ dayGridPlugin ]}
+                plugins={[dayGridPlugin]}
                 eventClick={clickEvent}
                 initialView="dayGridMonth"
                 events={[

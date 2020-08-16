@@ -1,5 +1,5 @@
 import React from 'react'
-import { db } from './services/firebase'
+import {db} from './services/firebase'
 import TextField from '@material-ui/core/TextField';
 import './List.css';
 import Button from '@material-ui/core/Button';
@@ -20,7 +20,7 @@ var bgColors = {
 var colorPick
 var person
 
-class List extends React.Component{
+class List extends React.Component {
     state = {
         students: null,
         name: "",
@@ -28,39 +28,39 @@ class List extends React.Component{
         missed: 0
     }
 
-    componentDidMount(){
+    componentDidMount() {
 
         db.collection('students')
             .get()
-            .then( snapshot =>{
+            .then(snapshot => {
                 const students = []
-                snapshot.forEach( doc => {
+                snapshot.forEach(doc => {
                     const data = doc.data()
-                    
-                    person=doc.data()
-                    person.id=doc.id
+
+                    person = doc.data()
+                    person.id = doc.id
                     console.log(person.id)
 
                     students.push(data)
                     console.log(doc.id)
                 })
-                students.sort(function(a, b){
-                    var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase()
+                students.sort(function (a, b) {
+                    var nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase()
                     if (nameA < nameB) //сортируем строки по возрастанию
                         return -1
                     if (nameA > nameB)
                         return 1
                     return 0 // Никакой сортировки
                 })
-                this.setState({ students: students })
+                this.setState({students: students})
                 console.log(snapshot)
             })
-            .catch( error => console.log(error))
+            .catch(error => console.log(error))
 
     }
 
     addNewStudent = () => {
-        if ((this.state.name != null & this.state.lvl != null) & this.state.missed != null){
+        if ((this.state.name != null & this.state.lvl != null) & this.state.missed != null) {
             db.collection('students')
                 .add({
                     name: this.state.name,
@@ -76,15 +76,15 @@ class List extends React.Component{
         const name = event.target.name;
         const value = event.target.value;
 
-        this.setState({ [name]: value });
+        this.setState({[name]: value});
     }
 
-    render(){
-        
-        return(
+    render() {
+
+        return (
             <div className="App">
                 <h1>Студенты</h1>
-                <Button  variant="contained">
+                <Button variant="contained">
                     <NavLink to="/">Вернуться на главную страницу</NavLink>
                 </Button>
                 <div>
@@ -93,7 +93,7 @@ class List extends React.Component{
                             <TextField
                                 id="standard-full-width"
                                 label="ФИО"
-                                style={{ margin: 8 }}
+                                style={{margin: 8}}
                                 placeholder="Иванов Иван Иванович"
                                 fullWidth
                                 margin="normal"
@@ -112,7 +112,7 @@ class List extends React.Component{
                                 id="standard-full-width"
                                 label="Уровень"
                                 className="inputLvl"
-                                style={{ margin: 8 }}
+                                style={{margin: 8}}
                                 placeholder="Уровень"
                                 fullWidth
                                 margin="normal"
@@ -130,7 +130,7 @@ class List extends React.Component{
                                 id="standard-full-width"
                                 label="Пропусков"
                                 className="inputMiss"
-                                style={{ margin: 8 }}
+                                style={{margin: 8}}
                                 fullWidth
                                 margin="normal"
                                 InputLabelProps={{
@@ -145,18 +145,18 @@ class List extends React.Component{
                             />
                         </p>
                         <Button variant="contained" onClick={this.addNewStudent}>Добавить студента</Button>
-                     </form>
+                    </form>
                 </div>
                 {
                     this.state.students &&
-                    this.state.students.map( student => {
-                         (student.lvl == 1 ) ? colorPick = bgColors.Red :
-                         (student.lvl == 2 ) ? colorPick = bgColors.Yellow :
-                         (student.lvl == 3 ) ? colorPick = bgColors.Cyan :
-                        console.log(student.name)
+                    this.state.students.map(student => {
+                        (student.lvl == 1) ? colorPick = bgColors.Red :
+                            (student.lvl == 2) ? colorPick = bgColors.Yellow :
+                                (student.lvl == 3) ? colorPick = bgColors.Cyan :
+                                    console.log(student.name)
                         return (
                             <div className="studentBlock" style={{borderColor: colorPick}}>
-                                <div className = "nameOfStudent" >
+                                <div className="nameOfStudent">
                                     <h4>
                                         <NavLink to={`/list/${person.id}`}>
                                             {student.name}
@@ -173,7 +173,7 @@ class List extends React.Component{
                         )
                     })
                 }
-                </div>
+            </div>
 
 
         )
