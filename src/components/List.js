@@ -29,7 +29,6 @@ class List extends React.Component {
     }
 
     componentDidMount() {
-
         db.collection('students')
             .get()
             .then(snapshot => {
@@ -56,7 +55,6 @@ class List extends React.Component {
                 console.log(snapshot)
             })
             .catch(error => console.log(error))
-
     }
 
     addNewStudent = () => {
@@ -69,7 +67,6 @@ class List extends React.Component {
                 });
             this.componentDidMount()
         }
-
     }
 
     onInputChange = event => {

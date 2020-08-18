@@ -1,5 +1,6 @@
 import React from 'react'
 import Calendar from './calendar/calendar'
+
 import {
     BrowserRouter,
     NavLink
@@ -14,9 +15,8 @@ export default class CalendarPage extends React.Component {
                     <NavLink to="/">Вернуться на главную страницу</NavLink>
                 </Button>
                 <Calendar/>
+
             </div>
-
-
         )
     }
 }
