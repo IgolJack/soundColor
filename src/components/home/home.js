@@ -10,8 +10,6 @@ export default class Home extends Component {
             <Link className='SectionNavigation-Item Section' to='/profile'>
                 <span className='Section-Title'>{title}</span>
             </Link>
-
-
         )
     }
 }
