@@ -91,31 +91,30 @@ class List extends React.Component{
         this.setState({ [name]: value });
     }
 
-    outputTextField(id, label, placeholder, className, type, name, value){
+    outputTextField = (props) => {
         return(
             <p>
                             <TextField
-                                id={`${id}`}
-                                label={`${label}`}
+                                id="standard-full-width"
+                                label={`${props.label}`}
                                 style={{ margin: 8 }}
-                                placeholder={`${placeholder}`}
+                                placeholder={`${props.placeholder}`}
                                 fullWidth
                                 margin="normal"
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
-                                className={`input${className}`}
+                                className={`input${props.className}`}
                                 required
-                                type={`${type}`}
-                                name={`${name}`}
-                                value={value}
+                                type={`${props.type}`}
+                                name={`${props.name}`}
+                                value={props.value}
                                 onChange={this.onInputChange}
                             /></p>
         )
     }
 
     render() {
-
         return (
             <div className="App">
                 <h1>Студенты</h1>
@@ -125,8 +124,7 @@ class List extends React.Component{
                 <div>
                     <form action="" className="inputForm">
                         
-                        <this.outputTextField 
-                            id="standard-full-width"
+                        <this.outputTextField                             
                             label="ФИО"
                             placeholder="Иванов Иван Иванович"
                             className="Name"
@@ -135,62 +133,24 @@ class List extends React.Component{
                             value={this.state.name}
                         />
 
-                        <p>
-                            <TextField
-                                id="standard-full-width"
-                                label="ФИО"
-                                style={{ margin: 8 }}
-                                placeholder="Иванов Иван Иванович"
-                                fullWidth
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                className="inputName"
-                                required
-                                type="text"
-                                name="name"
-                                value={this.state.name}
-                                onChange={this.onInputChange}
-                            /></p>
-                        <p>
-                            <TextField
-                                id="standard-full-width"
-                                label="Уровень"
-                                className="inputLvl"
-                                style={{ margin: 8 }}
-                                placeholder="Уровень"
-                                fullWidth
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                required
-                                type="number"
-                                name="lvl"
-                                value={this.state.lvl}
-                                onChange={this.onInputChange}
-                            /></p>
-                        <p>
-                            <TextField
-                                id="standard-full-width"
-                                label="Пропусков"
-                                className="inputMiss"
-                                style={{ margin: 8 }}
-                                fullWidth
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                placeholder="Пропусков"
-                                required
-                                type="number"
-                                name="missed"
-                                value={this.state.missed}
-                                onChange={this.onInputChange}
-                            />
-                        </p>
+                        <this.outputTextField
+                            label="Уровень"
+                            placeholder="Уровень"
+                            className="Lvl"
+                            type="number"
+                            name="lvl"
+                            value={this.state.lvl}
+                        />
 
+                        <this.outputTextField
+                            label="Пропусков"
+                            placeholder="Пропусков"
+                            className="inputMiss"
+                            type="number"
+                            name="missed"
+                            value={this.state.missed}
+                        />
+                       
                         <Button variant="contained" onClick={this.addNewStudent}>Добавить студента</Button>
                     </form>
 
@@ -210,7 +170,6 @@ class List extends React.Component{
                         if (student.lvl == 3) {
                             colorPick = bgColors.Cyan
                         }
-                        console.log(student.name)
                         return (
                             <div className="studentBlock" style={{ borderColor: colorPick }}>
                                 <div className="nameOfStudent" >
