@@ -4,6 +4,8 @@ import TextField from '@material-ui/core/TextField';
 import './List.css';
 import Button from '@material-ui/core/Button';
 
+
+
 import {
     NavLink
 } from 'react-router-dom'
@@ -23,14 +25,20 @@ var lastId
 
 class List extends React.Component{
     
+        
     state = {
         students: null,
         name: "",
         lvl: 0,
         missed: 0,
-        id: ""
+        id: "",
+        course: "Первый курс"
     }
 
+
+
+    
+    
     sortStudents(students) {
         students.sort(function(a, b){
                     var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase()
@@ -40,33 +48,34 @@ class List extends React.Component{
                         return 1
                     return 0 // Никакой сортировки
                 })
-    }
+    }   
     
-    componentDidMount(){
 
+    componentDidMount(){        
         db.collection('students')
-            .get()
-            .then( snapshot =>{
-                const students = []
-                snapshot.forEach( doc => {
-                    const data = doc.data()                                   
-                    lastId=doc.id
-                    //console.log("lastId: ",lastId)
-                    students.push(data)
-                    //console.log(doc.id)
-                })
-                //console.log("lastId: ",lastId)
-                //lastId=Number(lastId)                
-                this.sortStudents(students)
-                this.setState({ students: students })
-                console.log(snapshot)
-            })
-            .catch( error => console.log(error))
-
+        .get()
+        .then( snapshot =>{
+            const students = []
+            snapshot.forEach( doc => {
+                const data = doc.data()                                   
+                lastId=doc.id                    
+                console.log(lastId)
+                students.push(data)
+                //console.log(doc.id)
+                
+            })                
+            console.log("lastId: ",lastId)
+            //lastId=Number(lastId)                
+            this.sortStudents(students)
+            this.setState({ students: students })
+            console.log(snapshot)
+        })
+        .catch( error => console.log(error))        
     }
 
     addNewStudent = () => {
         if ((this.state.name != null & this.state.lvl != null) & this.state.missed != null){
+            //console.log(lastId)
             lastId=Number(lastId)
             lastId+=1
             lastId=String(lastId)
@@ -75,11 +84,15 @@ class List extends React.Component{
                 .set({
                     id: lastId,
                     name: this.state.name,
+                    course: this.state.course,
                     lvl: this.state.lvl,
                     missed: this.state.missed
                 });
             this.componentDidMount()
-            
+            this.setState({ name: "" })
+            this.setState({ course: "Первый курс" })
+            this.setState({ lvl: 0 })
+            this.setState({ missed: 0 })
         }
 
     }
@@ -87,9 +100,11 @@ class List extends React.Component{
     onInputChange = event => {
         const name = event.target.name;
         const value = event.target.value;
-
+        
         this.setState({ [name]: value });
     }
+
+    
 
     outputTextField = (props) => {
         return(
@@ -115,6 +130,7 @@ class List extends React.Component{
     }
 
     render() {
+        console.log(this.state.course)
         return (
             <div className="App">
                 <h1>Студенты</h1>
@@ -124,6 +140,17 @@ class List extends React.Component{
                 <div>
                     <form action="" className="inputForm">
                         
+                        <p>
+                            Выберите курс:
+                            <select name="course" value={this.state.course} onChange={this.onInputChange}>
+                                <option value="Первый курс">Первый курс</option>
+                                <option value="Второй курс">Второй курс</option>
+                                <option value="Третий курс">Третий курс</option>
+                                <option value="Четвертый курс">Четвертый курс</option>
+                                <option value="Пятый курс">Пятый курс</option>
+                            </select>                            
+                        </p>
+
                         <this.outputTextField                             
                             label="ФИО"
                             placeholder="Иванов Иван Иванович"
@@ -155,6 +182,9 @@ class List extends React.Component{
                     </form>
 
                 </div>
+
+                
+
                 {
                     this.state.students &&
                     this.state.students.map(student => {
@@ -180,6 +210,9 @@ class List extends React.Component{
                                     </h4>
                                 </div>
                                 <div>
+                                    <p>Курс - {student.course}</p>
+                                </div>
+                                <div>
                                     <p>Уровень - {student.lvl}</p>
                                 </div>
                                 <div>
@@ -189,6 +222,7 @@ class List extends React.Component{
                         )
                     })
                 }
+               
             </div>
 
 

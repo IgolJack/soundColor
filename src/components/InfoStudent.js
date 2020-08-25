@@ -2,22 +2,36 @@ import React from 'react'
 import { db, auth } from './services/firebase'
 import Button from '@material-ui/core/Button';
 import { NavLink } from 'react-router-dom'
-
+import EditDetails from './EditDetails'
 
 
 class InfoStudent extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      name: "",
+      lvl: 0,
+      missed: 0,
+      id: "",
+      course: "Первый курс"
+    }
 
-  state = {
-    person: null,
-    
+    this.componentDidMount = this.componentDidMount.bind(this)
+    this.outputInfo = this.outputInfo.bind(this)
   }
+  
   
   componentDidMount() {
     const { match: { params } } = this.props
     const { studentId } = params
     
+    this.setState({ id: studentId })
     var docRef = db.collection('students').doc(studentId)
 
+    this.getInfo(docRef)    
+  }
+
+  getInfo(docRef){
     docRef
     .get()
     .then(function (doc) {
@@ -27,10 +41,13 @@ class InfoStudent extends React.Component {
       }
     })
     .then( doc => {
-      const person = []
-      person.push(doc.data())               
-      this.setState({ person: person })
-      console.log(person)
+      const data=doc.data()
+      this.setState({
+        name: data.name,
+        lvl: data.lvl,
+        missed: data.missed,
+        course: data.course,
+      })
     })
     .catch(function (error) {
       console.log("Error getting document:", error);
@@ -40,6 +57,7 @@ class InfoStudent extends React.Component {
   outputButton() {
     return (
       <div>
+        
         <div style={{ margin: 12 }}>
           <Button variant="contained">
             <NavLink to="/list">Вернуться к списку студентов</NavLink>
@@ -54,36 +72,42 @@ class InfoStudent extends React.Component {
     )
   }
 
-  render() {
-    console.log(this.props)
-    const { match: { params } } = this.props;
-    const { studentId } = params
-    console.log(studentId) 
+  outputInfo(){
+    return(
+      <div>
+        <div>
+          <h4>
+            {this.state.name}
+          </h4>
+        </div>
+        <div>
+          <p>{this.state.course}</p>
+        </div>
+        <div>
+          <p>Уровень - {this.state.lvl}</p>
+        </div>
+        <div>
+          <p>Пропусков - {this.state.missed}</p>
+        </div>
+      </div>
+    )
+  }
 
+  render() {
     return (
       <div>
-        Работает! ({studentId})
-        {
-          this.state.person &&
-          this.state.person.map(person => {
-            //console.log(person.name)
-            return (
-              <div>
-                <div>
-                  <h4>
-                    {person.name}
-                  </h4>
-                </div>
-                <div>
-                  <p>Уровень - {person.lvl}</p>
-                </div>
-                <div>
-                  <p>Пропусков - {person.missed}</p>
-                </div>
-              </div>
-            )
-          })
-        }
+            <this.outputInfo />              
+        <div style={{ margin: 12 }}>
+          <EditDetails
+            name={this.state.name}
+            lvl={this.state.lvl}
+            missed={this.state.missed}
+            id={this.state.id}
+            course={this.state.course}
+            componentDidMount={this.componentDidMount}
+            outputInfo={this.outputInfo}
+          />          
+        </div>
         <this.outputButton />
       </div>
     )
