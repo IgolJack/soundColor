@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import {db} from "../services/firebase";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import { Link } from "react-router-dom";
+
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -13,6 +13,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import "@fullcalendar/core/main.css";
 import "@fullcalendar/daygrid/main.css";
 import "@fullcalendar/bootstrap/main.css";
+import {Link} from "react-router-dom";
 
 class Calendar extends React.Component{
     state = {
@@ -52,7 +53,6 @@ class Calendar extends React.Component{
                 snapshot.forEach(doc => {
                     const data = doc.data()
                     events.push(data)
-                    console.log(doc.id)
                 })
                 this.setState({events: events})
             })
@@ -62,12 +62,16 @@ class Calendar extends React.Component{
     EventDetail = ({ event, el }) => {
         // extendedProps is used to access additional event properties.
         const content = (
-            <a href={`/Calendar/${event.id}`}>
+
                 <div>
-                {event.title}
+                    <a href={`/Calendar/${event.id}`}>
+                        <span>
+                            {event.title}
+                        </span>
+                    </a>
                 <div>{event.extendedProps.description}</div>
                 </div>
-            </a>
+
         );
         ReactDOM.render(content, el);
         return el;
@@ -77,6 +81,9 @@ class Calendar extends React.Component{
         return (
             //Документация - https://fullcalendar.io/docs#toc.
             <div id="calendar" className="container" ref="calendar">
+                <div>
+                    <Link to={'/'}>Назад</Link>
+                </div>
                 <FullCalendar
                     defaultView="dayGridMonth"
                     plugins={[interactionPlugin, dayGridPlugin, bootstrapPlugin]}
@@ -88,7 +95,7 @@ class Calendar extends React.Component{
                 />
                 <div>
                     <form action="" className="inputForm">
-                        <p>
+                        <div>
                             <TextField
                                 id="id"
                                 label="id"
@@ -103,8 +110,8 @@ class Calendar extends React.Component{
                                 name="id"
                                 value={this.state.id}
                                 onChange={this.onInputChange}
-                            /></p>
-                        <p>
+                            /></div>
+                        <div>
                             <TextField
                                 id="title"
                                 label="title"
@@ -119,8 +126,8 @@ class Calendar extends React.Component{
                                 name="title"
                                 value={this.state.title}
                                 onChange={this.onInputChange}
-                            /></p>
-                        <p>
+                            /></div>
+                        <div>
                             <TextField
                                 id="start"
                                 label="start"
@@ -136,8 +143,8 @@ class Calendar extends React.Component{
                                 value={this.state.start}
                                 onChange={this.onInputChange}
                             />
-                        </p>
-                        <p>
+                        </div>
+                        <div>
                             <TextField
                                 id="end"
                                 label="end"
@@ -153,7 +160,7 @@ class Calendar extends React.Component{
                                 value={this.state.end}
                                 onChange={this.onInputChange}
                             />
-                        </p>
+                        </div>
                         <Button variant="contained" onClick={this.addNewEvent}>Добавить студента</Button>
                     </form>
                 </div>

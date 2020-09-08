@@ -147,8 +147,11 @@ class List extends React.Component {
                 {
                     this.state.students &&
                     this.state.students.map(student => {
+                        // eslint-disable-next-line
                         (student.lvl == 1) ? colorPick = bgColors.Red :
+                            // eslint-disable-next-line
                             (student.lvl == 2) ? colorPick = bgColors.Yellow :
+                                // eslint-disable-next-line
                                 (student.lvl == 3) ? colorPick = bgColors.Cyan :
                                     console.log(student.name)
                         return (
