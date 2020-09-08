@@ -1,5 +1,5 @@
 import React from 'react'
-import {db, auth} from '../services/firebase'
+import {db} from '../services/firebase'
 import {NavLink} from "react-router-dom";
 
 export default class InfoEvent extends React.Component{
@@ -21,8 +21,6 @@ componentDidMount() {
     const { eventId } = params
 
     this.setState({ id: eventId })
-    console.log(this.props.match.params.id);
-    console.log(eventId);
     const docRef = db.collection('eventsCalendar').doc(eventId);
     this.getInfo(docRef)
 }
@@ -56,11 +54,10 @@ return(
         <NavLink to={'/Calendar'}>
             <p>Назад!</p>
         </NavLink>
-        <p>{this.state.id}</p>
-        <p>{this.state.title}</p>
-        <p>{this.state.start}</p>
-        <p>{this.state.end}</p>
-
+        <p>ID = {this.state.id}</p>
+        <p>Название мероприятия = {this.state.title}</p>
+        <p>Время начала = {this.state.start}</p>
+        <p>Время конца = {this.state.end}</p>
 
     </div>
 )
