@@ -16,7 +16,7 @@ class Home extends React.Component {
                     </Button>
                     <br/>
                     <Button variant="contained">
-                        <NavLink to="/CalendarPage">Календарь </NavLink>
+                        <NavLink to="/Calendar">Календарь </NavLink>
                     </Button>
                 </h1>
             </div>

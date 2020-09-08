@@ -1,14 +1,27 @@
 import React from 'react'
-import FullCalendar from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
+import ReactDOM from "react-dom";
 import {db} from "../services/firebase";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import { Link } from "react-router-dom";
 
-function clickEvent() {
-}
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import bootstrapPlugin from "@fullcalendar/bootstrap";
+import interactionPlugin from "@fullcalendar/interaction";
+
+import "@fullcalendar/core/main.css";
+import "@fullcalendar/daygrid/main.css";
+import "@fullcalendar/bootstrap/main.css";
 
 class Calendar extends React.Component{
+    state = {
+        id: "",
+        title: "",
+        start: "",
+        end: "",
+        url: ""
+    }
     constructor(props) {
         super(props);
         this.state = {
@@ -26,11 +39,11 @@ class Calendar extends React.Component{
                 id: this.state.id,
                 title: this.state.title,
                 start: this.state.start,
-                end: this.state.end
+                end: this.state.end,
+                url: this.state.url
             })
         this.componentDidMount()
     }
-
     componentDidMount() {
         db.collection('eventsCalendar')
             .get()
@@ -42,18 +55,37 @@ class Calendar extends React.Component{
                     console.log(doc.id)
                 })
                 this.setState({events: events})
-                console.log(this.state.events)
             })
             .catch(error => console.log(error))
     }
 
+    EventDetail = ({ event, el }) => {
+        // extendedProps is used to access additional event properties.
+        const content = (
+            <a href={`/Calendar/${event.id}`}>
+                <div>
+                {event.title}
+                <div>{event.extendedProps.description}</div>
+                </div>
+            </a>
+        );
+        ReactDOM.render(content, el);
+        return el;
+    }
+
     render() {
         return (
-            //React https://fullcalendar.io/docs/react
             //Документация - https://fullcalendar.io/docs#toc.
-            //Важно - https://fullcalendar.io/docs/event-source-object
-            <div>
-            <FullCalendar plugins={[dayGridPlugin]} eventClick={clickEvent} initialView="dayGridMonth" events={this.state.events} color='yellow'/>
+            <div id="calendar" className="container" ref="calendar">
+                <FullCalendar
+                    defaultView="dayGridMonth"
+                    plugins={[interactionPlugin, dayGridPlugin, bootstrapPlugin]}
+                    themeSystem="bootstrap"
+                    weekends={false}
+                    displayEventTime={true}
+                    events={this.state.events}
+                    eventRender={this.EventDetail}
+                />
                 <div>
                     <form action="" className="inputForm">
                         <p>
@@ -128,7 +160,13 @@ class Calendar extends React.Component{
             </div>
         )
     }
+
+
+
 }
+
+//<NavLink to={`/CalendarPage/${Calendar.id}`}> </NavLink>
+
 
 
 export default Calendar
