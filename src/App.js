@@ -1,13 +1,13 @@
 import React from 'react'
 import './App.css';
-import CalendarPage from './components/CalendarPage'
 import {BrowserRouter as Router} from 'react-router-dom'
 import {Route, Switch, NavLink} from 'react-router-dom'
-import InfoEvents from "./components/calendar/infoEvent";
+import InfoEvent from "./components/calendar/infoEvent";
 import List from './components/List'
 import NotFound from './components/NotFound'
 import Home from './components/Home'
 import InfoStudent from './components/InfoStudent'
+import Calendar from './components/calendar/calendar'
 
 
 class App extends React.Component {
@@ -18,10 +18,10 @@ class App extends React.Component {
                 <Router>
                     <Switch>
                         <Route exact path="/" component={Home}/>
-                        <Route exact path="/CalendarPage" component={CalendarPage}/>
+                        <Route exact path="/Calendar" component={Calendar}/>
                         <Route exact path="/list" component={List}/>
                         <Route exact path='/list/:studentId' component={InfoStudent}/>
-                        <Route exact path='/CalendarPage/:eventId' component={InfoEvents}/>
+                        <Route exact path='/Calendar/:eventId' component={InfoEvent}/>
                         <Route component={NotFound}/>
                     </Switch>
                 </Router>
