@@ -1,6 +1,6 @@
 import React from 'react'
 import { db, auth } from './services/firebase'
-import Button from '@material-ui/core/Button';
+import Button from '@material-ui/core/Button'
 import { NavLink } from 'react-router-dom'
 import EditDetails from './EditDetails'
 
@@ -75,9 +75,21 @@ class InfoStudent extends React.Component {
   outputInfo(){
     return(
       <div>
-        <div>
-          <h4>
+        <div style={{ float: "right" }}>
+          <EditDetails
+            name={this.state.name}
+            lvl={this.state.lvl}
+            missed={this.state.missed}
+            id={this.state.id}
+            course={this.state.course}
+            componentDidMount={this.componentDidMount}
+            outputInfo={this.outputInfo}
+          />
+        </div>
+        <div style={{ paddingLeft: 48, marginTop: 21, marginBottom: 10 }}>
+          <h4 >
             {this.state.name}
+
           </h4>
         </div>
         <div>
@@ -96,18 +108,7 @@ class InfoStudent extends React.Component {
   render() {
     return (
       <div>
-            <this.outputInfo />              
-        <div style={{ margin: 12 }}>
-          <EditDetails
-            name={this.state.name}
-            lvl={this.state.lvl}
-            missed={this.state.missed}
-            id={this.state.id}
-            course={this.state.course}
-            componentDidMount={this.componentDidMount}
-            outputInfo={this.outputInfo}
-          />          
-        </div>
+        <this.outputInfo />
         <this.outputButton />
       </div>
     )

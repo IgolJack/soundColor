@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { db } from './services/firebase'
-
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -11,12 +10,10 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
 
-import EditIcon from '@material-ui/icons/Edit';
+var LastId
 
-class EditDetails extends Component {
+class AddStudent extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -25,7 +22,8 @@ class EditDetails extends Component {
             missed: 0,
             id: "",
             course: "Первый курс",
-            open: false
+            open: false,
+            lastId: ""
   
         }
     }
@@ -33,18 +31,16 @@ class EditDetails extends Component {
 
     mapUserDetailToState = () => {
         this.setState({
-            id: this.props.id ? this.props.id : '',            
-            name: this.props.name ? this.props.name : '',
-            lvl: this.props.lvl ? this.props.lvl : 0,
-            missed: this.props.missed ? this.props.missed : 0,
-            course: this.props.course ? this.props.course : '',
+            lastId: this.props.lastId ? this.props.lastId : '',
             
         })
+        
     }
 
     handleOpen = () => {
         this.setState({ open: true })
         this.mapUserDetailToState()
+        console.log(this.state.lastId)
     }
 
     handleClose = () => {
@@ -62,19 +58,38 @@ class EditDetails extends Component {
         this.setState({ [name]: value });
     }
 
-    handleSubmit = () => {        
-        db.collection('students')
-            .doc(`${this.state.id}`)
-            .set({
-                id: this.state.id,
-                name: this.state.name,
-                course: this.state.course,
-                lvl: this.state.lvl,
-                missed: this.state.missed
-            });
+    addNewStudent = () => {
+        // console.log(this.state.name)
+        // console.log(this.state.course)
+        // console.log(this.state.lvl)
+        // console.log(this.state.missed)
         
+        if ((this.state.name != null && this.state.lvl != null) && this.state.missed != null){
+            //console.log(lastId)
+            var LastId = Number(this.props.lastId)
+            LastId+=1
+            LastId=String(LastId)
+            db.collection('students')
+                .doc(LastId)
+                .set({
+                    id: LastId,
+                    name: this.state.name,
+                    course: this.state.course,
+                    lvl: this.state.lvl,
+                    missed: this.state.missed
+                });
+            this.props.getStudents()
+            this.setState({ 
+                name: "",
+                course: "Первый курс",
+                lvl: 0,
+                missed: 0
+            })
+        } else {
+            console.log("Введите значение!!")
+        }
         this.handleClose()
-        this.props.componentDidMount()
+        this.props.getStudents()
         this.props.outputInfo()
     }
 
@@ -104,20 +119,16 @@ class EditDetails extends Component {
     render() {
         return (
             <div>
-                <Tooltip title="Редактировать">
-                    <IconButton aria-label="edit"  onClick={this.handleOpen}>
-                        <EditIcon />
-                    </IconButton>
-                </Tooltip>
+                <Button variant="contained" onClick={this.handleOpen}>Добавить студента</Button>
                 <Dialog 
                 open={this.state.open}
                 
                 fullWidth
                 maxWidth="sm">
-                    <DialogTitle>Редактирование данных</DialogTitle>
+                    <DialogTitle>Добавьте пользователя</DialogTitle>
                     <DialogContent>
                         <form>
-                        <p>
+                            <p>
                                 <FormControl
                                     required
                                     fullWidth
@@ -139,6 +150,8 @@ class EditDetails extends Component {
                                     </Select>
                                 </FormControl>
                             </p>
+                                                   
+                        
                         
                         <this.outputTextField                             
                             label="ФИО"
@@ -169,8 +182,8 @@ class EditDetails extends Component {
                         </form>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.handleClose}>Закрыть</Button>
-                        <Button onClick={this.handleSubmit}>Сохранить</Button>
+                        <Button variant="contained" onClick={this.handleClose}>Закрыть</Button>
+                        <Button variant="contained" onClick={this.addNewStudent}>Добавить</Button>
                     </DialogActions>
                 </Dialog>
             </div>
@@ -178,4 +191,4 @@ class EditDetails extends Component {
     }
 }
 
-export default EditDetails;
+export default AddStudent;

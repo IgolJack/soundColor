@@ -1,14 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { db } from './services/firebase'
-import TextField from '@material-ui/core/TextField';
+
 import './List.css';
+
 import Button from '@material-ui/core/Button';
 
-
+import AddStudent from './AddStudent'
+import CheckBox from './CheckBox'
+import DeleteStudent from './Warnings/DeleteStudent'
+import EditDetails from './EditDetails'
 
 import {
     NavLink
 } from 'react-router-dom'
+import { Checkbox } from '@material-ui/core';
 
 var bgColors = {
     "Default": "#81b71a",
@@ -19,26 +24,77 @@ var bgColors = {
     "Yellow": "#F6BB42",
 }
 
-var colorPick
-var lastId
-
+var colorPick = bgColors.Blue
+var prevBase = null
+var base = null
 
 class List extends React.Component{
-    
-        
-    state = {
-        students: null,
-        name: "",
-        lvl: 0,
-        missed: 0,
-        id: "",
-        course: "Первый курс"
+    constructor(props) {
+        super(props)
+        this.state = {
+            students: null,
+            
+            lastId: "",
+            filter: "",
+            filterName: "",
+            filterCourse: "",
+            filterLevel: ""
+        }
+
+        this.getStudents = this.getStudents.bind(this)
+        this.outputInfo = this.outputInfo.bind(this)
     }
+        
+    // filterStudents(filter, filterName) {              
+        
+        
+    //     if(filter === "" ){              
+    //         base = db.collection('students')
+    //         prevBase = base
+    //     } 
+    //     else if(filterName === "course" || filterName === "lvl"){
+            
+    //         base = prevBase
+    //         .where(`${filterName}`, "==", `${filter}`)
+    //         // prevBase = base
+             
+    //     }
+    //     else if(filterName === "missed") {
+            
+    //         base = db.collection('students')
+    //         .where(`${filterName}`, ">=", `${filter}`)
+    //         prevBase = base
+    //     }
+    //     this.getStudents(base)
 
+    // }
 
+    getStudents() {        
+        db.collection('students').get().then(snapshot => {
+            const students = []
+            var lastId = 0
+            snapshot.forEach(doc => {
+                const data = doc.data()
+                data.id = Number(data.id)
+                // console.log("data.id",data.id)
+                // console.log("lastId",lastId)
+                if (lastId < data.id) {
+                    lastId = doc.id
+                }
+                // console.log(lastId)
+                students.push(data)
+                //console.log(doc.id)                
+            })
+            // console.log("lastId: ",lastId)
+            //lastId=Number(lastId)                
+            this.sortStudents(students)
+            this.setState({ students: students, lastId: lastId })
+            // console.log("lastId: ", this.state.lastId)
+            console.log(snapshot)
+        })
+            .catch(error => console.log(error))
+    }  
 
-    
-    
     sortStudents(students) {
         students.sort(function(a, b){
                     var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase()
@@ -48,146 +104,40 @@ class List extends React.Component{
                         return 1
                     return 0 // Никакой сортировки
                 })
-    }   
-    
+    }     
 
-    componentDidMount(){        
-        db.collection('students')
-        .get()
-        .then( snapshot =>{
-            const students = []
-            snapshot.forEach( doc => {
-                const data = doc.data()                                   
-                lastId=doc.id                    
-                console.log(lastId)
-                students.push(data)
-                //console.log(doc.id)
-                
-            })                
-            console.log("lastId: ",lastId)
-            //lastId=Number(lastId)                
-            this.sortStudents(students)
-            this.setState({ students: students })
-            console.log(snapshot)
-        })
-        .catch( error => console.log(error))        
-    }
-
-    addNewStudent = () => {
-        if ((this.state.name != null & this.state.lvl != null) & this.state.missed != null){
-            //console.log(lastId)
-            lastId=Number(lastId)
-            lastId+=1
-            lastId=String(lastId)
-            db.collection('students')
-                .doc(lastId)
-                .set({
-                    id: lastId,
-                    name: this.state.name,
-                    course: this.state.course,
-                    lvl: this.state.lvl,
-                    missed: this.state.missed
-                });
-            this.componentDidMount()
-            this.setState({ name: "" })
-            this.setState({ course: "Первый курс" })
-            this.setState({ lvl: 0 })
-            this.setState({ missed: 0 })
-        }
-
+    componentDidMount() {
+        var filter = this.state.filter
+        var filterName = this.state.filterName
+        this.getStudents()
     }
 
     onInputChange = event => {
+        //console.log("onInputChange")
         const name = event.target.name;
         const value = event.target.value;
+
+        this.setState({ [name]: value});
+
+        //в итоге понять, можно ли сделать проще и менее костыльно
+        // if(name ==="filterCourse") {this.setState({filterName: "course"})}
+        // else if (name==="filterLevel") {this.setState({filterName: "lvl"})}
         
-        this.setState({ [name]: value });
+        // this.setState({ [name]: value, filter: value }, () => {
+        //     this.componentDidMount();
+        //   });
+        
+        
     }
-
     
-
-    outputTextField = (props) => {
-        return(
-            <p>
-                            <TextField
-                                id="standard-full-width"
-                                label={`${props.label}`}
-                                style={{ margin: 8 }}
-                                placeholder={`${props.placeholder}`}
-                                fullWidth
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                className={`input${props.className}`}
-                                required
-                                type={`${props.type}`}
-                                name={`${props.name}`}
-                                value={props.value}
-                                onChange={this.onInputChange}
-                            /></p>
-        )
-    }
-
-    render() {
-        console.log(this.state.course)
+    outputInfo = () => {
         return (
-            <div className="App">
-                <h1>Студенты</h1>
-                <Button variant="contained">
-                    <NavLink to="/">Вернуться на главную страницу</NavLink>
-                </Button>
-                <div>
-                    <form action="" className="inputForm">
-                        
-                        <p>
-                            Выберите курс:
-                            <select name="course" value={this.state.course} onChange={this.onInputChange}>
-                                <option value="Первый курс">Первый курс</option>
-                                <option value="Второй курс">Второй курс</option>
-                                <option value="Третий курс">Третий курс</option>
-                                <option value="Четвертый курс">Четвертый курс</option>
-                                <option value="Пятый курс">Пятый курс</option>
-                            </select>                            
-                        </p>
-
-                        <this.outputTextField                             
-                            label="ФИО"
-                            placeholder="Иванов Иван Иванович"
-                            className="Name"
-                            type="text"
-                            name="name"
-                            value={this.state.name}
-                        />
-
-                        <this.outputTextField
-                            label="Уровень"
-                            placeholder="Уровень"
-                            className="Lvl"
-                            type="number"
-                            name="lvl"
-                            value={this.state.lvl}
-                        />
-
-                        <this.outputTextField
-                            label="Пропусков"
-                            placeholder="Пропусков"
-                            className="inputMiss"
-                            type="number"
-                            name="missed"
-                            value={this.state.missed}
-                        />
-                       
-                        <Button variant="contained" onClick={this.addNewStudent}>Добавить студента</Button>
-                    </form>
-
-                </div>
-
-                
-
+            <div>
                 {
                     this.state.students &&
                     this.state.students.map(student => {
+                        colorPick = '#000000'
+
                         // eslint-disable-next-line
                         if (student.lvl == 1) {
                             colorPick = bgColors.Red
@@ -200,9 +150,28 @@ class List extends React.Component{
                         if (student.lvl == 3) {
                             colorPick = bgColors.Cyan
                         }
+
                         return (
                             <div className="studentBlock" style={{ borderColor: colorPick }}>
-                                <div className="nameOfStudent" >
+                                <div style={{ float: "right" }}>
+                                    <DeleteStudent
+                                        id={student.id}
+                                        getStudents={this.getStudents}
+                                        outputInfo={this.outputInfo}
+                                    />
+                                </div>
+                                <div style={{ float: "right" }}>
+                                    <EditDetails
+                                        name={student.name}
+                                        lvl={student.lvl}
+                                        missed={student.missed}
+                                        id={student.id}
+                                        course={student.course}
+                                        componentDidMount={this.getStudents}
+                                        outputInfo={this.outputInfo}
+                                    />
+                                </div>
+                                <div className="nameOfStudent" style={{ paddingLeft: 48*2 }}>
                                     <h4 key={student.id}>
                                         <NavLink to={`/list/${student.id}`}>
                                             {student.name}
@@ -222,9 +191,92 @@ class List extends React.Component{
                         )
                     })
                 }
-               
             </div>
+        )
+    }
 
+
+
+
+
+
+
+    render() {
+        // console.log(this.state.lastId)        
+        return (
+            <div className="App">
+                <h1>Студенты</h1>
+                <Button variant="contained">
+                    <NavLink to="/">Вернуться на главную страницу</NavLink>
+                </Button>
+                <div style={{ margin: 12 }}>
+                    <AddStudent 
+                        lastId={this.state.lastId}
+                        getStudents={this.getStudents}
+                        outputInfo={this.outputInfo}
+                    />
+                </div>
+
+
+                {/* <div>
+                    <h3>Фильтр</h3>
+                    <p>
+                        <FormControl
+                            fullWidth
+                            style={{ margin: 8 }}
+                        >
+                            <InputLabel id="demo-simple-select-label">Курс</InputLabel>
+                            <Select
+
+                                name="filterCourse"
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={this.state.filterCourse}
+                                onChange={this.onInputChange}
+                            >
+                                <MenuItem value="">Все курсы</MenuItem>
+                                <MenuItem value="Первый курс">Первый курс</MenuItem>
+                                <MenuItem value="Второй курс">Второй курс</MenuItem>
+                                <MenuItem value="Третий курс">Третий курс</MenuItem>
+                                <MenuItem value="Четвертый курс">Четвертый курс</MenuItem>
+                                <MenuItem value="Пятый курс">Пятый курс</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </p>
+                    <p>
+                        <FormControl
+                            fullWidth
+                            style={{ margin: 8 }}
+                        >
+                            <InputLabel id="demo-simple-select-label">Уровень</InputLabel>
+                            <Select
+
+                                name="filterLevel"
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={this.state.filterLevel}
+                                onChange={this.onInputChange}
+                            >
+                                <MenuItem value="">Все уровни</MenuItem>
+                                <MenuItem value="1">Первый уровень</MenuItem>
+                                <MenuItem value="2">Второй уровень</MenuItem>
+                                <MenuItem value="3">Третий уровень</MenuItem>
+                                <MenuItem value="4">Четвертый уровень</MenuItem>
+                                <MenuItem value="5">Пятый уровень</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </p>
+                </div> */}
+
+                {/* <div style={{ margin: 12 }}>
+                    <CheckBox
+                        handleFilters={filters => this.handleFilters(filters, "courses")}
+                    />
+                </div> */}
+
+                <this.outputInfo />
+                
+            </div>
 
         )
     }
