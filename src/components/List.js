@@ -4,11 +4,13 @@ import { db } from './services/firebase'
 import './List.css';
 
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
 import AddStudent from './AddStudent'
 import CheckBox from './CheckBox'
 import DeleteStudent from './Warnings/DeleteStudent'
 import EditDetails from './EditDetails'
+
 
 import {
     NavLink
@@ -33,6 +35,7 @@ class List extends React.Component{
         super(props)
         this.state = {
             students: null,
+            searchStudent: "",
             
             lastId: "",
             filter: "",
@@ -43,6 +46,7 @@ class List extends React.Component{
 
         this.getStudents = this.getStudents.bind(this)
         this.outputInfo = this.outputInfo.bind(this)
+        this.onInputChange = this.onInputChange.bind(this)
     }
         
     // filterStudents(filter, filterName) {              
@@ -70,7 +74,7 @@ class List extends React.Component{
     // }
 
     getStudents() {        
-        db.collection('students').get().then(snapshot => {
+        db.collection('students').orderBy('name').get().then(snapshot => {
             const students = []
             var lastId = 0
             snapshot.forEach(doc => {
@@ -87,24 +91,12 @@ class List extends React.Component{
             })
             // console.log("lastId: ",lastId)
             //lastId=Number(lastId)                
-            this.sortStudents(students)
             this.setState({ students: students, lastId: lastId })
             // console.log("lastId: ", this.state.lastId)
             console.log(snapshot)
         })
             .catch(error => console.log(error))
-    }  
-
-    sortStudents(students) {
-        students.sort(function(a, b){
-                    var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase()
-                    if (nameA < nameB) //сортируем строки по возрастанию
-                        return -1
-                    if (nameA > nameB)
-                        return 1
-                    return 0 // Никакой сортировки
-                })
-    }     
+    }        
 
     componentDidMount() {
         var filter = this.state.filter
@@ -113,12 +105,12 @@ class List extends React.Component{
     }
 
     onInputChange = event => {
-        //console.log("onInputChange")
+        console.log(event.target.value)
         const name = event.target.name;
         const value = event.target.value;
 
         this.setState({ [name]: value});
-
+        console.log(this.state.searchStudent)
         //в итоге понять, можно ли сделать проще и менее костыльно
         // if(name ==="filterCourse") {this.setState({filterName: "course"})}
         // else if (name==="filterLevel") {this.setState({filterName: "lvl"})}
@@ -130,12 +122,12 @@ class List extends React.Component{
         
     }
     
-    outputInfo = () => {
+    outputInfo = (props) => {
         return (
             <div>
                 {
-                    this.state.students &&
-                    this.state.students.map(student => {
+                    props.searchFilteredStudents &&
+                    props.searchFilteredStudents.map(student => {
                         colorPick = '#000000'
 
                         // eslint-disable-next-line
@@ -202,13 +194,18 @@ class List extends React.Component{
 
 
     render() {
+        let searchFilteredStudents = this.state.students && this.state.students.filter(student => {
+            return student.name.toLowerCase().includes(this.state.searchStudent)
+        })
+
+
         // console.log(this.state.lastId)        
         return (
             <div className="App">
                 <h1>Студенты</h1>
                 <Button variant="contained">
                     <NavLink to="/">Вернуться на главную страницу</NavLink>
-                </Button>
+                </Button>                
                 <div style={{ margin: 12 }}>
                     <AddStudent 
                         lastId={this.state.lastId}
@@ -216,7 +213,16 @@ class List extends React.Component{
                         outputInfo={this.outputInfo}
                     />
                 </div>
-
+                <div style={{ margin: 12 }}>
+                    <TextField
+                    id="outlined-basic"
+                    name="searchStudent"
+                    label="Найти студента"
+                    variant="outlined"
+                    size="small"
+                    onChange={this.onInputChange}
+                    />
+                </div>
 
                 {/* <div>
                     <h3>Фильтр</h3>
@@ -274,7 +280,7 @@ class List extends React.Component{
                     />
                 </div> */}
 
-                <this.outputInfo />
+                <this.outputInfo searchFilteredStudents={searchFilteredStudents}/>
                 
             </div>
 

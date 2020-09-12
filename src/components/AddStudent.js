@@ -11,6 +11,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
+
+
 var LastId
 
 class AddStudent extends Component {
@@ -87,6 +89,7 @@ class AddStudent extends Component {
             })
         } else {
             console.log("Введите значение!!")
+            
         }
         this.handleClose()
         this.props.getStudents()
