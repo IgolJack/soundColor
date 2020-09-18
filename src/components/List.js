@@ -262,9 +262,11 @@ class List extends React.Component{
         return (
             <div className="App">
                 <h1>Студенты</h1>
-                <Button variant="contained">
-                    <NavLink to="/">Вернуться на главную страницу</NavLink>
-                </Button>                
+                <div style={{ margin: 12 }}>
+                    <Button variant="contained">
+                        <NavLink to="/">Вернуться на главную страницу</NavLink>
+                    </Button>
+                </div>                
                 <div style={{ margin: 12 }}>
                     <AddStudent 
                         lastId={this.state.lastId}
