@@ -3,17 +3,16 @@ import ReactDOM from "react-dom";
 import {db} from "../services/firebase";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-
+import {Link} from "react-router-dom";
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import bootstrapPlugin from "@fullcalendar/bootstrap";
 import interactionPlugin from "@fullcalendar/interaction";
 
 import "@fullcalendar/core/main.css";
 import "@fullcalendar/daygrid/main.css";
-import "@fullcalendar/bootstrap/main.css";
-import {Link} from "react-router-dom";
+
+
 
 class Calendar extends React.Component{
     state = {
@@ -86,8 +85,8 @@ class Calendar extends React.Component{
                 </div>
                 <FullCalendar
                     defaultView="dayGridMonth"
-                    plugins={[interactionPlugin, dayGridPlugin, bootstrapPlugin]}
-                    themeSystem="bootstrap"
+                    plugins={[interactionPlugin, dayGridPlugin]}
+                    themeSystem='standard'
                     weekends={false}
                     displayEventTime={true}
                     events={this.state.events}
