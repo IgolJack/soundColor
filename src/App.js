@@ -5,6 +5,7 @@ import {
     Route,
     Switch
 } from 'react-router-dom'
+
 import InfoEvent from "./components/calendar/infoEvent";
 import List from './components/List'
 import NotFound from './components/NotFound'
@@ -23,10 +24,13 @@ class App extends React.Component {
                 <Router>
                     <Switch>
 
+
                         <Route exact path="/" component={Login} />
                         <Route exact path="/home" component={Home} />
                         <Route exact path="/list" component={List} />
                         <Route exact path='/list/:studentId' component={InfoStudent} />
+                        <Route exact path="/Calendar" component={Calendar}/>
+                        <Route exact path='/Calendar/:eventId' component={InfoEvent}/>
                         <Route exact path="/login" component={LoginPage} />
 
                         <Route component={NotFound} />

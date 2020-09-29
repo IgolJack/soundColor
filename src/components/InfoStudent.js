@@ -1,10 +1,9 @@
 import React from 'react'
+
 import { db, auth } from './services/firebase'
 import Button from '@material-ui/core/Button'
 import { NavLink } from 'react-router-dom'
 import EditDetails from './EditDetails'
-
-
 
 class InfoStudent extends React.Component {
   constructor(props) {
@@ -16,6 +15,8 @@ class InfoStudent extends React.Component {
       id: "",
       course: "Первый курс"
     }
+
+
 
     this.componentDidMount = this.componentDidMount.bind(this)
     this.outputInfo = this.outputInfo.bind(this)
@@ -116,6 +117,5 @@ class InfoStudent extends React.Component {
   }
 
 }
-
 
 export default InfoStudent
