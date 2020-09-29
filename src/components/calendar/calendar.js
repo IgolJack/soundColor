@@ -78,6 +78,9 @@ class Calendar extends React.Component{
     render() {
         return (
             <div>
+                <div>
+                    <Link to={'/'}>Назад</Link>
+                </div>
                 <FullCalendar
                     defaultView="dayGridMonth"
                     plugins={[interactionPlugin, dayGridPlugin]}
@@ -88,6 +91,12 @@ class Calendar extends React.Component{
                     eventRender={this.EventDetail}
                 />
             </div>
+
+
+
+
+
+
         )
     }
 }

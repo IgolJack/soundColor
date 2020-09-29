@@ -1,14 +1,16 @@
 import React from 'react'
 import Calendar from './calendar/calendar'
 import {
-    NavLink
+   Link
 } from 'react-router-dom'
 
  class CalendarPage extends React.Component {
     render() {
         return (
-            <div> <NavLink to={'/'}>Назад</NavLink></div>
+            <div>
+
                 <Calendar/>
+            </div>
         )
     }
 }
