@@ -6,7 +6,7 @@ import {
 import Button from "@material-ui/core/Button";
 
 
-export default class CalendarPage extends React.Component {
+ class CalendarPage extends React.Component {
     render() {
         return (
             <div className="CalendarPage">
@@ -17,3 +17,5 @@ export default class CalendarPage extends React.Component {
         )
     }
 }
+
+export default CalendarPage
