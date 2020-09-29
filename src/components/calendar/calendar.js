@@ -58,7 +58,6 @@ class Calendar extends React.Component{
     }
 
     EventDetail = ({ event, el }) => {
-        // extendedProps is used to access additional event properties.
         const content = (
 
                 <div>
