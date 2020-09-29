@@ -20,7 +20,7 @@ class Calendar extends React.Component{
         title: "",
         start: "",
         end: "",
-        url: ""
+        lastId: "",
     }
     constructor(props) {
         super(props);
@@ -33,29 +33,39 @@ class Calendar extends React.Component{
         const value = event.target.value;
         this.setState({[name]: value});
     }
-    addNewEvent = () => {
-        db.collection('eventsCalendar')
-            .add({
-                id: this.state.id,
-                title: this.state.title,
-                start: this.state.start,
-                end: this.state.end,
-                url: this.state.url
-            })
-        this.componentDidMount()
-    }
+
     componentDidMount() {
         db.collection('eventsCalendar')
             .get()
             .then(snapshot => {
                 const events = []
+                let lastId = 0
                 snapshot.forEach(doc => {
                     const data = doc.data()
+                    data.id = Number(data.id)
+                    if (lastId < data.id) {
+                        lastId = doc.id
+                    }
                     events.push(data)
                 })
-                this.setState({events: events})
+                this.setState({events: events, lastId: lastId})
             })
             .catch(error => console.log(error))
+
+    }
+
+    addNewEvent = () => {
+        let id = Number(this.state.lastId) + 1
+        let name = String(id)
+        db.collection('eventsCalendar')
+            .doc(name)
+            .set({
+                id: id,
+                title: this.state.title,
+                start: this.state.start,
+                end: this.state.end,
+            })
+        this.componentDidMount()
     }
 
     EventDetail = ({ event, el }) => {
@@ -92,21 +102,6 @@ class Calendar extends React.Component{
                 />
                 <div>
                         <form>
-                            <TextField
-                                id="id"
-                                label="id"
-                                style={{margin: 8}}
-                                placeholder="d"
-                                fullWidth
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                className="inputName"
-                                name="id"
-                                value={this.state.id}
-                                onChange={this.onInputChange}
-                            />
                             <TextField
                                 id="title"
                                 label="title"

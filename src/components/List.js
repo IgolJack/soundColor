@@ -87,7 +87,7 @@ class List extends React.Component{
     getStudents() {        
         db.collection('students').orderBy('name').get().then(snapshot => {
             const students = []
-            var lastId = 0
+            let lastId = 0
             snapshot.forEach(doc => {
                 const data = doc.data()
                 data.id = Number(data.id)
