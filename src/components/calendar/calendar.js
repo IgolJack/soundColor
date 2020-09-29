@@ -78,8 +78,7 @@ class Calendar extends React.Component{
 
     render() {
         return (
-            //Документация - https://fullcalendar.io/docs#toc.
-            <div id="calendar" className="container" ref="calendar">
+            <div>
                 <div>
                     <Link to={'/'}>Назад</Link>
                 </div>
@@ -166,13 +165,5 @@ class Calendar extends React.Component{
             </div>
         )
     }
-
-
-
 }
-
-//<NavLink to={`/CalendarPage/${Calendar.id}`}> </NavLink>
-
-
-
 export default Calendar

@@ -10,9 +10,7 @@ export default class CalendarPage extends React.Component {
     render() {
         return (
             <div className="CalendarPage">
-                {/*<Button variant="contained">*/}
-                {/*    <Link to="/">Вернуться на главную страницу</Link>*/}
-                {/*</Button>*/}
+
                 <Calendar/>
 
             </div>
