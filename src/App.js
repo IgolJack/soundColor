@@ -1,12 +1,17 @@
 import React from 'react'
 import './App.css';
-import {BrowserRouter as Router} from 'react-router-dom'
-import {Route, Switch } from 'react-router-dom'
+import {
+    BrowserRouter as Router,
+    Route,
+    Switch
+} from 'react-router-dom'
 import InfoEvent from "./components/calendar/infoEvent";
 import List from './components/List'
 import NotFound from './components/NotFound'
 import Home from './components/Home'
 import InfoStudent from './components/InfoStudent'
+import Login from './components/registration/Login'
+import LoginPage from './components/registration/LoginPage'
 import Calendar from './components/calendar/calendar'
 
 
@@ -17,12 +22,15 @@ class App extends React.Component {
             <div>
                 <Router>
                     <Switch>
-                        <Route exact path="/" component={Home}/>
-                        <Route exact path="/Calendar" component={Calendar}/>
-                        <Route exact path="/list" component={List}/>
-                        <Route exact path='/list/:studentId' component={InfoStudent}/>
-                        <Route exact path='/Calendar/:eventId' component={InfoEvent}/>
-                        <Route component={NotFound}/>
+
+                        <Route exact path="/" component={Login} />
+                        <Route exact path="/home" component={Home} />
+                        <Route exact path="/list" component={List} />
+                        <Route exact path='/list/:studentId' component={InfoStudent} />
+                        <Route exact path="/login" component={LoginPage} />
+
+                        <Route component={NotFound} />
+
                     </Switch>
                 </Router>
             </div>

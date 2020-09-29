@@ -1,16 +1,25 @@
 import React from 'react'
 
+import Button from '@material-ui/core/Button';
+
 import {
     NavLink
 } from 'react-router-dom'
 import Button from "@material-ui/core/Button";
 
-class Home extends React.Component {
+class Home extends React.Component{
+    constructor(props){
+        super(props)
+    }
 
-    render() {
-        return (
+    render(){
+        return(
+
+
             <div>
-                <h1>
+                <h1>           
+                    <div><Button onClick={this.props.handleLogout}>Выйти</Button></div>
+          
                     <Button variant="contained">
                         <NavLink to="/Calendar">Регистрация (если не зареган ничего не отображается!)</NavLink>
                     </Button>
@@ -26,6 +35,7 @@ class Home extends React.Component {
                     <Button variant="contained">
                         <NavLink to="/Calendar">Календарь</NavLink>
                     </Button>
+      
                 </h1>
             </div>
 
