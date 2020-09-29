@@ -1,18 +1,18 @@
 import React from 'react'
-
+import Button from "@material-ui/core/Button";
 import {
     NavLink
 } from 'react-router-dom'
 
-class NotFound extends React.Component{
-    
-    render(){
-        return(
+class NotFound extends React.Component {
+
+    render() {
+        return (
             <div>
                 <p>СТРАНИЦА НЕ НАЙДЕНА</p>
-                <button>
+                <Button variant="contained">
                     <NavLink to="/">Вернуться на главную страницу</NavLink>
-                </button>
+                </Button>
             </div>
 
         )

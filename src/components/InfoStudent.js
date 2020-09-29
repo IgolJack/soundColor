@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom'
 import EditDetails from './EditDetails'
 
 
+
 class InfoStudent extends React.Component {
   constructor(props) {
     super(props)
@@ -113,8 +114,8 @@ class InfoStudent extends React.Component {
       </div>
     )
   }
-}
 
+}
 
 
 export default InfoStudent

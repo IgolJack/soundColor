@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
-import { db } from './services/firebase'
 
+import React, { useState } from 'react'
+import {db} from './services/firebase'
+import TextField from '@material-ui/core/TextField';
 import './List.css';
 
 import Button from '@material-ui/core/Button';
@@ -41,6 +42,7 @@ var colorPick = bgColors.Blue
 var prevBase = null
 var base = null
 
+
 class List extends React.Component{
     constructor(props) {
         super(props)
@@ -58,6 +60,7 @@ class List extends React.Component{
         this.getStudents = this.getStudents.bind(this)
         this.outputInfo = this.outputInfo.bind(this)
         this.onInputChange = this.onInputChange.bind(this)
+
     }
         
     // filterStudents(filter, filterName) {              
@@ -123,6 +126,7 @@ class List extends React.Component{
         console.log(this.state.filterMissed)
       }
 
+
     onInputChange = event => {
         console.log(event.target.value)
         const name = event.target.name;
@@ -186,6 +190,7 @@ class List extends React.Component{
                                 <div className="nameOfStudent" style={{ paddingLeft: 48*2 }}>
                                     <h4 key={student.id}>
                                         <NavLink to={`/list/${student.id}`}>
+
                                             {student.name}
                                         </NavLink>
                                     </h4>
@@ -206,8 +211,6 @@ class List extends React.Component{
             </div>
         )
     }
-
-
 
 
 
