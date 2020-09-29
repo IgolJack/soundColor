@@ -78,9 +78,6 @@ class Calendar extends React.Component{
     render() {
         return (
             <div>
-                <div>
-                    <Link to={'/'}>Назад</Link>
-                </div>
                 <FullCalendar
                     defaultView="dayGridMonth"
                     plugins={[interactionPlugin, dayGridPlugin]}
@@ -90,77 +87,6 @@ class Calendar extends React.Component{
                     events={this.state.events}
                     eventRender={this.EventDetail}
                 />
-                <div>
-                    <form action="" className="inputForm">
-                        <div>
-                            <TextField
-                                id="id"
-                                label="id"
-                                style={{margin: 8}}
-                                placeholder="d"
-                                fullWidth
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                className="inputName"
-                                name="id"
-                                value={this.state.id}
-                                onChange={this.onInputChange}
-                            /></div>
-                        <div>
-                            <TextField
-                                id="title"
-                                label="title"
-                                className="inputLvl"
-                                style={{margin: 8}}
-                                placeholder="Event 3"
-                                fullWidth
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                name="title"
-                                value={this.state.title}
-                                onChange={this.onInputChange}
-                            /></div>
-                        <div>
-                            <TextField
-                                id="start"
-                                label="start"
-                                className="inputMiss"
-                                style={{margin: 8}}
-                                fullWidth
-                                name="start"
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                placeholder="2020-08-01"
-                                value={this.state.start}
-                                onChange={this.onInputChange}
-                            />
-                        </div>
-                        <div>
-                            <TextField
-                                id="end"
-                                label="end"
-                                className="inputMiss"
-                                style={{margin: 8}}
-                                fullWidth
-                                name="end"
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                placeholder="2020-08-12"
-                                value={this.state.end}
-                                onChange={this.onInputChange}
-                            />
-                        </div>
-                        <Button variant="contained" onClick={this.addNewEvent}>Добавить студента</Button>
-                    </form>
-                </div>
             </div>
         )
     }
