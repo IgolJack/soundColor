@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react'
 import {db} from './services/firebase'
 import TextField from '@material-ui/core/TextField';
@@ -84,7 +83,6 @@ class List extends React.Component{
     //         prevBase = base
     //     }
     //     this.getStudents(base)
-
     // }
 
     getStudents() {        
@@ -131,6 +129,7 @@ class List extends React.Component{
         console.log(event.target.value)
         const name = event.target.name;
         const value = event.target.value;
+
 
         this.setState({ [name]: value});
         console.log(this.state.filterCourse)
