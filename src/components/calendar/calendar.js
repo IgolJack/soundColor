@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import {db} from "../services/firebase";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import {Link} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -13,8 +13,7 @@ import "@fullcalendar/core/main.css";
 import "@fullcalendar/daygrid/main.css";
 
 
-
-class Calendar extends React.Component{
+class Calendar extends React.Component {
     state = {
         id: "",
         title: "",
@@ -22,12 +21,14 @@ class Calendar extends React.Component{
         end: "",
         lastId: "",
     }
+
     constructor(props) {
         super(props);
         this.state = {
             events: [],
         }
     }
+
     onInputChange = event => {
         const name = event.target.name;
         const value = event.target.value;
@@ -68,18 +69,9 @@ class Calendar extends React.Component{
         this.componentDidMount()
     }
 
-    EventDetail = ({ event, el }) => {
+    EventDetail = ({event, el}) => {
         const content = (
-
-                <div>
-                    <a href={`/Calendar/${event.id}`}>
-                        <span>
-                            {event.title}
-                        </span>
-                    </a>
-                <div>{event.extendedProps.description}</div>
-                </div>
-
+                <a href={`/Calendar/${event.id}`}>{event.title}</a>
         );
         ReactDOM.render(content, el);
         return el;
@@ -89,7 +81,9 @@ class Calendar extends React.Component{
         return (
             <div>
                 <div>
-                    <Link to={'/'}>Назад</Link>
+                    <Button variant="contained">
+                        <NavLink to="/">Вернуться на главную страницу</NavLink>
+                    </Button>
                 </div>
                 <FullCalendar
                     defaultView="dayGridMonth"
@@ -100,59 +94,54 @@ class Calendar extends React.Component{
                     events={this.state.events}
                     eventRender={this.EventDetail}
                 />
-                <div>
-                        <form>
-                            <TextField
-                                id="title"
-                                label="title"
-                                className="inputLvl"
-                                style={{margin: 8}}
-                                placeholder="Event 3"
-                                fullWidth
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                name="title"
-                                value={this.state.title}
-                                onChange={this.onInputChange}
-                            />
-                            <TextField
-                                id="start"
-                                label="start"
-                                className="inputMiss"
-                                style={{margin: 8}}
-                                fullWidth
-                                name="start"
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                placeholder="2020-08-01"
-                                value={this.state.start}
-                                onChange={this.onInputChange}
-                            />
-                            <TextField
-                                id="end"
-                                label="end"
-                                className="inputMiss"
-                                style={{margin: 8}}
-                                fullWidth
-                                name="end"
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                placeholder="2020-08-12"
-                                value={this.state.end}
-                                onChange={this.onInputChange}
-                            />
-                            <Button variant="contained" onClick={this.addNewEvent}>Добавить студента</Button>
-                        </form>
+                <div style={{paddingRight: 10, paddingLeft: 10}}>
+                    <form>
+                        <TextField
+                            id="title"
+                            label="Название мероприятия"
+                            className="inputLvl"
+                            fullWidth
+                            placeholder="Практика второго курса в филармонии"
+                            margin="normal"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            name="title"
+                            value={this.state.title}
+                            onChange={this.onInputChange}
+                        />
+                        <TextField
+                            id="start"
+                            label="Дата начала"
+                            className="inputMiss"
+                            fullWidth
+                            name="start"
+                            margin="normal"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            placeholder="2020-08-01"
+                            value={this.state.start}
+                            onChange={this.onInputChange}
+                        />
+                        <TextField
+                            id="end"
+                            label="Дата окончания"
+                            className="inputMiss"
+                            fullWidth
+                            name="end"
+                            margin="normal"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            placeholder="2020-08-12"
+                            value={this.state.end}
+                            onChange={this.onInputChange}
+                        />
+                        <Button variant="contained" onClick={this.addNewEvent}>Добавить мероприятие</Button>
+                    </form>
                 </div>
             </div>
-
-
 
 
         )

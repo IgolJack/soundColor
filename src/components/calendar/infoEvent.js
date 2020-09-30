@@ -60,7 +60,7 @@ addUserToEvent(){
     // в последствии просто не будет кнопки если человек записался (хотя можно для безопасности)
     console.log('Уникальный идентификатор пользователя - ' + uid)
 
-    
+
     this.state.members.push(uid)
     db.collection('eventsCalendar')
         .doc(String(this.state.id))
@@ -77,9 +77,13 @@ addUserToEvent(){
     render() {
 return(
     <div>
-        <NavLink to={'/Calendar'}>
-            <p>Назад!</p>
-        </NavLink>
+        <Button variant="contained">
+            <NavLink to="/Calendar">Вернуться к каледарю</NavLink>
+        </Button>
+        <Button variant="contained">
+            <NavLink to="/">Вернуться на глвную страницу</NavLink>
+        </Button>
+
         <p>ID = {this.state.id}</p>
         <p>Название мероприятия = {this.state.title}</p>
         <p>Время начала = {this.state.start}</p>

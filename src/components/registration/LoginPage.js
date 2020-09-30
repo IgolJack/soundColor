@@ -3,20 +3,23 @@ import './LoginPage.css'
 
 
 const LoginPage = (props) => {
-    
-    const { 
+
+    const {
         email,
         setEmail,
         password,
         setPassword,
         handleLogin,
+        // eslint-disable-next-line
         handleSignup,
+        // eslint-disable-next-line
         hasAccount,
+        // eslint-disable-next-line
         setHasAccount,
         emailError,
         passwordError
-     } = props
-    
+    } = props
+
     return (
         <section className="login">
             <div className="loginContainer">
@@ -40,7 +43,7 @@ const LoginPage = (props) => {
                 <p className="errorMsg">{passwordError}</p>
                 <div className="btnContainer">
                     <>
-                    <button onClick={handleLogin}>Войти</button>
+                        <button onClick={handleLogin}>Войти</button>
                     </>
                 </div>
             </div>

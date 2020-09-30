@@ -7,9 +7,6 @@ import Button from "@material-ui/core/Button";
 
 
 class Home extends React.Component{
-    constructor(props){
-        super(props)
-    }
 
     render(){
         return(
