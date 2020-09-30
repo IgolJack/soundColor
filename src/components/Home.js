@@ -12,11 +12,7 @@ class Home extends React.Component{
         return(
             <div>
                 <h1>           
-                    <div><Button onClick={this.props.handleLogout}>Выйти</Button></div>
-
-                    <Button variant="contained">
-                        <NavLink to="/Calendar">Регистрация (если не зареган ничего не отображается!)</NavLink>
-                    </Button>
+                    <Button  color="secondary" variant="contained" onClick={this.props.handleLogout}>Выйти</Button>
                     <br/>
                     <Button variant="contained">
                         <NavLink to="/Calendar">Вход (в зависимости от типа профиля отображаются те или иные блоки)</NavLink>

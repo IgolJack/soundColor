@@ -81,7 +81,7 @@ return(
             <NavLink to="/Calendar">Вернуться к каледарю</NavLink>
         </Button>
         <Button variant="contained">
-            <NavLink to="/">Вернуться на глвную страницу</NavLink>
+            <NavLink to="/">Вернуться на главную страницу</NavLink>
         </Button>
 
         <p>ID = {this.state.id}</p>
