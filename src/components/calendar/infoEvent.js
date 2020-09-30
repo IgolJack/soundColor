@@ -14,7 +14,7 @@ export default class InfoEvent extends React.Component{
             end: "",
             members: [],
         }
-
+    this.addUserToEvent = this.addUserToEvent.bind(this)
     this.componentDidMount = this.componentDidMount.bind(this)
 }
 
@@ -53,9 +53,25 @@ getInfo(docRef){
     }
 
 addUserToEvent(){
-    let uid = firebase.auth().currentUser.uid
+    let uid = firebase.auth().currentUser.uid //или email
+
+
+    //нужно предотвротить попадекние уже сущ. uid/email в массив members (для отладки)
+    // в последствии просто не будет кнопки если человек записался (хотя можно для безопасности)
     console.log('Уникальный идентификатор пользователя - ' + uid)
+
     
+    this.state.members.push(uid)
+    db.collection('eventsCalendar')
+        .doc(String(this.state.id))
+        .set({
+            members: this.state.members,
+            id: this.state.id,
+            title: this.state.title,
+            start:this.state.start,
+            end: this.state.end,
+        })
+    this.componentDidMount()
 }
 
     render() {
