@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
 import { db } from './services/firebase'
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-
-
-
-var LastId
+import {
+    Button,
+    TextField,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    InputLabel,
+    MenuItem,
+    FormControl,
+    Select
+} from '@material-ui/core';
 
 class AddStudent extends Component {
     constructor(props) {
@@ -25,18 +23,14 @@ class AddStudent extends Component {
             id: "",
             course: "Первый курс",
             open: false,
-            lastId: ""
-  
+            lastId: ""  
         }
     }
     
-
     mapUserDetailToState = () => {
         this.setState({
-            lastId: this.props.lastId ? this.props.lastId : '',
-            
-        })
-        
+            lastId: this.props.lastId ? this.props.lastId : ''            
+        })        
     }
 
     handleOpen = () => {
@@ -60,14 +54,8 @@ class AddStudent extends Component {
         this.setState({ [name]: value });
     }
 
-    addNewStudent = () => {
-        // console.log(this.state.name)
-        // console.log(this.state.course)
-        // console.log(this.state.lvl)
-        // console.log(this.state.missed)
-        
-        if ((this.state.name != null && this.state.lvl != null) && this.state.missed != null){
-            //console.log(lastId)
+    addNewStudent = () => {        
+        if ((this.state.name !== "" && this.state.lvl !== "") && this.state.missed !== ""){            
             var LastId = Number(this.props.lastId)
             LastId+=1
             LastId=String(LastId)
@@ -93,7 +81,7 @@ class AddStudent extends Component {
         }
         this.handleClose()
         this.props.getStudents()
-        this.props.outputInfo()
+        this.props.outputInfo(this.props.filteredStudents)
     }
 
     outputTextField = (props) => {
