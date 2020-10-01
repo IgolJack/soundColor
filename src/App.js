@@ -10,33 +10,35 @@ import List from './components/List'
 import NotFound from './components/NotFound'
 import Home from './components/Home'
 import InfoStudent from './components/InfoStudent'
-import Login from './components/registration/Login'
 import LoginPage from './components/registration/LoginPage'
 import Calendar from './components/calendar/calendar'
+import { AuthProvider } from "./components/registration/Auth";
+import PrivateRoute from "./components/registration/PrivateRoute";
 
 
-class App extends React.Component {
+const App = () => {
 
-    render() {
+    
         return (
             <div>
-                <Router>
-                    <Switch>
+                <AuthProvider>
+                    <Router>
+                        <Switch>
 
-                        <Route exact path="/" component={Login} />
-                        <Route exact path="/home" component={Home} />
-                        <Route exact path="/list" component={List} />
-                        <Route exact path='/list/:studentId' component={InfoStudent} />
-                        <Route exact path="/login" component={LoginPage} />
-
-                        <Route component={NotFound} />
-
-                    </Switch>
-                </Router>
+                            <Route exact path="/login" component={LoginPage} />
+                            <PrivateRoute exact path="/" component={Home} />
+                            <PrivateRoute exact path="/list" component={List} />
+                            <PrivateRoute exact path='/list/:studentId' component={InfoStudent} />
+                            <PrivateRoute exact path="/Calendar" component={Calendar} />
+                            <PrivateRoute exact path='/Calendar/:eventId' component={InfoEvent} />
+                            <Route component={NotFound} />
+                        </Switch>
+                    </Router>
+                </AuthProvider>
             </div>
 
         )
-    }
+    
 }
 
 

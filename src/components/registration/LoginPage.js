@@ -1,51 +1,47 @@
-import React from 'react';
-import './LoginPage.css'
+import React, { useCallback, useContext } from "react";
+import { withRouter, Redirect } from "react-router";
+import { auth } from '../services/firebase'
+import { AuthContext } from "./Auth.js";
 
+const LoginPage = ({ history }) => {
+  const handleLogin = useCallback(
+    async event => {
+      event.preventDefault();
+      const { email, password } = event.target.elements;
+      try {
+        await 
+          auth
+          .signInWithEmailAndPassword(email.value, password.value);
+        history.push("/");
+      } catch (error) {
+        alert(error);
+      }
+    },
+    [history]
+  );
 
-const LoginPage = (props) => {
-    
-    const { 
-        email,
-        setEmail,
-        password,
-        setPassword,
-        handleLogin,
-        handleSignup,
-        hasAccount,
-        setHasAccount,
-        emailError,
-        passwordError
-     } = props
-    
-    return (
-        <section className="login">
-            <div className="loginContainer">
-                <label>Имя пользователя</label>
-                <input
-                    type="text"
-                    autoFocus
-                    required
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                />
-                <p className="errorMsg">{emailError}</p>
-                <label>Пароль</label>
-                <input
-                    type="password"
-                    autoFocus
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <p className="errorMsg">{passwordError}</p>
-                <div className="btnContainer">
-                    <>
-                    <button onClick={handleLogin}>Войти</button>
-                    </>
-                </div>
-            </div>
-        </section>
-    );
+  const { currentUser } = useContext(AuthContext);
+
+  if (currentUser) {
+    return <Redirect to="/" />;
+  }
+
+  return (   
+      <div>
+          <h1>Log in</h1>
+          <form onSubmit={handleLogin}>
+              <label>
+                  Email
+          <input name="email" type="email" placeholder="Email" />
+              </label>
+              <label>
+                  Password
+          <input name="password" type="password" placeholder="Password" />
+              </label>
+              <button type="submit">Log in</button>
+          </form>
+      </div>
+  );
 };
 
-export default LoginPage;
+export default withRouter(LoginPage);
