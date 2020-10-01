@@ -1,11 +1,11 @@
 
-import React from 'react'
-import { db } from './services/firebase'
+import React, { useState } from 'react'
+import {db} from './services/firebase'
 import TextField from '@material-ui/core/TextField';
 import './List.css';
 
 import Button from '@material-ui/core/Button';
-
+import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
@@ -15,15 +15,11 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 
-
-
-
-
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 
 import AddStudent from './AddStudent'
-
+import CheckBox from './CheckBox'
 import DeleteStudent from './Warnings/DeleteStudent'
 import EditDetails from './EditDetails'
 
@@ -31,7 +27,7 @@ import EditDetails from './EditDetails'
 import {
     NavLink
 } from 'react-router-dom'
-
+import { Checkbox } from '@material-ui/core';
 
 var bgColors = {
     "Default": "#81b71a",
@@ -43,7 +39,8 @@ var bgColors = {
 }
 
 var colorPick = bgColors.Blue
-
+var prevBase = null
+var base = null
 
 
 class List extends React.Component{
@@ -51,12 +48,11 @@ class List extends React.Component{
         super(props)
         this.state = {
             students: null,
-            
             searchStudent: "",
             
             lastId: "",
             filter: "",
-            filterMissed: 0,
+            filterMissed: -1,
             filterCourse: "",
             filterLevel: ""
         }
@@ -67,6 +63,30 @@ class List extends React.Component{
 
     }
         
+    // filterStudents(filter, filterName) {              
+        
+        
+    //     if(filter === "" ){              
+    //         base = db.collection('students')
+    //         prevBase = base
+    //     } 
+    //     else if(filterName === "course" || filterName === "lvl"){
+            
+    //         base = prevBase
+    //         .where(`${filterName}`, "==", `${filter}`)
+    //         // prevBase = base
+             
+    //     }
+    //     else if(filterName === "missed") {
+            
+    //         base = db.collection('students')
+    //         .where(`${filterName}`, ">=", `${filter}`)
+    //         prevBase = base
+    //     }
+    //     this.getStudents(base)
+
+    // }
+
     getStudents() {        
         db.collection('students').orderBy('name').get().then(snapshot => {
             const students = []
@@ -93,33 +113,45 @@ class List extends React.Component{
     }        
 
     componentDidMount() {
+        var filter = this.state.filter
+        var filterName = this.state.filterName
         this.getStudents()
     }
 
     componentDidUpdate(prevProps) {
         // Популярный пример (не забудьте сравнить пропсы):
-        if (this.props !== prevProps) {
-          this.fetchData(this.props);
+        if (this.props.filterCourse !== prevProps.filterCourse) {
+          this.fetchData(this.props.filterCourse);
         }
         console.log(this.state.filterMissed)
       }
 
 
     onInputChange = event => {
+        console.log(event.target.value)
         const name = event.target.name;
         const value = event.target.value;
 
         this.setState({ [name]: value});
         console.log(this.state.filterCourse)
-        console.log(this.state.filterLevel)           
+        console.log(this.state.filterLevel)
+        //в итоге понять, можно ли сделать проще и менее костыльно
+        // if(name ==="filterCourse") {this.setState({filterName: "course"})}
+        // else if (name==="filterLevel") {this.setState({filterName: "lvl"})}
+        
+        // this.setState({ [name]: value }, () => {
+        //     this.componentDidMount();
+        //   });
+        
+        
     }
     
     outputInfo = (props) => {
         return (
             <div>
                 {
-                    props.filteredStudents &&
-                    props.filteredStudents.map(student => {
+                    props.searchFilteredStudents &&
+                    props.searchFilteredStudents.map(student => {
                         colorPick = '#000000'
 
                         // eslint-disable-next-line
@@ -182,40 +214,43 @@ class List extends React.Component{
 
 
 
-    render() {
-
+    render() {              
+        
         let searchFilteredStudents = this.state.students && this.state.students.filter(student => {
-            if(this.state.searchStudent !== ""){
+            if(this.state.searchStudent != ""){
                 return student.name.toLowerCase().includes(this.state.searchStudent.toLowerCase())
-            } else if (this.state.filterCourse !== "" || this.state.filterLevel !== "" || this.state.filterMissed >= 0){
-                if (this.state.filterCourse !== "" && this.state.filterLevel !== "" && this.state.filterMissed > 0){
+            } else if (this.state.filterCourse != "" || this.state.filterLevel != "" || this.state.filterMissed >= 0){
+                if (this.state.filterCourse != "" && this.state.filterLevel != "" && this.state.filterMissed > 0){
                     console.log("filterCourse!= 0 && filterLevel!= 0 && filterMissed != 0")
-                    return  student.course.includes(this.state.filterCourse) && student.lvl === this.state.filterLevel && student.missed >= this.state.filterMissed
+                    return  student.course.includes(this.state.filterCourse) && student.lvl == this.state.filterLevel && student.missed >= this.state.filterMissed
                 }                  
-                else if (this.state.filterLevel !== "" && this.state.filterMissed > 0){
+                else if (this.state.filterLevel != "" && this.state.filterMissed > 0){
                     console.log("filterLevel!= 0 && filterMissed != 0")
-                    return student.lvl === this.state.filterLevel && student.missed >= this.state.filterMissed
+                    return student.lvl == this.state.filterLevel && student.missed >= this.state.filterMissed
                 } 
-                else if (this.state.filterCourse !== "" && this.state.filterMissed > 0){
+                else if (this.state.filterCourse != "" && this.state.filterMissed > 0){
                     console.log("filterCourse != 0 && filterMissed != 0")
                     return  student.course.includes(this.state.filterCourse) && student.missed >= this.state.filterMissed
                 }
-                else if (this.state.filterCourse !== "" && this.state.filterLevel !== ""){
+                else if (this.state.filterCourse != "" && this.state.filterLevel != ""){
                     console.log("filterCourse != 0 && filterLevel != 0")
-                    return  student.course.includes(this.state.filterCourse) && student.lvl === this.state.filterLevel
+                    return  student.course.includes(this.state.filterCourse) && student.lvl == this.state.filterLevel
                 } 
-                else if (this.state.filterLevel !== ""){
+                else if (this.state.filterLevel != ""){
                     console.log("this.state.filterLevel")
-                    return student.lvl === this.state.filterLevel
+                    return student.lvl == this.state.filterLevel
                 }                
                 else if (this.state.filterMissed > 0){
                     console.log("this.state.filterMissed")
                     return student.missed >= this.state.filterMissed
                 }
-                else {
+                else if(this.state.filterCourse != ""){
                     console.log("this.state.filterCourse")
                     return student.course.includes(this.state.filterCourse)
-                }              
+                } else {
+                    console.log("filterMissed === 0")
+                    return student.missed === 0
+                }               
             }            
             else {
                 console.log("this.state.students")
@@ -240,11 +275,10 @@ class List extends React.Component{
                         lastId={this.state.lastId}
                         getStudents={this.getStudents}
                         outputInfo={this.outputInfo}
-                        filteredStudents={searchFilteredStudents}
                     />
                 </div>
                 <div style={{ margin: 12 }}>
-                   <TextField
+                    <TextField
                     id="outlined-basic"
                     name="searchStudent"
                     label="Найти студента"
@@ -263,74 +297,80 @@ class List extends React.Component{
                         >
                             <Typography>Фильтры</Typography>
                         </AccordionSummary>
-                        <AccordionDetails>                            
-                            <FormControl
-                                fullWidth
-                                style={{ margin: 8 }}
-                            >
-                                <InputLabel id="demo-simple-select-label">Курс</InputLabel>
-                                <Select
-
-                                    name="filterCourse"
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={this.state.filterCourse}
-                                    onChange={this.onInputChange}
-                                >
-                                    <MenuItem value="">Все курсы</MenuItem>
-                                    <MenuItem value="Первый курс">Первый курс</MenuItem>
-                                    <MenuItem value="Второй курс">Второй курс</MenuItem>
-                                    <MenuItem value="Третий курс">Третий курс</MenuItem>
-                                    <MenuItem value="Четвертый курс">Четвертый курс</MenuItem>
-                                    <MenuItem value="Пятый курс">Пятый курс</MenuItem>
-                                </Select>
-                            </FormControl>
-
-                            <FormControl
-                                fullWidth
-                                style={{ margin: 8 }}
-                            >
-                                <InputLabel id="demo-simple-select-label">Уровень</InputLabel>
-                                <Select
-
-                                    name="filterLevel"
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={this.state.filterLevel}
-                                    onChange={this.onInputChange}
-                                >
-                                    <MenuItem value="">Все уровни</MenuItem>
-                                    <MenuItem value="1">Первый уровень</MenuItem>
-                                    <MenuItem value="2">Второй уровень</MenuItem>
-                                    <MenuItem value="3">Третий уровень</MenuItem>
-                                    <MenuItem value="4">Четвертый уровень</MenuItem>
-                                    <MenuItem value="5">Пятый уровень</MenuItem>
-                                </Select>
-                            </FormControl>
-
-                            <FormControl
-                                fullWidth
-                                style={{ margin: 8 }}
-                            >
-                                <TextField
-                                    id="standard-full-width"
-                                    label="Пропуски"
-                                    helperText="Значение и более"
-                                    type="number"
-                                    fullWidth
-                                    name="filterMissed"
-                                    value={this.filterMissed}
-                                    onChange={this.onInputChange}
-                                />
-                            </FormControl>
+                        <AccordionDetails>
                             
+                                
+                                    <FormControl
+                                        fullWidth
+                                        style={{ margin: 8 }}
+                                    >
+                                        <InputLabel id="demo-simple-select-label">Курс</InputLabel>
+                                        <Select
+
+                                            name="filterCourse"
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={this.state.filterCourse}
+                                            onChange={this.onInputChange}
+                                        >
+                                            <MenuItem value="">Все курсы</MenuItem>
+                                            <MenuItem value="Первый курс">Первый курс</MenuItem>
+                                            <MenuItem value="Второй курс">Второй курс</MenuItem>
+                                            <MenuItem value="Третий курс">Третий курс</MenuItem>
+                                            <MenuItem value="Четвертый курс">Четвертый курс</MenuItem>
+                                            <MenuItem value="Пятый курс">Пятый курс</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                
+                                    <FormControl
+                                        fullWidth
+                                        style={{ margin: 8 }}
+                                    >
+                                        <InputLabel id="demo-simple-select-label">Уровень</InputLabel>
+                                        <Select
+
+                                            name="filterLevel"
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={this.state.filterLevel}
+                                            onChange={this.onInputChange}
+                                        >
+                                            <MenuItem value="">Все уровни</MenuItem>
+                                            <MenuItem value="1">Первый уровень</MenuItem>
+                                            <MenuItem value="2">Второй уровень</MenuItem>
+                                            <MenuItem value="3">Третий уровень</MenuItem>
+                                            <MenuItem value="4">Четвертый уровень</MenuItem>
+                                            <MenuItem value="5">Пятый уровень</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                    
+                                        <FormControl
+                                            fullWidth
+                                            style={{ margin: 8 }}
+                                        >
+                                            <TextField
+                                                id="standard-full-width"
+                                                label="Пропуски"
+                                                type="number"
+                                                fullWidth
+                                                name="filterMissed"
+                                                value={this.filterMissed}
+                                                onChange={this.onInputChange}
+                                            />
+                                        </FormControl>
                                     
                             
                         </AccordionDetails>
                     </Accordion>
                 </div>
 
-                <this.outputInfo filteredStudents={searchFilteredStudents}/>
+                {/* <div style={{ margin: 12 }}>
+                    <CheckBox
+                        handleFilters={filters => this.handleFilters(filters, "courses")}
+                    />
+                </div> */}
+
+                <this.outputInfo searchFilteredStudents={searchFilteredStudents}/>
                 
             </div>
 

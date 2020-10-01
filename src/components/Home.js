@@ -1,20 +1,25 @@
 import React from 'react'
-import { auth } from './services/firebase'
 
 import Button from '@material-ui/core/Button';
 
 import {
     NavLink
 } from 'react-router-dom'
-
+import Button from "@material-ui/core/Button";
 
 class Home extends React.Component{
-    
+    constructor(props){
+        super(props)
+    }
+
     render(){
-        return(            
-            <div>              
+        return(
+
+
+            <div>
                 <h1>           
-                    <div><Button onClick={() => auth.signOut()}>Выйти</Button></div>          
+                    <div><Button onClick={this.props.handleLogout}>Выйти</Button></div>
+          
                     <Button variant="contained">
                         <NavLink to="/Calendar">Регистрация (если не зареган ничего не отображается!)</NavLink>
                     </Button>
@@ -29,7 +34,8 @@ class Home extends React.Component{
                     <br/>
                     <Button variant="contained">
                         <NavLink to="/Calendar">Календарь</NavLink>
-                    </Button>      
+                    </Button>
+      
                 </h1>
             </div>
 
