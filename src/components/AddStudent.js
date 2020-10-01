@@ -1,15 +1,17 @@
-import React, {Component} from 'react';
-import {db} from './services/firebase'
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
+import React, { Component } from 'react';
+import { db } from './services/firebase'
+import {
+    Button,
+    TextField,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    InputLabel,
+    MenuItem,
+    FormControl,
+    Select
+} from '@material-ui/core';
 
 class AddStudent extends Component {
     constructor(props) {
@@ -21,50 +23,42 @@ class AddStudent extends Component {
             id: "",
             course: "Первый курс",
             open: false,
-            lastId: ""
-
+            lastId: ""  
         }
     }
-
-
+    
     mapUserDetailToState = () => {
         this.setState({
-            lastId: this.props.lastId ? this.props.lastId : '',
-        })
+            lastId: this.props.lastId ? this.props.lastId : ''            
+        })        
     }
 
     handleOpen = () => {
-        this.setState({open: true})
+        this.setState({ open: true })
         this.mapUserDetailToState()
         console.log(this.state.lastId)
     }
 
     handleClose = () => {
-        this.setState({open: false})
+        this.setState({ open: false })
     }
 
-    componentDidMount() {
+    componentDidMount(){
         this.mapUserDetailToState()
-    }
-
+    }  
+        
     onInputChange = event => {
         const name = event.target.name;
         const value = event.target.value;
-
-        this.setState({[name]: value});
+        
+        this.setState({ [name]: value });
     }
 
-    addNewStudent = () => {
-        // console.log(this.state.name)
-        // console.log(this.state.course)
-        // console.log(this.state.lvl)
-        // console.log(this.state.missed)
-
-        if ((this.state.name != null && this.state.lvl != null) && this.state.missed != null) {
-            //console.log(lastId)
+    addNewStudent = () => {        
+        if ((this.state.name !== "" && this.state.lvl !== "") && this.state.missed !== ""){            
             var LastId = Number(this.props.lastId)
-            LastId += 1
-            LastId = String(LastId)
+            LastId+=1
+            LastId=String(LastId)
             db.collection('students')
                 .doc(LastId)
                 .set({
@@ -75,7 +69,7 @@ class AddStudent extends Component {
                     missed: this.state.missed
                 });
             this.props.getStudents()
-            this.setState({
+            this.setState({ 
                 name: "",
                 course: "Первый курс",
                 lvl: 0,
@@ -83,44 +77,45 @@ class AddStudent extends Component {
             })
         } else {
             console.log("Введите значение!!")
-
+            
         }
         this.handleClose()
         this.props.getStudents()
-        this.props.outputInfo()
+        this.props.outputInfo(this.props.filteredStudents)
     }
 
     outputTextField = (props) => {
-        return (
+        return(
             <p>
-                <TextField
-                    id="standard-full-width"
-                    label={`${props.label}`}
-                    style={{margin: 8}}
-                    placeholder={`${props.placeholder}`}
-                    fullWidth
-                    margin="normal"
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    className={`input${props.className}`}
-                    required
-                    type={`${props.type}`}
-                    name={`${props.name}`}
-                    value={props.value}
-                    onChange={this.onInputChange}
-                /></p>
+                            <TextField
+                                id="standard-full-width"
+                                label={`${props.label}`}
+                                style={{ margin: 8 }}
+                                placeholder={`${props.placeholder}`}
+                                fullWidth
+                                margin="normal"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                className={`input${props.className}`}
+                                required
+                                type={`${props.type}`}
+                                name={`${props.name}`}
+                                value={props.value}
+                                onChange={this.onInputChange}
+                            /></p>
         )
     }
-
+    
     render() {
         return (
             <div>
                 <Button variant="contained" onClick={this.handleOpen}>Добавить студента</Button>
-                <Dialog
-                    open={this.state.open}
-                    fullWidth
-                    maxWidth="sm">
+                <Dialog 
+                open={this.state.open}
+                
+                fullWidth
+                maxWidth="sm">
                     <DialogTitle>Добавьте пользователя</DialogTitle>
                     <DialogContent>
                         <form>
@@ -128,7 +123,7 @@ class AddStudent extends Component {
                                 <FormControl
                                     required
                                     fullWidth
-                                    style={{margin: 8}}
+                                    style={{ margin: 8 }}
                                 >
                                     <InputLabel id="demo-simple-select-label">Курс</InputLabel>
                                     <Select
@@ -146,34 +141,35 @@ class AddStudent extends Component {
                                     </Select>
                                 </FormControl>
                             </p>
+                                                   
+                        
+                        
+                        <this.outputTextField                             
+                            label="ФИО"
+                            placeholder="Иванов Иван Иванович"
+                            className="Name"
+                            type="text"
+                            name="name"
+                            value={this.state.name}
+                        />
 
+                        <this.outputTextField
+                            label="Уровень"
+                            placeholder="Уровень"
+                            className="Lvl"
+                            type="number"
+                            name="lvl"
+                            value={this.state.lvl}
+                        />
 
-                            <this.outputTextField
-                                label="ФИО"
-                                placeholder="Иванов Иван Иванович"
-                                className="Name"
-                                type="text"
-                                name="name"
-                                value={this.state.name}
-                            />
-
-                            <this.outputTextField
-                                label="Уровень"
-                                placeholder="Уровень"
-                                className="Lvl"
-                                type="number"
-                                name="lvl"
-                                value={this.state.lvl}
-                            />
-
-                            <this.outputTextField
-                                label="Пропусков"
-                                placeholder="Пропусков"
-                                className="inputMiss"
-                                type="number"
-                                name="missed"
-                                value={this.state.missed}
-                            />
+                        <this.outputTextField
+                            label="Пропусков"
+                            placeholder="Пропусков"
+                            className="inputMiss"
+                            type="number"
+                            name="missed"
+                            value={this.state.missed}
+                        />
                         </form>
                     </DialogContent>
                     <DialogActions>
