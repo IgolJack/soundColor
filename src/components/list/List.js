@@ -44,7 +44,7 @@ class List extends React.Component{
         super(props)
         this.state = {
             students: null,
-            
+            filterName: {},
             searchStudent: "",
             
             lastId: "",
@@ -94,25 +94,43 @@ class List extends React.Component{
         if (this.props !== prevProps) {
           this.fetchData(this.props);
         }
-        console.log(this.state.filterMissed)
+        console.log(this.state.filterName)
       }
 
 
     onInputChange = event => {
         const name = event.target.name;
         const value = event.target.value;
+        
+        this.setState({ searchStudent: "" })
+        //console.log(have, ", ", value)
 
-        this.setState({ [name]: value});
-        console.log(this.state.filterCourse)
-        console.log(this.state.filterLevel)           
+        if(value !== ""){
+            this.setState({ filterName: {...this.state.filterName, [name]: value} });
+        }
+        else if(name in this.state.filterName && value === ""){
+            //console.log("обнуление")
+            const { filterName } = this.state;
+            delete filterName[`${name}`];
+            this.setState({ filterName: filterName })            
+        }      
+    }
+
+    search = event => {
+        this.setState({ searchStudent: event.target.value })
+        const { filterName } = this.state;
+        delete filterName.course;
+        delete filterName.lvl;
+        delete filterName.missed;
+        this.setState({ filterName: filterName }) 
     }
     
     outputInfo = (props) => {
         return (
             <div>
                 {
-                    props.filteredStudents &&
-                    props.filteredStudents.map(student => {
+                   props.filteredStudents &&
+                   props.filteredStudents.map(student => {
                         colorPick = '#000000'
 
                         // eslint-disable-next-line
@@ -176,49 +194,23 @@ class List extends React.Component{
 
 
     render() {
-
-        let searchFilteredStudents = this.state.students && this.state.students.filter(student => {
-            if(this.state.searchStudent !== ""){
+        let filteredStidents
+        if(this.state.searchStudent === ""){
+            filteredStidents = this.state.students && this.state.students.filter(item => {
+                for (var key in this.state.filterName) {
+                    if (item[key] === undefined || item[key] !== this.state.filterName[key]) {
+                        return false
+                    }
+                }
+                return true
+            });
+        }
+        else {
+            filteredStidents = this.state.students && this.state.students.filter(student => {
                 return student.name.toLowerCase().includes(this.state.searchStudent.toLowerCase())
-            } else if (this.state.filterCourse !== "" || this.state.filterLevel !== "" || this.state.filterMissed >= 0){
-                if (this.state.filterCourse !== "" && this.state.filterLevel !== "" && this.state.filterMissed > 0){
-                    console.log("filterCourse!= 0 && filterLevel!= 0 && filterMissed != 0")
-                    return  student.course.includes(this.state.filterCourse) && student.lvl === this.state.filterLevel && student.missed >= this.state.filterMissed
-                }                  
-                else if (this.state.filterLevel !== "" && this.state.filterMissed > 0){
-                    console.log("filterLevel!= 0 && filterMissed != 0")
-                    return student.lvl === this.state.filterLevel && student.missed >= this.state.filterMissed
-                } 
-                else if (this.state.filterCourse !== "" && this.state.filterMissed > 0){
-                    console.log("filterCourse != 0 && filterMissed != 0")
-                    return  student.course.includes(this.state.filterCourse) && student.missed >= this.state.filterMissed
-                }
-                else if (this.state.filterCourse !== "" && this.state.filterLevel !== ""){
-                    console.log("filterCourse != 0 && filterLevel != 0")
-                    return  student.course.includes(this.state.filterCourse) && student.lvl === this.state.filterLevel
-                } 
-                else if (this.state.filterLevel !== ""){
-                    console.log("this.state.filterLevel")
-                    return student.lvl === this.state.filterLevel
-                }                
-                else if (this.state.filterMissed > 0){
-                    console.log("this.state.filterMissed")
-                    return student.missed >= this.state.filterMissed
-                }
-                else {
-                    console.log("this.state.filterCourse")
-                    return student.course.includes(this.state.filterCourse)
-                }              
-            }            
-            else {
-                console.log("this.state.students")
-                return this.state.students
-            }
-            
-            
-        })
-
-
+            })
+        }
+        
         // console.log(this.state.lastId)        
         return (
             <div className="App">
@@ -233,7 +225,7 @@ class List extends React.Component{
                         lastId={this.state.lastId}
                         getStudents={this.getStudents}
                         outputInfo={this.outputInfo}
-                        filteredStudents={searchFilteredStudents}
+                        filteredStudents={filteredStidents}
                     />
                 </div>
                 <div style={{ margin: 12 }}>
@@ -243,7 +235,8 @@ class List extends React.Component{
                     label="Найти студента"
                     variant="outlined"
                     size="small"
-                    onChange={this.onInputChange}
+                    value={this.state.searchStudent}
+                    onChange={this.search}
                     />
                 </div>
 
@@ -264,10 +257,10 @@ class List extends React.Component{
                                 <InputLabel id="demo-simple-select-label">Курс</InputLabel>
                                 <Select
 
-                                    name="filterCourse"
+                                    name="course"
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    value={this.state.filterCourse}
+                                    
                                     onChange={this.onInputChange}
                                 >
                                     <MenuItem value="">Все курсы</MenuItem>
@@ -286,10 +279,10 @@ class List extends React.Component{
                                 <InputLabel id="demo-simple-select-label">Уровень</InputLabel>
                                 <Select
 
-                                    name="filterLevel"
+                                    name="lvl"
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    value={this.state.filterLevel}
+                                    
                                     onChange={this.onInputChange}
                                 >
                                     <MenuItem value="">Все уровни</MenuItem>
@@ -311,8 +304,8 @@ class List extends React.Component{
                                     helperText="Значение и более"
                                     type="number"
                                     fullWidth
-                                    name="filterMissed"
-                                    value={this.filterMissed}
+                                    name="missed"
+                                    
                                     onChange={this.onInputChange}
                                 />
                             </FormControl>
@@ -323,7 +316,10 @@ class List extends React.Component{
                     </Accordion>
                 </div>
 
-                <this.outputInfo filteredStudents={searchFilteredStudents}/>
+                <this.outputInfo
+                    filteredStudents={filteredStidents}
+                    
+                />
                 
             </div>
 
