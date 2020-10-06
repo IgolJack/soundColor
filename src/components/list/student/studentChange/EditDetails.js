@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
-import { db } from './services/firebase'
-import {
-    Button,
-    TextField,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    InputLabel,
-    MenuItem,
-    FormControl,
-    Select
-} from '@material-ui/core';
+import { db } from '../../../firebase/firebase'
 
-class AddStudent extends Component {
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+
+import EditIcon from '@material-ui/icons/Edit';
+
+class EditDetails extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -22,21 +25,26 @@ class AddStudent extends Component {
             missed: 0,
             id: "",
             course: "Первый курс",
-            open: false,
-            lastId: ""  
+            open: false
+  
         }
     }
     
+
     mapUserDetailToState = () => {
         this.setState({
-            lastId: this.props.lastId ? this.props.lastId : ''            
-        })        
+            id: this.props.id ? this.props.id : '',            
+            name: this.props.name ? this.props.name : '',
+            lvl: this.props.lvl ? this.props.lvl : 0,
+            missed: this.props.missed ? this.props.missed : 0,
+            course: this.props.course ? this.props.course : '',
+            
+        })
     }
 
     handleOpen = () => {
         this.setState({ open: true })
         this.mapUserDetailToState()
-        console.log(this.state.lastId)
     }
 
     handleClose = () => {
@@ -54,34 +62,20 @@ class AddStudent extends Component {
         this.setState({ [name]: value });
     }
 
-    addNewStudent = () => {        
-        if ((this.state.name !== "" && this.state.lvl !== "") && this.state.missed !== ""){            
-            var LastId = Number(this.props.lastId)
-            LastId+=1
-            LastId=String(LastId)
-            db.collection('students')
-                .doc(LastId)
-                .set({
-                    id: LastId,
-                    name: this.state.name,
-                    course: this.state.course,
-                    lvl: this.state.lvl,
-                    missed: this.state.missed
-                });
-            this.props.getStudents()
-            this.setState({ 
-                name: "",
-                course: "Первый курс",
-                lvl: 0,
-                missed: 0
-            })
-        } else {
-            console.log("Введите значение!!")
-            
-        }
+    handleSubmit = () => {        
+        db.collection('students')
+            .doc(`${this.state.id}`)
+            .set({
+                id: this.state.id,
+                name: this.state.name,
+                course: this.state.course,
+                lvl: this.state.lvl,
+                missed: this.state.missed
+            });
+        
         this.handleClose()
-        this.props.getStudents()
-        this.props.outputInfo(this.props.filteredStudents)
+        this.props.componentDidMount()
+        this.props.outputInfo()
     }
 
     outputTextField = (props) => {
@@ -110,16 +104,20 @@ class AddStudent extends Component {
     render() {
         return (
             <div>
-                <Button variant="contained" onClick={this.handleOpen}>Добавить студента</Button>
+                <Tooltip title="Редактировать">
+                    <IconButton aria-label="edit"  onClick={this.handleOpen}>
+                        <EditIcon />
+                    </IconButton>
+                </Tooltip>
                 <Dialog 
                 open={this.state.open}
                 
                 fullWidth
                 maxWidth="sm">
-                    <DialogTitle>Добавьте пользователя</DialogTitle>
+                    <DialogTitle>Редактирование данных</DialogTitle>
                     <DialogContent>
                         <form>
-                            <p>
+                        <p>
                                 <FormControl
                                     required
                                     fullWidth
@@ -141,8 +139,6 @@ class AddStudent extends Component {
                                     </Select>
                                 </FormControl>
                             </p>
-                                                   
-                        
                         
                         <this.outputTextField                             
                             label="ФИО"
@@ -173,8 +169,8 @@ class AddStudent extends Component {
                         </form>
                     </DialogContent>
                     <DialogActions>
-                        <Button variant="contained" onClick={this.handleClose}>Закрыть</Button>
-                        <Button variant="contained" onClick={this.addNewStudent}>Добавить</Button>
+                        <Button onClick={this.handleClose}>Закрыть</Button>
+                        <Button onClick={this.handleSubmit}>Сохранить</Button>
                     </DialogActions>
                 </Dialog>
             </div>
@@ -182,4 +178,4 @@ class AddStudent extends Component {
     }
 }
 
-export default AddStudent;
+export default EditDetails;

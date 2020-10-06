@@ -1,15 +1,14 @@
 import React from 'react'
-import './App.css';
 import {
     BrowserRouter as Router,
     Route,
     Switch
 } from 'react-router-dom'
-import InfoEvent from "./components/calendar/infoEvent";
-import List from './components/List'
+import InfoEvent from "./components/calendar/calendarEvents/infoEvent";
+import List from './components/list/List'
 import NotFound from './components/NotFound'
 import Home from './components/Home'
-import InfoStudent from './components/InfoStudent'
+import InfoStudent from './components/list/student/InfoStudent'
 import LoginPage from './components/registration/LoginPage'
 import Calendar from './components/calendar/calendar'
 import { AuthProvider } from "./components/registration/Auth";

@@ -1,38 +1,29 @@
 import React from 'react'
-import { auth } from './services/firebase'
+import { auth } from './firebase/firebase'
+import {NavLink} from 'react-router-dom'
 
-import Button from '@material-ui/core/Button';
-
-import {
-    NavLink
-} from 'react-router-dom'
-
+import Navbar from 'react-bootstrap/Navbar'
+import {Button} from "react-bootstrap";
 
 class Home extends React.Component{
     
     render(){
         return(            
-            <div>              
-                <h1>           
-                    <div><Button onClick={() => auth.signOut()}>Выйти</Button></div>          
-                    <Button variant="contained">
-                        <NavLink to="/Calendar">Регистрация (если не зареган ничего не отображается!)</NavLink>
-                    </Button>
-                    <br/>
-                    <Button variant="contained">
-                        <NavLink to="/Calendar">Вход (в зависимости от типа профиля отображаются те или иные блоки)</NavLink>
-                    </Button>
-                    <br/>
-                    <Button variant="contained">
-                        <NavLink to="/list">Список студентов</NavLink>
-                    </Button>
-                    <br/>
-                    <Button variant="contained">
-                        <NavLink to="/Calendar">Календарь</NavLink>
-                    </Button>      
-                </h1>
+            <div>
+                <Navbar bg="light">
+                    <Button variant="primary" size="lg" block onClick={() => auth.signOut()}>Выйти</Button>
+                </Navbar>
+                <Navbar bg="light">
+                    <NavLink to="/list"  style={{ width: "100%", 'text-decoration': "none"}}>
+                        <Button variant="primary" size="lg" block>  Список студентов</Button>
+                    </NavLink>
+                </Navbar>
+                <Navbar bg="light" >
+                        <NavLink to="/Calendar" style={{ width: "100%",  'text-decoration': "none"}} >
+                            <Button variant="primary" size="lg" block>Календарь</Button>
+                        </NavLink>
+                </Navbar>
             </div>
-
         )
     }
 }

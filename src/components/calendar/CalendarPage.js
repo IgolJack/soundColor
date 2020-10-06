@@ -1,5 +1,5 @@
 import React from 'react'
-import Calendar from './calendar/calendar'
+import Calendar from './calendar'
 import {
    Link
 } from 'react-router-dom'
@@ -8,7 +8,6 @@ import {
     render() {
         return (
             <div>
-
                 <Calendar/>
             </div>
         )

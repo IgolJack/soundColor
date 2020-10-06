@@ -1,5 +1,5 @@
 import React from 'react'
-import {db} from '../services/firebase'
+import {db} from '../../firebase/firebase'
 import {NavLink} from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import * as firebase from "firebase";

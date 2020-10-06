@@ -1,11 +1,10 @@
 
 import React from 'react'
-import { db } from './services/firebase'
+import { db } from '../firebase/firebase'
 import TextField from '@material-ui/core/TextField';
 import './List.css';
 
 import Button from '@material-ui/core/Button';
-
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
@@ -15,17 +14,11 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 
-
-
-
-
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-
-import AddStudent from './AddStudent'
-
-import DeleteStudent from './Warnings/DeleteStudent'
-import EditDetails from './EditDetails'
+import AddStudent from './student/studentChange/AddStudent'
+import DeleteStudent from './student/studentChange/DeleteStudent'
+import EditDetails from './student/studentChange/EditDetails'
 
 
 import {

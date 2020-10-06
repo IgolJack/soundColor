@@ -1,10 +1,8 @@
 import React from 'react'
-import { db } from './services/firebase'
+import { db } from '../../firebase/firebase'
 import Button from '@material-ui/core/Button'
 import { NavLink } from 'react-router-dom'
-import EditDetails from './EditDetails'
-
-
+import EditDetails from './studentChange/EditDetails'
 
 class InfoStudent extends React.Component {
   constructor(props) {
@@ -25,10 +23,8 @@ class InfoStudent extends React.Component {
   componentDidMount() {
     const { match: { params } } = this.props
     const { studentId } = params
-    
     this.setState({ id: studentId })
     var docRef = db.collection('students').doc(studentId)
-
     this.getInfo(docRef)    
   }
 
