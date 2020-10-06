@@ -5,22 +5,12 @@ import {db} from "../../firebase/firebase";
 import Form from 'react-bootstrap/Form'
 
 class CalendarNewEvent extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            lastId: '',
-
-        }
-    }
-
     state = {
         id: "",
         title: "",
         start: "",
         end: "",
-        lastId: "",
     }
-
 
     addNewEvent = () => {
         let id = Number(this.props.lastId) + 1

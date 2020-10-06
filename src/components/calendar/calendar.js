@@ -19,7 +19,6 @@ class Calendar extends React.Component {
         super(props);
         this.state = {
             events: [],
-
         }
     }
 
@@ -36,7 +35,6 @@ class Calendar extends React.Component {
                         lastId = doc.id
                     }
                     events.push(data)
-
                 })
                 this.setState({events: events, lastId: lastId})
             })
@@ -56,7 +54,7 @@ class Calendar extends React.Component {
         return (
             <div>
                 <BackToHome/>
-                <CalendarNewEvent name={this.state.lastId}/>
+                <CalendarNewEvent lastId={this.state.lastId}/>
                 <FullCalendar
                     defaultView="dayGridMonth"
                     plugins={[interactionPlugin, dayGridPlugin]}
