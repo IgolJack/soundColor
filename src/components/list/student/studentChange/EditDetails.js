@@ -74,8 +74,6 @@ class EditDetails extends Component {
             });
         
         this.handleClose()
-        this.props.componentDidMount()
-        this.props.outputInfo()
     }
 
     outputTextField = (props) => {

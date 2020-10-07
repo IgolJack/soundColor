@@ -80,8 +80,6 @@ class AddStudent extends Component {
             
         }
         this.handleClose()
-        this.props.getStudents()
-        this.props.outputInfo(this.props.filteredStudents)
     }
 
     outputTextField = (props) => {

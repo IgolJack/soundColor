@@ -42,8 +42,6 @@ class DeleteStudent extends Component {
             console.error("Error removing document: ", error);
         });
         this.handleClose()
-        this.props.getStudents()
-        this.props.outputInfo()
     }
 
     render() {
