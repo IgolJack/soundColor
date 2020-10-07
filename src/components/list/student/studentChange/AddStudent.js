@@ -1,17 +1,8 @@
-import React, { Component } from 'react';
-import { db } from '../../../firebase/firebase'
-import {
-    Button,
-    TextField,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    InputLabel,
-    MenuItem,
-    FormControl,
-    Select
-} from '@material-ui/core';
+import React, {Component} from 'react';
+import {db} from '../../../firebase/firebase'
+import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form";
+import {Button} from "react-bootstrap";
 
 class AddStudent extends Component {
     constructor(props) {
@@ -23,42 +14,41 @@ class AddStudent extends Component {
             id: "",
             course: "Первый курс",
             open: false,
-            lastId: ""  
+            lastId: ""
         }
     }
-    
+
     mapUserDetailToState = () => {
         this.setState({
-            lastId: this.props.lastId ? this.props.lastId : ''            
-        })        
+            lastId: this.props.lastId ? this.props.lastId : ''
+        })
     }
 
     handleOpen = () => {
-        this.setState({ open: true })
+        this.setState({open: true})
         this.mapUserDetailToState()
         console.log(this.state.lastId)
     }
 
     handleClose = () => {
-        this.setState({ open: false })
+        this.setState({open: false})
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.mapUserDetailToState()
-    }  
-        
+    }
+
     onInputChange = event => {
         const name = event.target.name;
         const value = event.target.value;
-        
-        this.setState({ [name]: value });
+        this.setState({[name]: value});
     }
 
-    addNewStudent = () => {        
-        if ((this.state.name !== "" && this.state.lvl !== "") && this.state.missed !== ""){            
+    addNewStudent = () => {
+        if ((this.state.name !== "" && this.state.lvl !== "") && this.state.missed !== "") {
             var LastId = Number(this.props.lastId)
-            LastId+=1
-            LastId=String(LastId)
+            LastId += 1
+            LastId = String(LastId)
             db.collection('students')
                 .doc(LastId)
                 .set({
@@ -69,7 +59,7 @@ class AddStudent extends Component {
                     missed: this.state.missed
                 });
             this.props.getStudents()
-            this.setState({ 
+            this.setState({
                 name: "",
                 course: "Первый курс",
                 lvl: 0,
@@ -77,104 +67,91 @@ class AddStudent extends Component {
             })
         } else {
             console.log("Введите значение!!")
-            
         }
         this.handleClose()
     }
 
     outputTextField = (props) => {
-        return(
-            <p>
-                            <TextField
-                                id="standard-full-width"
-                                label={`${props.label}`}
-                                style={{ margin: 8 }}
-                                placeholder={`${props.placeholder}`}
-                                fullWidth
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                className={`input${props.className}`}
-                                required
-                                type={`${props.type}`}
-                                name={`${props.name}`}
-                                value={props.value}
-                                onChange={this.onInputChange}
-                            /></p>
+        return (
+                <Form.Control
+                    id="standard-full-width"
+                    label={`${props.label}`}
+                    style={{margin: 8}}
+                    placeholder={`${props.placeholder}`}
+                    className={`input${props.className}`}
+                    required
+                    type={`${props.type}`}
+                    name={`${props.name}`}
+                    value={props.value}
+                    onChange={this.onInputChange}
+                />
         )
     }
-    
+
     render() {
         return (
             <div>
-                <Button variant="contained" onClick={this.handleOpen}>Добавить студента</Button>
-                <Dialog 
-                open={this.state.open}
-                
-                fullWidth
-                maxWidth="sm">
-                    <DialogTitle>Добавьте пользователя</DialogTitle>
-                    <DialogContent>
-                        <form>
-                            <p>
-                                <FormControl
-                                    required
-                                    fullWidth
-                                    style={{ margin: 8 }}
+                <Button  variant="primary" onClick={this.handleOpen}>Добавить студента</Button>
+
+                <Modal show={this.state.open}>
+                    <Modal.Header>
+                        <Modal.Title>Добавить пользователя</Modal.Title>
+                    </Modal.Header>
+
+                    <Modal.Body>
+                        <Form>
+                            <Form.Group controlId="exampleForm.ControlInput1">
+                                <Form.Label>Курс</Form.Label>
+
+                                <Form.Control as="select"
+                                              name="course"
+                                              labelId="demo-simple-select-label"
+                                              id="demo-simple-select"
+                                              value={this.state.course}
+                                              onChange={this.onInputChange}
                                 >
-                                    <InputLabel id="demo-simple-select-label">Курс</InputLabel>
-                                    <Select
-                                        name="course"
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={this.state.course}
-                                        onChange={this.onInputChange}
-                                    >
-                                        <MenuItem value="Первый курс">Первый курс</MenuItem>
-                                        <MenuItem value="Второй курс">Второй курс</MenuItem>
-                                        <MenuItem value="Третий курс">Третий курс</MenuItem>
-                                        <MenuItem value="Четвертый курс">Четвертый курс</MenuItem>
-                                        <MenuItem value="Пятый курс">Пятый курс</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </p>
-                                                   
-                        
-                        
-                        <this.outputTextField                             
-                            label="ФИО"
-                            placeholder="Иванов Иван Иванович"
-                            className="Name"
-                            type="text"
-                            name="name"
-                            value={this.state.name}
-                        />
+                                    <option value="Первый курс">Первый курс</option>
+                                    <option value="Второй курс">Второй курс</option>
+                                    <option value="Третий курс">Третий курс</option>
+                                    <option value="Четвертый курс">Четвертый курс</option>
+                                    <option value="Пятый курс">Пятый курс</option>
+                                </Form.Control>
+                                <Form.Label>ФИО</Form.Label>
+                                <this.outputTextField
+                                    label="ФИО"
+                                    placeholder="Иванов Иван Иванович"
+                                    className="Name"
+                                    type="text"
+                                    name="name"
+                                    value={this.state.name}
+                                />
+                                <Form.Label>Уровень</Form.Label>
+                                <this.outputTextField
+                                    label="Уровень"
+                                    placeholder="Уровень"
+                                    className="Lvl"
+                                    type="number"
+                                    name="lvl"
+                                    value={this.state.lvl}
+                                />
+                                <Form.Label>Пропуски</Form.Label>
+                                <this.outputTextField
+                                    label="Пропусков"
+                                    placeholder="Пропусков"
+                                    className="inputMiss"
+                                    type="number"
+                                    name="missed"
+                                    value={this.state.missed}
+                                />
+                            </Form.Group>
+                        </Form>
+                    </Modal.Body>
 
-                        <this.outputTextField
-                            label="Уровень"
-                            placeholder="Уровень"
-                            className="Lvl"
-                            type="number"
-                            name="lvl"
-                            value={this.state.lvl}
-                        />
-
-                        <this.outputTextField
-                            label="Пропусков"
-                            placeholder="Пропусков"
-                            className="inputMiss"
-                            type="number"
-                            name="missed"
-                            value={this.state.missed}
-                        />
-                        </form>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button variant="contained" onClick={this.handleClose}>Закрыть</Button>
-                        <Button variant="contained" onClick={this.addNewStudent}>Добавить</Button>
-                    </DialogActions>
-                </Dialog>
+                    <Modal.Footer>
+                        <Button onClick={this.handleClose}>Закрыть</Button>
+                        <Button onClick={this.addNewStudent}>Добавить</Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
         );
     }

@@ -1,8 +1,7 @@
 import React from 'react'
 import { db } from '../../firebase/firebase'
-import Button from '@material-ui/core/Button'
-import { NavLink } from 'react-router-dom'
 import EditDetails from './studentChange/EditDetails'
+import BackToHome from "../../UI/backToHome";
 
 class InfoStudent extends React.Component {
   constructor(props) {
@@ -53,26 +52,13 @@ class InfoStudent extends React.Component {
 
   outputButton() {
     return (
-      <div>
-        
-        <div style={{ margin: 12 }}>
-          <Button variant="contained">
-            <NavLink to="/list">Вернуться к списку студентов</NavLink>
-          </Button>
-        </div>
-        <div style={{ margin: 12 }}>
-          <Button variant="contained">
-            <NavLink to="/">Вернуться на главную страницу</NavLink>
-          </Button>
-        </div>
-      </div>
+     <BackToHome/>
     )
   }
 
   outputInfo(){
     return(
       <div>
-        <div style={{ float: "right" }}>
           <EditDetails
             name={this.state.name}
             lvl={this.state.lvl}
@@ -82,23 +68,11 @@ class InfoStudent extends React.Component {
             componentDidMount={this.componentDidMount}
             outputInfo={this.outputInfo}
           />
-        </div>
-        <div style={{ paddingLeft: 48, marginTop: 21, marginBottom: 10 }}>
-          <h4 >
-            {this.state.name}
-
-          </h4>
-        </div>
-        <div>
+          <h1>{this.state.name}</h1>
           <p>{this.state.course}</p>
-        </div>
-        <div>
           <p>Уровень - {this.state.lvl}</p>
-        </div>
-        <div>
           <p>Пропусков - {this.state.missed}</p>
-        </div>
-      </div>
+     </div>
     )
   }
 

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { auth } from '../firebase/firebase'
-
 export const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {

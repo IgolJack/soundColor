@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import {db} from '../../../firebase/firebase'
-import Button from '@material-ui/core/Button';
+import Modal from 'react-bootstrap/Modal'
+import {Button} from "react-bootstrap";
+
+
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import Dialog from '@material-ui/core/Dialog';
@@ -47,25 +50,21 @@ class DeleteStudent extends Component {
     render() {
         return (
             <div>
-                <Tooltip title="Удалить">
-                    <IconButton aria-label="delete" onClick={this.handleOpen}>
-                        <DeleteForeverIcon/>
-                    </IconButton>
-                </Tooltip>
+                <Button onClick={this.handleOpen}> Удалить</Button>
 
-                <Dialog
-                    open={this.state.open}
-                    maxWidth="sm">
-                    <DialogContent>
+                <Modal
+                    show={this.state.open}
+                    backdrop="static"
+                    keyboard={false}
+                >
+                    <Modal.Body>
                         Вы точно хотите удалить этого студента?
-                    </DialogContent>
-                    <DialogActions>
+                    </Modal.Body>
+                    <Modal.Footer>
                         <Button onClick={this.handleClose}>Отмена</Button>
                         <Button onClick={this.deleteStudent}>Удалить</Button>
-                    </DialogActions>
-                </Dialog>
-
-
+                    </Modal.Footer>
+                </Modal>
             </div>
         );
     }
