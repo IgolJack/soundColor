@@ -3,14 +3,6 @@ import {db} from '../../../firebase/firebase'
 import Modal from 'react-bootstrap/Modal'
 import {Button} from "react-bootstrap";
 
-
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-
 class DeleteStudent extends Component {
     constructor(props) {
         super(props)
