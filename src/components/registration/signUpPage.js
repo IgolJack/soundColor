@@ -143,7 +143,7 @@ let course = 'Первый курс'
           <Form.Item
             label="Пароль"
             name="password"
-            value=''
+            value='password'
             type='text' 
             id='p'
             autoComplete="new-password"
