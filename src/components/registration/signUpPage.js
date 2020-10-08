@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useState } from "react";
 import { auth, db } from '../firebase/firebase'
 import {AuthContext} from '../login/Auth'
-import { Form, Input, Button, message , Select, Divider } from 'antd';
+import { Form, Input, Button, message , Select, Divider, Row, Col} from 'antd';
 import BackToHome from '../UI/backToHome'
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import './Box.css';
@@ -149,7 +149,7 @@ let course = 'Первый курс'
     );
 
       return (
-        <div  style={{padding:'50px',  width: "100%" }}>
+        <div  style={{padding:'50px' }}>
           <BackToHome/>
        <br/>
         <Form
@@ -211,78 +211,92 @@ let course = 'Первый курс'
           
          </Select>
          </Form.Item>
-         <Divider type="horizontal" style={{ width: "100%"}} />
-
-          <Form.Item
-            name="lateness"
-            value={lateness}
-            rules={[{ required: true, message: 'Please input your email!' }]}
-          >
-            <Input type="number" addonBefore="Опазданий" name="lateness" min={0} defaultValue={lateness} />
+         
+        <Input.Group compact style={{ display:'flex', flexWrap: 'wrap', justifyContent: 'center', flexDirection: 'row', alignContent: 'center', alignItems: 'stretch', margin: 'auto', flex: 'auto' }}>
+         
+            <Form.Item
+                name="lateness"
+                style={{ margin: 5}} 
+                value={lateness}
+                rules={[{ required: true, message: 'Please input your email!' }]}
+            >
+              <Input type="number" style={{ width: 150}}  addonBefore="Опозданий" name="lateness" min={0} defaultValue={lateness} /> 
           </Form.Item>
+
           <Form.Item
             name="lvl"
             value={lvl}
+            style={{ margin: 5}} 
             rules={[{ required: true, message: 'Please input your email!' }]}
           >
-            <Input type="number" addonBefore="Уровень" name="lvl" min={0} defaultValue={lvl} />
+          <Input type="number" style={{ width: 150}}  addonBefore="Уровень" name="lvl" min={0} defaultValue={lvl} /> 
           </Form.Item>
-         
+
           <Form.Item
             name="missed"
             value={missed}
+            style={{ margin: 5}} 
             rules={[{ required: true, message: 'Please input your email!' }]}
           >
-            <Input name="missed" type="number" addonBefore="Пропусков" defaultValue={missed} min={0} />
+            <Input name="missed"  style={{ width: 150}} type="number" addonBefore="Пропусков" defaultValue={missed} min={0} />
           </Form.Item>
          
           <Form.Item
             name="disgrace"
+            style={{ margin: 5}} 
             value={disgrace}
             rules={[{ required: true, message: 'Please input your email!' }]}
           >
-            <Input type="number" addonBefore="Опозорил" name="disgrace" defaultValue={disgrace} min={0} />
+            <Input type="number" style={{ width: 150}} addonBefore="Опозорил" name="disgrace" defaultValue={disgrace} min={0} />
           </Form.Item>
          
           <Form.Item
             name="responsible"
+            style={{ margin: 5}} 
             value={responsible}
             rules={[{ required: true, message: 'Please input your email!' }]}
           >
-            <Input type="number" addonBefore="Отвественен" name="responsible" defaultValue={responsible} min={0} />
+            <Input type="number" style={{ width: 150}} addonBefore="Отвеств." name="responsible" defaultValue={responsible} min={0} />
           </Form.Item>
           
           <Form.Item
             name="concert"
+            style={{ margin: 5}} 
             value={concert}
             rules={[{ required: true, message: 'Please input your email!' }]}
           >
-            <Input type="number" addonBefore="Мероприятий" name="concert" defaultValue={concert} min={0} />
+            <Input type="number" style={{ width: 150}} addonBefore="Меропр." name="concert" defaultValue={concert} min={0} />
           </Form.Item>
         
           <Form.Item
             name="equipment"
+            style={{ margin: 5}} 
             value={equipment}
             rules={[{ required: true, message: 'Please input your email!' }]}
           >
-            <Input type="number" addonBefore="Оборудование" name="equipment" defaultValue={equipment} min={0} />
+            <Input type="number" style={{ width: 150}} addonBefore="Оборуд." name="equipment" defaultValue={equipment} min={0} />
           </Form.Item>
           
           <Form.Item
             name="discharges"
+            style={{ margin: 5}} 
             value={discharges}
             rules={[{ required: true, message: 'Please input your email!' }]}
           >
-            <Input type="number" addonBefore="Выписываний" name="discharges" defaultValue={discharges} min={0} />
+            <Input type="number" style={{ width: 150}} addonBefore="Выписыв." name="discharges" defaultValue={discharges} min={0} />
           </Form.Item>
         
           <Form.Item
             name="count"
+            style={{ margin: 5}} 
             value={count}
             rules={[{ required: true, message: 'Please input your email!' }]}
           >
-            <Input type="number" addonBefore="Записей" name="count" defaultValue={count} min={0} />
+            <Input type="number" style={{ width: 150}} addonBefore="Записей" name="count" defaultValue={count} min={0} />
           </Form.Item>
+          </Input.Group>
+         
+          
 
 
           
