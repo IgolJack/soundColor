@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 
 import { Collapse } from 'antd';
+import { Select } from 'antd';
 const { Panel } = Collapse;
+
+const { Option } = Select;
 
 class PropertyFilter extends Component {
     
@@ -12,7 +15,7 @@ class PropertyFilter extends Component {
                     <Panel header="Фильтры" key="1">
                         <p>
                             <h6>Курс</h6>
-                            <select
+                            <Select
                                 name="course"
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
@@ -25,11 +28,11 @@ class PropertyFilter extends Component {
                                 <option value="Третий курс">Третий курс</option>
                                 <option value="Четвертый курс">Четвертый курс</option>
                                 <option value="Пятый курс">Пятый курс</option>
-                            </select>
+                            </Select>
                             </p>
                             <p>
                             <h6>Уровень</h6>
-                            <select
+                            <Select
 
                                 name="lvl"
                                 labelId="demo-simple-select-label"
@@ -43,7 +46,7 @@ class PropertyFilter extends Component {
                                 <option value="3">Третий уровень</option>
                                 <option value="4">Четвертый уровень</option>
                                 <option value="5">Пятый уровень</option>
-                            </select>
+                            </Select>
                             </p>
                             <p>
                                 <h6>Пропуски</h6>

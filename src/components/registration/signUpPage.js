@@ -3,6 +3,7 @@ import { withRouter, Redirect } from "react-router";
 import { auth } from '../firebase/firebase'
 import {AuthContext} from '../login/Auth'
 import { Form, Input, Button, Checkbox, InputNumber } from 'antd';
+import AddStudent from '../list/student/studentChange/AddStudent'
 
 
 
@@ -49,7 +50,7 @@ let count = '0';
         }
         },
 
-        console.log(currentUser['uid'])
+        console.log(skips)
     );
 
 
@@ -174,6 +175,23 @@ let count = '0';
             <Button type="primary" htmlType="submit">
               Submit
             </Button>
+           
+             <AddStudent
+              password={values.password}
+              email={values.email}
+              name={values.name}
+              lateness={values.lateness}
+              lvl={values.lvl}
+              skips={values.skips}
+              disgrace={values.disgrace}
+              responsible={values.responsible}
+              concert={values.concert}
+              equipment={values.equipment}
+              discharges={values.discharges}
+              count={values.count}
+              uid={currentUser.uid}
+            />
+          
           </Form.Item>
         </Form>
       );
