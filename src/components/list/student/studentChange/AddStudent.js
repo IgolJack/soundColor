@@ -22,7 +22,7 @@ const AddStudent = (props) => {
     
 
     const addNewStudent = () => {
-        console.log(props.values)
+        console.log(props)
             db.collection('students')
                 .doc(uid)
                 .set({
