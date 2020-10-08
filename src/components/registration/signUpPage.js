@@ -163,6 +163,7 @@ let course = 'Первый курс'
 
           <Form.Item
             label="Опазданий"
+            type="number"
             name="lateness"
             value={lateness}
             rules={[{ required: true, message: 'Please input your email!' }]}
@@ -172,6 +173,7 @@ let course = 'Первый курс'
 
           <Form.Item
             label="Уровень"
+            type="number"
             name="lvl"
             value={lvl}
             rules={[{ required: true, message: 'Please input your email!' }]}
@@ -181,6 +183,7 @@ let course = 'Первый курс'
 
           <Form.Item
             label="Пропусков"
+            type="number"
             name="missed"
             value={missed}
             rules={[{ required: true, message: 'Please input your email!' }]}
@@ -190,6 +193,7 @@ let course = 'Первый курс'
 
           <Form.Item
             label="Опозорил раз"
+            type="number"
             name="disgrace"
             value={disgrace}
             rules={[{ required: true, message: 'Please input your email!' }]}
@@ -199,6 +203,7 @@ let course = 'Первый курс'
 
           <Form.Item
             label="Отвественен раз"
+            type="number"
             name="responsible"
             value={responsible}
             rules={[{ required: true, message: 'Please input your email!' }]}
@@ -208,6 +213,7 @@ let course = 'Первый курс'
 
           <Form.Item
             label="Мероприятий посетило"
+            type="number"
             name="concert"
             value={concert}
             rules={[{ required: true, message: 'Please input your email!' }]}
@@ -217,6 +223,7 @@ let course = 'Первый курс'
 
           <Form.Item
             label="Оборудование брало"
+            type="number"
             name="equipment"
             value={equipment}
             rules={[{ required: true, message: 'Please input your email!' }]}
@@ -226,6 +233,7 @@ let course = 'Первый курс'
           
           <Form.Item
             label="Выписываний"
+            type="number"
             name="discharges"
             value={discharges}
             rules={[{ required: true, message: 'Please input your email!' }]}
@@ -235,6 +243,7 @@ let course = 'Первый курс'
           
           <Form.Item
             label="Сдано записей"
+            type="number"
             name="count"
             value={count}
             rules={[{ required: true, message: 'Please input your email!' }]}
@@ -245,6 +254,7 @@ let course = 'Первый курс'
 
           <Form.Item
             label="Выберите курс"
+            type="number"
             name="course"
             value={course}
             >
