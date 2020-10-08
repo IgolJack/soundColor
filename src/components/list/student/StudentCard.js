@@ -6,11 +6,6 @@ import {
 } from 'react-router-dom'
 
 class StudentCard extends Component {
-    constructor(props){
-        super(props)
-        
-    }
-    
     
     render() {
         return (

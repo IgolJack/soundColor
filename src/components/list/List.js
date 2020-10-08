@@ -69,7 +69,7 @@ class List extends React.Component {
         // console.log(this.state.lastId)        
         return (
             <div className="App">
-                <h1>Студенты</h1>
+                <h2 style={{ textAlign: "center" }}>Студенты</h2>
                 <div>
                     <BackToHome/>
                 </div>

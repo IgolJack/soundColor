@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import StudentCard from './StudentCard'
-import {
-    NavLink
-} from 'react-router-dom'
+
 
 var bgColors = {
     "Default": "#81b71a",
@@ -17,11 +15,7 @@ var colorPick = bgColors.Blue
 
 
 class Students extends Component {
-    constructor(props){
-        super(props)
         
-    }
-    
     render() {
         console.log(this.props.students)
 
