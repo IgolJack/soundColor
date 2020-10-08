@@ -3,6 +3,7 @@ import { auth, db } from '../firebase/firebase'
 import {AuthContext} from '../login/Auth'
 import { Form, Input, Button, InputNumber, Select, Divider } from 'antd';
 import BackToHome from '../UI/backToHome'
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 const { Option } = Select;
 
 const layout = {
@@ -77,8 +78,6 @@ let course = 'Первый курс'
       
   };
 
-
-
     const handleLogin = useCallback(
       
         async values => {
@@ -117,13 +116,14 @@ let course = 'Первый курс'
         },
     );
 
-    
       return (
-        <div>
+        <div  style={{padding:'50px'}}>
           <BackToHome/>
-
+        <br/>
         <Form
           form={form}
+          size="large"
+          style={{maxWidth:'500px'}}
           {...layout}
           name="basic"
           initialValues={{ 
@@ -132,16 +132,14 @@ let course = 'Первый курс'
           onFinish={handleLogin}
         >
           <Form.Item
-            label="Email"
             name="email"
             value={email}
             rules={[{ required: true, message: 'Please input your email!' }]}
           >
-            <Input name="email"/>
+            <Input addonBefore="Email" prefix={<UserOutlined className="site-form-item-icon" />} name="email"/>
           </Form.Item>
     
           <Form.Item
-            label="Пароль"
             name="password"
             value='password'
             type='text' 
@@ -150,18 +148,17 @@ let course = 'Первый курс'
             onclick={form.setFieldsValue({password: Password.generate(8)})}
             rules={[{ required: true, message: 'Please input your password!' }]}
           >
-            <Input.Password name="password" autoComplete="new-password"/>
+            <Input.Password addonBefore="Пароль" prefix={<LockOutlined className="site-form-item-icon" />} name="password" autoComplete="new-password"/>
           </Form.Item>
 
          
 
           <Form.Item
-            label="ФИО"
             name="name"
             value={name}
             rules={[{ required: true, message: 'Please input your email!' }]}
           >
-            <Input name="name"/>
+            <Input addonBefore="ФИО" name="name"/>
           </Form.Item>
 
           <Form.Item
@@ -269,7 +266,7 @@ let course = 'Первый курс'
 
           <Form.Item {...tailLayout}>
           <Button type="primary" htmlType="submit">
-              Submit
+              Зарегистрировать студента
             </Button>
           </Form.Item>
         </Form>
