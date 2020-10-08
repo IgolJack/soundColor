@@ -1,7 +1,7 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext } from "react";
 import { auth, db } from '../firebase/firebase'
 import {AuthContext} from '../login/Auth'
-import { Form, Input, Button, message , Select, Divider, Row, Col} from 'antd';
+import { Form, Input, Button, message , Select, Divider} from 'antd';
 import BackToHome from '../UI/backToHome'
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import './Box.css';
@@ -165,7 +165,16 @@ let course = 'Первый курс'
           <Form.Item
             name="email"
             value={email}
-            rules={[{ required: true, message: 'Введите email!' }]}
+            rules={[
+              {
+                type: 'email',
+                message: 'The input is not valid E-mail!',
+              },
+              {
+                required: true,
+                message: 'Please input your E-mail!',
+              },
+            ]}
           >
             <Input addonBefore="Email" prefix={<UserOutlined className="site-form-item-icon" />} name="email"/>
           </Form.Item>
@@ -295,17 +304,12 @@ let course = 'Первый курс'
           </Form.Item>
           </Input.Group>
          
-          
-
-
-          
-       
-          <Divider type="horizontal" style={{ width: "100%"}} />
+        
 
           <Form.Item 
           {...tailLayout} 
           >
-          <Button style={{width:'100%'}} type="primary" htmlType="submit">
+          <Button style={{width:'100%', margin: '8px'}} type="primary" htmlType="submit">
               Зарегистрировать студента
             </Button>
           </Form.Item>
