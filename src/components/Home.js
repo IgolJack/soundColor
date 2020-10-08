@@ -22,6 +22,11 @@ class Home extends React.Component{
                             <Button block size ="large" type="primary" >Календарь</Button>
                         </NavLink>
                 </Navbar>
+                <Navbar bg="light" >
+                        <NavLink to="/Registration" style={{ width: "100%",  'text-decoration': "none"}} >
+                            <Button block size ="large" type="primary" >Регистрация</Button>
+                        </NavLink>
+                </Navbar>
             </div>
         )
     }

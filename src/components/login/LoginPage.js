@@ -3,7 +3,7 @@ import { withRouter, Redirect } from "react-router";
 import { auth } from '../firebase/firebase'
 import { AuthContext } from "./Auth.js";
 
-const LoginPage = ({ history }) => {
+const LoginPage = () => {
   const handleLogin = useCallback(
     async event => {
       event.preventDefault();
@@ -12,12 +12,10 @@ const LoginPage = ({ history }) => {
         await 
           auth
           .signInWithEmailAndPassword(email.value, password.value);
-        history.push("/");
       } catch (error) {
         alert(error);
       }
     },
-    [history]
   );
 
   const { currentUser } = useContext(AuthContext);
