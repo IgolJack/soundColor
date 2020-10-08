@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { withRouter, Redirect } from "react-router";
 import { auth } from '../firebase/firebase'
 import {AuthContext} from '../login/Auth'
@@ -19,8 +19,9 @@ const layout = {
 
 
 const SignUpPage = () => {
-let password = '';
-let email = '';
+const [email, setEmail]  = useState('');
+let password = ''
+
 let name = '';
 let lateness = '0';
 let lvl = '1';
@@ -42,7 +43,6 @@ let count = '0';
               displayName: values.name
             })}
             )
-          
 
 
         } catch (error) {
@@ -53,7 +53,11 @@ let count = '0';
         console.log(skips)
     );
 
-
+    const updateData = (value) => {
+      setEmail(value)
+      console.log(email)
+      
+  }
     
       return (
         <Form
@@ -66,9 +70,10 @@ let count = '0';
             label="Email"
             name="email"
             value={email}
+            
             rules={[{ required: true, message: 'Please input your email!' }]}
           >
-            <Input name="email" />
+            <Input name="email" onChange={updateData}/>
           </Form.Item>
     
           <Form.Item
@@ -177,18 +182,7 @@ let count = '0';
             </Button>
            
              <AddStudent
-              password={values.password}
-              email={values.email}
-              name={values.name}
-              lateness={values.lateness}
-              lvl={values.lvl}
-              skips={values.skips}
-              disgrace={values.disgrace}
-              responsible={values.responsible}
-              concert={values.concert}
-              equipment={values.equipment}
-              discharges={values.discharges}
-              count={values.count}
+              
               uid={currentUser.uid}
             />
           
