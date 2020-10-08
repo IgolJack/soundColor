@@ -13,9 +13,6 @@ const layout = {
     wrapperCol: { offset: 8, span: 16 },
   };
 
-
-
-
 const SignUpPage = () => {
 
 let password = ''
@@ -38,9 +35,10 @@ let course = 'Первый курс'
         async values => {
         try {
             await auth.createUserWithEmailAndPassword(values.email, values.password)
-            
             .then(function(result)
-            { return result.user.updateProfile({
+            { 
+              console.log('Регистрация прошла успешно.')
+              return result.user.updateProfile({
               displayName: values.name
             })}
             )
@@ -62,14 +60,12 @@ let course = 'Первый курс'
                         uid: currentUser.uid,
                       })
                       .then(function() {
-                        console.log("Transaction successfully committed!");}
+                        console.log("Студент успешно создан.");}
                       )} 
         catch (error) {
             console.log(error);
         }
         },
-
- 
     );
     
       return (
