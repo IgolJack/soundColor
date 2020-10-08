@@ -87,7 +87,6 @@ let course = 'Первый курс'
   };
   const succes = () => {
     message.success('Студент успешно создан', 2);
-    form.setFieldsValue({password: Password.generate(8)})
     form.setFieldsValue({email: ''})
     form.setFieldsValue({name: ''})
     form.setFieldsValue({lateness: '0'})
@@ -149,7 +148,7 @@ let course = 'Первый курс'
     );
 
       return (
-        <div  style={{padding:'50px' }}>
+        <div  style={{padding:'15px' }}>
           <BackToHome/>
        <br/>
         <Form
