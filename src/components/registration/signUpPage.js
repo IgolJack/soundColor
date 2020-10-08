@@ -105,6 +105,10 @@ let course = 'Первый курс'
     message.info('Регистрация прошла успешно');
   };
 
+  const errorRed = (error) => {
+    message.error(String(error));
+  };
+
 
 
     const handleLogin = useCallback(
@@ -142,7 +146,7 @@ let course = 'Первый курс'
                       }
                       )} 
         catch (error) {
-            console.log(error);
+            errorRed(error)
         }
         },
     );
@@ -210,6 +214,8 @@ let course = 'Первый курс'
            name="course"
            value={course}
            addonBefore="ФИО"
+           rules={[{ required: true, message: 'Please input your email!' }]}
+            
           >
            <Option value="Первый курс">Первый курс</Option>
            <Option value="Второй курс">Второй курс</Option>
