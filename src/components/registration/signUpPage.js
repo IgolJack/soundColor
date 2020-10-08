@@ -19,19 +19,19 @@ const layout = {
 
 
 const SignUpPage = () => {
+const [password, setPassword]  = useState('');
 const [email, setEmail]  = useState('');
-let password = ''
+const [name, setName]  = useState('');
+const [lateness, setLateness]  = useState('0');
+const [lvl, setLvl]  = useState('1');
+const [skips, setSkips]  = useState('0');
+const [disgrace, setDisgrace]  = useState('0');
+const [responsible, setResponsible]  = useState('0');
+const [concert, setConcert]  = useState('0');
+const [equipment, setEquipment]  = useState('0');
+const [discharges, setDischarges]  = useState('0');
+const [count, setCount]  = useState('0');
 
-let name = '';
-let lateness = '0';
-let lvl = '1';
-let skips = '0';
-let disgrace = '0';
-let responsible = '0';
-let concert = '0';
-let equipment = '0';
-let discharges = '0';
-let count = '0';
   const { currentUser } = useContext(AuthContext);
     const handleLogin = useCallback(
         async values => {
@@ -50,11 +50,12 @@ let count = '0';
         }
         },
 
-        console.log(skips)
+ 
     );
 
-    const updateData = (value) => {
-      setEmail(value)
+    const updateData = (event) => {
+      setEmail(event.target.value)
+
       console.log(email)
       
   }
