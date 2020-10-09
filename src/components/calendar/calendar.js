@@ -12,7 +12,7 @@ import "tui-time-picker/dist/tui-time-picker.css";
 import { Button } from 'antd'
 
 import BackToHome from "../UI/backToHome";
-import { NavLink, Redirect } from 'react-router-dom'
+import { NavLink, Redirect, Link } from 'react-router-dom'
 
 
 class Calendar extends React.Component {
@@ -60,6 +60,9 @@ class Calendar extends React.Component {
             <div>
                 
                 <BackToHome/>
+                <NavLink to="/Registration/AddEvent" style={{width: "100%", 'text-decoration': "none"}}>
+                    <Button block size ="large" type="primary">Создать мероприятие</Button>
+                </NavLink>
                 <CalendarNewEvent lastId={this.state.lastId}/>
                 <TUICalendar
                     ref={this.calendarRef}
@@ -83,7 +86,12 @@ class Calendar extends React.Component {
                     schedules={this.state.eventsNum}
                     template={{
                         time(schedule) {
-                            return `<a href="/Calendar/${schedule.id}"> ${schedule.title} </a>`
+                            let content = [];
+                            content.push(<NavLink to="/Calendar/${schedule.id}"> ${schedule.title} </NavLink>);
+                            console.log(content);
+                            return (
+                                `<a href="/Calendar/${schedule.id}"> ${schedule.title} </a>`
+                            )
                             //<NavLink to="/Calendar/${schedule.id}"> ${schedule.title} </NavLink>
                             //`<a href="/Calendar/${schedule.id}"> ${schedule.title} </a>`
                         },
