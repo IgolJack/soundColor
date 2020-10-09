@@ -11,7 +11,7 @@ class SearchFilter extends Component {
                     name="searchStudent"
                     placeholder="Найти студента"
                     variant="outlined"
-                    size="small"
+                    size="Large"
                     fullWidth
                     value={this.props.searchStudent}
                     onChange={this.props.search}
