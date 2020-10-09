@@ -14,7 +14,7 @@ import Calendar from './components/calendar/calendar'
 import { AuthProvider } from "./components/login/Auth";
 import PrivateRoute from "./components/login/PrivateRoute";
 import SignUpPage from "./components/registration/signUpPage"
-
+import CalendarNewEvent from './components/calendar/calendarEvents/calendarNewEvent'
 const App = () => {
 
     
@@ -30,7 +30,9 @@ const App = () => {
                             <PrivateRoute exact path='/list/:studentId' component={InfoStudent} />
                             <PrivateRoute exact path="/Calendar" component={Calendar} />
                             <PrivateRoute exact path='/Calendar/:eventId' component={InfoEvent} />
+                            <PrivateRoute exact path="/Registration/AddEvent" component={CalendarNewEvent} />
                             <PrivateRoute exact path="/Registration" component={SignUpPage} />
+                            
                             <Route component={NotFound} />
                         </Switch>
                     </Router>

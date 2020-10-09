@@ -60,6 +60,9 @@ class Calendar extends React.Component {
             <div>
                 
                 <BackToHome/>
+                <NavLink to="/Registration/AddEvent" style={{width: "100%", 'text-decoration': "none"}}>
+                    <Button block size ="large" type="primary">Создать мероприятие</Button>
+                </NavLink>
                 <CalendarNewEvent lastId={this.state.lastId}/>
                 <TUICalendar
                     ref={this.calendarRef}

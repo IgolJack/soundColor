@@ -11,8 +11,6 @@ import './Box.css';
 
 const { Option } = Select;
 
-
-
 const layout = {
   labelCol: { span: 0 },
   wrapperCol: { span: 0 },
@@ -22,7 +20,7 @@ const tailLayout = {
 };
 
 const SignUpPage = (props) => {
-
+  
   let password = ''
   let email = ''
   let name = ''
@@ -36,9 +34,8 @@ const SignUpPage = (props) => {
   let discharges = '0'
   let count = '0'
   let course = 'Первый курс'
+
   const [lastId, setLastId] = useState(localStorage.getItem('lastId'))
-
-
   const { currentUser } = useContext(AuthContext);
   const [form] = Form.useForm()
   const Password = {
@@ -99,13 +96,9 @@ const SignUpPage = (props) => {
   const succesRed = () => {
     message.info('Регистрация прошла успешно');
   };
-
   const errorRed = (error) => {
     message.error(String(error));
   };
-
-
-
   const handleLogin = useCallback(
 
     async values => {
