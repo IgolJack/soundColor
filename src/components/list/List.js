@@ -1,10 +1,15 @@
 import React from 'react'
 import {db} from '../firebase/firebase'
 import './List.css';
-import AddStudent from './student/studentChange/AddStudent'
+
 import Filter from './student/filter/Filter'
 import Students from './student/Students'
 import BackToHome from "../UI/backToHome";
+import {Link} from 'react-router-dom'
+import Navbar from 'react-bootstrap/Navbar'
+import { Button } from 'antd'
+
+
 
 class List extends React.Component {
     constructor(props) {
@@ -31,7 +36,7 @@ class List extends React.Component {
                 // console.log("data.id",data.id)
                 // console.log("lastId",lastId)
                 if (lastId < data.id) {
-                    lastId = doc.id
+                    lastId = data.id
                 }
                 // console.log(lastId)
                 students.push(data)
@@ -39,11 +44,14 @@ class List extends React.Component {
             })
             // console.log("lastId: ",lastId)
             //lastId=Number(lastId)                
-            this.setState({students: students, lastId: lastId})
+            this.setState({students: students })
+            localStorage.setItem('lastId', lastId)
             // console.log("lastId: ", this.state.lastId)
             console.log(snapshot)
         })
             .catch(error => console.log(error))
+
+        
     }
 
     componentDidMount() {
@@ -66,18 +74,18 @@ class List extends React.Component {
 
     render() {
 
-        // console.log(this.state.lastId)        
+        console.log(localStorage.getItem('lastId'))        
         return (
             <div className="App">
                 <h2 style={{ textAlign: "center" }}>Студенты</h2>
                 <div>
                     <BackToHome/>
                 </div>
-                <div>
-                    <AddStudent
-                        lastId={this.state.lastId}
-                    />
-                </div>
+                <Navbar bg="light" >
+                        <Link to={{pathname: "/Registration", state: {lastId: this.state.lastId}}} style={{ width: "100%",  'text-decoration': "none"}} >
+                            <Button block size ="large" type="primary" >Регистрация</Button>
+                        </Link>
+                </Navbar>
 
                 <Filter
                     students={this.state.students}
