@@ -1,34 +1,42 @@
-import React from 'react'
-import ReactDOM from "react-dom";
+import React from "react";
+
 import {db} from "../firebase/firebase";
 import CalendarNewEvent from "./calendarEvents/calendarNewEvent"
 
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin from "@fullcalendar/interaction";
+import TUICalendar from "@toast-ui/react-calendar";
+import { ISchedule, ICalendarInfo } from "tui-calendar";
+import "tui-calendar/dist/tui-calendar.css";
+import "tui-date-picker/dist/tui-date-picker.css";
+import "tui-time-picker/dist/tui-time-picker.css";
 
-import "@fullcalendar/core/main.css";
-import "@fullcalendar/daygrid/main.css";
+import { Button } from 'antd'
 
 import BackToHome from "../UI/backToHome";
+import { NavLink, Redirect } from 'react-router-dom'
+
 
 class Calendar extends React.Component {
+    
+    calendarRef = React.createRef();
+ 
+    handleClickNextButton = () => {
+      const calendarInstance = this.calendarRef.current.getInstance();
+      calendarInstance.next();
+    };
+
     state = {
         lastId: "",
+        eventsNum: [],
     }
+     
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            events: [],
-        }
-    }
+
 
     componentDidMount() {
         db.collection('eventsCalendar')
             .get()
             .then(snapshot => {
-                const events = []
+                let events = []
                 let lastId = 0
                 snapshot.forEach(doc => {
                     const data = doc.data()
@@ -38,34 +46,63 @@ class Calendar extends React.Component {
                     }
                     events.push(data)
                 })
-                this.setState({events: events, lastId: lastId})
+                this.setState({eventsNum: events, lastId: lastId})
             })
             .catch(error => console.log(error))
-
+       
     }
 
-    EventDetail = ({event, el}) => {
-        const content = (
-            <a style={{ 'text-decoration': "none", color:'white'}} href={`/Calendar/${event.id}`}>{event.title}</a>
-        );
-        ReactDOM.render(content, el);
-        return el;
-    }
+ 
 
     render() {
+      
         return (
             <div>
+                
                 <BackToHome/>
                 <CalendarNewEvent lastId={this.state.lastId}/>
-                <FullCalendar
-                    defaultView="dayGridMonth"
-                    plugins={[interactionPlugin, dayGridPlugin]}
-                    themeSystem='standard'
-                    weekends={false}
-                    displayEventTime={true}
-                    events={this.state.events}
-                    eventRender={this.EventDetail}
+                <TUICalendar
+                    ref={this.calendarRef}
+                    height="500px"
+                    onClickSchedule = {this.clickSchedule}
+                    view="month"
+                    useCreationPopup={false}
+                    useDetailPopup={false}
+                    disableDblClick={true}
+                    disableClick={true}
+                    calendars={[
+                        {
+                            id: "1",
+                            name: "My Calendar",
+                            color: "#ffffff",
+                            bgColor: "#9e5fff",
+                            dragBgColor: "#9e5fff",
+                            borderColor: "#9e5fff"
+                          }
+                    ]}
+                    schedules={this.state.eventsNum}
+                    template={{
+                        time(schedule) {
+                            return `<a href="/Calendar/${schedule.id}"> ${schedule.title} </a>`
+                            //<NavLink to="/Calendar/${schedule.id}"> ${schedule.title} </NavLink>
+                            //`<a href="/Calendar/${schedule.id}"> ${schedule.title} </a>`
+                        },
+                        milestoneTitle() {
+                          return 'Milestone';
+                        },
+                        allday(schedule) {
+                          return `${schedule.title}<i class="fa fa-refresh"></i>`;
+                        },
+                        alldayTitle() {
+                          return 'All Day';
+                        }
+                      }}
+                      
+                      
+
                 />
+                <br/>
+                <Button block size ="large" type="primary" onClick={this.handleClickNextButton}>Go next!</Button>
             </div>
         )
     }
