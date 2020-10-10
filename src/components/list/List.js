@@ -78,13 +78,11 @@ class List extends React.Component {
         return (
             <div className="App">
                 <h2 style={{ textAlign: "center" }}>Студенты</h2>
-                <div>
-                    <BackToHome/>
-                </div>
+                
                 <Navbar bg="light" >
-                        <Link to={{pathname: "/Registration", state: {lastId: this.state.lastId}}} style={{ width: "100%",  'text-decoration': "none"}} >
-                            <Button block size ="large" type="primary" >Регистрация</Button>
-                        </Link>
+                    <Link to={{ pathname: "/Registration", state: { lastId: this.state.lastId } }} style={{ width: "100%", 'text-decoration': "none" }} >
+                        <Button block size="large" type="primary" >Регистрация</Button>
+                    </Link>
                 </Navbar>
 
                 <Filter
@@ -99,7 +97,7 @@ class List extends React.Component {
                     filterName={this.state.filterName}
                     searchStudent={this.state.searchStudent}
                 />
-
+                <BackToHome />
             </div>
 
         )
