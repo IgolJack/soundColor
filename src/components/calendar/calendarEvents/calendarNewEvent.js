@@ -2,7 +2,7 @@ import React from "react";
 import {db} from "../../firebase/firebase";
 import { Form, Input, Button, DatePicker, Row, Col, Select, TimePicker} from 'antd';
 import TreeTransfer from "./treeTransfer";
-
+import BackToHome from "../../UI/backToHome";
 
 const CalendarNewEvent = (props) => {
     const [form] = Form.useForm();
@@ -36,6 +36,8 @@ const CalendarNewEvent = (props) => {
 
     return (
         <div>
+            
+            <BackToHome/>
             <Form
                 form={form}
                 layout="auto"

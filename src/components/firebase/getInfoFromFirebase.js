@@ -12,6 +12,7 @@ const getInfoFromFirebase = () => {
                 const data = doc.data()
                 events.push(data)
             })
+           
             console.log('Там >',events)
         })
         

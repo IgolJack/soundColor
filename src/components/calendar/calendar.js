@@ -11,49 +11,23 @@ import "tui-time-picker/dist/tui-time-picker.css";
 
 import { Button } from 'antd'
 import BackToHome from "../UI/backToHome";
-import { NavLink, Redirect, Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
+import {getInfoFromFirebase} from "../firebase/getInfoFromFirebase"
 
-
-class Calendar extends React.Component {
+const Calendar = () => {
     
-    calendarRef = React.createRef();
- 
-    handleClickNextButton = () => {
+    const calendarRef = React.createRef();
+    const handleClickNextButton = () => {
       const calendarInstance = this.calendarRef.current.getInstance();
       calendarInstance.next();
     };
+    var eventsNum
+    const { fire} = getInfoFromFirebase()
+    fire("eventsCalendar")
 
-    state = {
-        lastId: "",
-        eventsNum: [],
-    }
-     
-
-
-
-    componentDidMount() {
-        db.collection('eventsCalendar')
-            .get()
-            .then(snapshot => {
-                let events = []
-                let lastId = 0
-                snapshot.forEach(doc => {
-                    const data = doc.data()
-                    data.id = Number(data.id)
-                    if (lastId < data.id) {
-                        lastId = doc.id
-                    }
-                    events.push(data)
-                })
-                this.setState({eventsNum: events, lastId: lastId})
-            })
-            .catch(error => console.log(error))
-       
-    }
+    
 
  
-
-    render() {
       
         return (
             <div>
@@ -62,11 +36,9 @@ class Calendar extends React.Component {
                 <NavLink to="/Registration/AddEvent" style={{width: "100%", 'text-decoration': "none"}}>
                     <Button block size ="large" type="primary">Создать мероприятие</Button>
                 </NavLink>
-                <CalendarNewEvent lastId={this.state.lastId}/>
                 <TUICalendar
-                    ref={this.calendarRef}
+                    ref={calendarRef}
                     height="500px"
-                    onClickSchedule = {this.clickSchedule}
                     view="month"
                     useCreationPopup={false}
                     useDetailPopup={false}
@@ -82,7 +54,7 @@ class Calendar extends React.Component {
                             borderColor: "#9e5fff"
                           }
                     ]}
-                    schedules={this.state.eventsNum}
+                    schedules={eventsNum}
                     template={{
                         time(schedule) {
                             let content = [];
@@ -93,15 +65,6 @@ class Calendar extends React.Component {
                             )
                             //<NavLink to="/Calendar/${schedule.id}"> ${schedule.title} </NavLink>
                             //`<a href="/Calendar/${schedule.id}"> ${schedule.title} </a>`
-                        },
-                        milestoneTitle() {
-                          return 'Milestone';
-                        },
-                        allday(schedule) {
-                          return `${schedule.title}<i class="fa fa-refresh"></i>`;
-                        },
-                        alldayTitle() {
-                          return 'All Day';
                         }
                       }}
                       
@@ -109,10 +72,10 @@ class Calendar extends React.Component {
 
                 />
                 <br/>
-                <Button block size ="large" type="primary" onClick={this.handleClickNextButton}>Go next!</Button>
+                <Button block size ="large" type="primary" onClick={handleClickNextButton}>Go next!</Button>
             </div>
         )
-    }
+    
 }
 
 export default Calendar
