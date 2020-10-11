@@ -1,6 +1,7 @@
 import React from "react";
 import {db} from "../../firebase/firebase";
 import { Form, Input, Button, DatePicker, Row, Col, Select, TimePicker} from 'antd';
+import TreeTransfer from "./treeTransfer";
 
 
 const CalendarNewEvent = (props) => {
@@ -112,7 +113,7 @@ const CalendarNewEvent = (props) => {
                         </Select>
                         </Form.Item>
 
-
+                        <TreeTransfer/>
                         <h1>TreeTransferWithSearchAndTagsHere</h1>
 
                 <Form.Item>
