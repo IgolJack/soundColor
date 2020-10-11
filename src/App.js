@@ -14,6 +14,7 @@ import Calendar from './components/calendar/calendar'
 import { AuthProvider } from "./components/login/Auth";
 import PrivateRoute from "./components/login/PrivateRoute";
 import SignUpPage from "./components/registration/signUpPage"
+import HomeTeam from "./components/firebase/get"
 import CalendarNewEvent from './components/calendar/calendarEvents/calendarNewEvent'
 const App = () => {
 
@@ -32,7 +33,7 @@ const App = () => {
                             <PrivateRoute exact path='/Calendar/:eventId' component={InfoEvent} />
                             <PrivateRoute exact path="/Registration/AddEvent" component={CalendarNewEvent} />
                             <PrivateRoute exact path="/Registration" component={SignUpPage} />
-                            
+                            <PrivateRoute exact path="/Get" component={HomeTeam} />
                             <Route component={NotFound} />
                         </Switch>
                     </Router>

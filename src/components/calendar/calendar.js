@@ -10,7 +10,6 @@ import "tui-date-picker/dist/tui-date-picker.css";
 import "tui-time-picker/dist/tui-time-picker.css";
 
 import { Button } from 'antd'
-
 import BackToHome from "../UI/backToHome";
 import { NavLink, Redirect, Link } from 'react-router-dom'
 
