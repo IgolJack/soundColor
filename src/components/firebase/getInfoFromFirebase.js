@@ -12,10 +12,17 @@ const getInfoFromFirebase = () => {
                 const data = doc.data()
                 events.push(data)
             })
-           
-            console.log('Там >',events)
         })
-        
+
+        events.map(event => { 
+            events.push ({ 
+              id: event.id,
+              start: new Date(event.start),
+              end:new Date(event.end), 
+              title: event.title, 
+              }) 
+            })
+            
     }
 
 	return {fire, events}
