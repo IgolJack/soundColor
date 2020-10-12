@@ -5,6 +5,9 @@ import Equipment from "./equipment";
 import StagePlan from "./stagePlan";
 
 
+import BackToHome from "../../UI/backToHome";
+
+
 const { TextArea } = Input;
 const { Option } = Select;
 const { Group } = Radio;
@@ -94,8 +97,13 @@ const CalendarNewEvent = () => {
     console.log(lastId)
     console.log(equipment)
     return (
+
         <div style={{ padding: '15px' }}>
             <h2 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '15px' }}>Добавить мероприятие</h2>
+
+            
+            <BackToHome/>
+
             <Form
                 form={form}
                 layout="auto"
