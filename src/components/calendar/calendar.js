@@ -46,24 +46,28 @@ class Calendar extends React.Component {
                     }
                     events.push(data)
                 })
-                this.setState({eventsNum: events, lastId: lastId})
+                this.setState({ eventsNum: events, lastId: lastId })
+                localStorage.setItem('EventLastId', lastId)
             })
             .catch(error => console.log(error))
+
+        
+        
+            
        
     }
 
  
 
-    render() {
-      
+    render() {  
+    
         return (
-            <div>
+            <div style={{padding: '15px'}}>
                 
                 <BackToHome/>
                 <NavLink to="/Registration/AddEvent" style={{width: "100%", 'text-decoration': "none"}}>
                     <Button block size ="large" type="primary">Создать мероприятие</Button>
                 </NavLink>
-                <CalendarNewEvent lastId={this.state.lastId}/>
                 <TUICalendar
                     ref={this.calendarRef}
                     height="500px"
