@@ -8,6 +8,9 @@ class Filter extends React.Component{
         this.state = {
             filterName: {},
             searchStudent: "",
+            course: "",
+            lvl: "",
+            missed: "",
         }
 
         this.onInputChange = this.onInputChange.bind(this)
@@ -21,9 +24,9 @@ class Filter extends React.Component{
         })
     }
 
-    onInputChange = event => {
-        const name = event.target.name;
-        const value = event.target.value;
+    onInputChange = key => {
+        const name = key.name;
+        const value = key.value;
         
         this.setState({ searchStudent: "" })
         //console.log(have, ", ", value)
@@ -45,8 +48,12 @@ class Filter extends React.Component{
         delete filterName.course;
         delete filterName.lvl;
         delete filterName.missed;
-        this.setState({ filterName: filterName }, () => this.props.updateData("filterName", this.state.filterName))
-
+        this.setState({
+            filterName: filterName,
+            course: "",
+            lvl: "",
+            missed: ""
+        }, () => this.props.updateData("filterName", this.state.filterName))
     }
     
 
@@ -55,7 +62,12 @@ class Filter extends React.Component{
         return(
            <div>
                 <SearchFilter search={this.search}/>
-                <PropertyFilter onInputChange={this.onInputChange}/>
+                <PropertyFilter
+                    onInputChange={this.onInputChange}
+                    course={this.state.course}
+                    lvl={this.state.lvl}
+                    missed={this.state.missed}
+                />
             </div>
         );
     }

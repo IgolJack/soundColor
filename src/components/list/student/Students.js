@@ -23,6 +23,9 @@ class Students extends Component {
         if (this.props.searchStudent === "") {
             filteredStidents = this.props.students && this.props.students.filter(item => {
                 for (var key in this.props.filterName) {
+                    if (key === "missed" && this.props.filterName[key] === 0 && item[key] !== this.props.filterName[key]) {
+                        return false
+                    }
                     if (key === "missed" && item[key] < this.props.filterName[key]) {
                         return false
                     }

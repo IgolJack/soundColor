@@ -7,7 +7,7 @@ import Students from './student/Students'
 import BackToHome from "../UI/backToHome";
 import {Link} from 'react-router-dom'
 import Navbar from 'react-bootstrap/Navbar'
-import { Button } from 'antd'
+import { Button, Skeleton } from 'antd'
 
 
 
@@ -19,6 +19,7 @@ class List extends React.Component {
             filterName: {},
             searchStudent: "",
             lastId: "",
+            loading: true,
         }
 
         this.getStudents = this.getStudents.bind(this)
@@ -33,25 +34,16 @@ class List extends React.Component {
             snapshot.forEach(doc => {
                 const data = doc.data()
                 data.id = Number(data.id)
-                // console.log("data.id",data.id)
-                // console.log("lastId",lastId)
                 if (lastId < data.id) {
                     lastId = data.id
                 }
-                // console.log(lastId)
-                students.push(data)
-                //console.log(doc.id)                
-            })
-            // console.log("lastId: ",lastId)
-            //lastId=Number(lastId)                
-            this.setState({students: students })
+                students.push(data)               
+            })             
+            this.setState({students: students, loading: !this.state.loading })
             localStorage.setItem('lastId', lastId)
-            // console.log("lastId: ", this.state.lastId)
             console.log(snapshot)
         })
             .catch(error => console.log(error))
-
-        
     }
 
     componentDidMount() {
@@ -92,11 +84,13 @@ class List extends React.Component {
                     updateData={this.updateData}
                 />
 
+                <Skeleton active loading={this.state.loading} paragraph={{rows: 25}} title={false} >
                 <Students
                     students={this.state.students}
                     filterName={this.state.filterName}
                     searchStudent={this.state.searchStudent}
                 />
+                </Skeleton>
                 <BackToHome />
             </div>
 

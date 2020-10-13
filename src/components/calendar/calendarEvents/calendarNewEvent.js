@@ -13,6 +13,11 @@ const { Option } = Select;
 const { Group } = Radio;
 const OptionSel = Select.Option;
 
+const radio = [
+    { label: 'Свободная', value: 'Свободная' },
+    { label: 'Парадная', value: 'Парадная' },
+]
+
 
 function useEquipment() {
     const [equip, setEquip] = useState([])
@@ -51,7 +56,7 @@ const CalendarNewEvent = () => {
     let equipGroup = []
 
     const [cloth, setCloth] = useState('Свободная')
-
+    console.log(cloth)
     let children = []
     for (let i = 10; i < 36; i++) {
         children.push(<OptionSel key={i.toString(36) + i}>{i.toString(36) + i}</OptionSel>);
@@ -102,7 +107,7 @@ const CalendarNewEvent = () => {
             <h2 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '15px' }}>Добавить мероприятие</h2>
 
             
-            <BackToHome/>
+            
 
             <Form
                 form={form}
@@ -199,14 +204,12 @@ const CalendarNewEvent = () => {
                             >
 
                                 <Group
-                                    options={['Свободная', 'Парадная']}
-                                    defaultValue={'Свободная'}
+                                    options={radio}
                                     onChange={onChange4}
                                     value={cloth}
                                     optionType="button"
-                                    buttonStyle="solid">
-                                    Свободная
-                                </Group>
+                                    buttonStyle="solid"
+                                />
 
                             </Form.Item>
                         </div>
@@ -279,9 +282,9 @@ const CalendarNewEvent = () => {
                         placeholder="Tags Mode"
                         name="cast"
                     >
-                        <OptionSel key={1}>Рояль</OptionSel>
-                        <OptionSel key={2}>Скрипка</OptionSel>
-                        <OptionSel key={3}>Гитара</OptionSel>
+                        <OptionSel key={'Рояль'}>Рояль</OptionSel>
+                        <OptionSel key={'Скрипка'}>Скрипка</OptionSel>
+                        <OptionSel key={'Гитара'}>Гитара</OptionSel>
                     </Select>
                 </Form.Item>
 
@@ -299,7 +302,7 @@ const CalendarNewEvent = () => {
                         Добавить мероприятие
                     </Button>
                 </Form.Item>
-
+                <BackToHome />
             </Form>
         </div>
     );

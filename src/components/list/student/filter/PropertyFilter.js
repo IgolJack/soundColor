@@ -5,8 +5,93 @@ import { Collapse, Select, InputNumber, Row, Col } from 'antd';
 const { Panel } = Collapse;
 const { Option } = Select;
 
+const courses = [
+    {
+        label: "Все курсы",
+        value:  "",
+        name: "course",
+    },
+    {
+        label: "Первый курс",
+        value:  "Первый курс",
+        name: "course",
+    },
+    {
+        label: "Второй курс",
+        value:  "Второй курс",
+        name: "course",
+    },
+    {
+        label: "Третий курс",
+        value:  "Третий курс",
+        name: "course",
+    },
+    {
+        label: "Четвертый курс",
+        value:  "Четвертый курс",
+        name: "course",
+    },
+    {
+        label: "Пятый курс",
+        value:  "Пятый курс",
+        name: "course",
+    },
+]
+
+const levels = [
+    {
+        label: "Все уровни",
+        value:  "",
+        name: "lvl",
+    },
+    {
+        label: "Первый уровень",
+        value:  "1",
+        name: "lvl",
+    },
+    {
+        label: "Второй уровень",
+        value:  "2",
+        name: "lvl",
+    },
+    {
+        label: "Третий уровень",
+        value:  "3",
+        name: "lvl",
+    },
+    {
+        label: "Четвертый уровень",
+        value:  "4",
+        name: "lvl",
+    },
+    {
+        label: "Пятый уровень",
+        value:  "5",
+        name: "lvl",
+    },
+]
+
+
 class PropertyFilter extends Component {
     
+    state = {
+        course: "",
+        lvl: "",
+        missed: "",
+    }
+
+    onInputNumberChange = (value) => {
+        console.log(value)
+        let key = { value: value, name: 'missed' }
+        this.setState({ missed: value }, this.onChange(value, key))
+        console.log(this.state.missed)
+    }
+
+    onChange = (value, key) => {
+        console.log(key)
+        this.props.onInputChange(key)
+    }
+
     render() {
         return (
             <div>
@@ -17,36 +102,26 @@ class PropertyFilter extends Component {
                                 <h6>Курс</h6>
                                 <Select
                                     style={{width:'100%'}}
-                                    name="course"
-                                    labelId="demo-simple-select-label"
+                                    key="course"
                                     id="demo-simple-select"
-                                    defaultValue=""
-                                    onChange={this.props.onInputChange}
+                                    defaultValue={this.props.course}
+                                    options={courses}
+                                    onChange={this.onChange}
                                 >
-                                    <Option value="">Все курсы</Option>
-                                    <Option value="Первый курс">Первый курс</Option>
-                                    <Option value="Второй курс">Второй курс</Option>
-                                    <Option value="Третий курс">Третий курс</Option>
-                                    <Option value="Четвертый курс">Четвертый курс</Option>
-                                    <Option value="Пятый курс">Пятый курс</Option>
+                                    
                                 </Select>
                             </Col>
                             <Col xs={{span: 7, offset: 1}} sm={{span: 6, offset: 3}} md={{span: 6, offset: 3}} lg={{span: 6, offset: 3}} xl={{span: 6, offset: 3}} xll={{span: 6, offset: 3}}>
                                 <h6>Уровень</h6>
                                 <Select
                                     style={{width:'100%'}}
-                                    name="lvl"
+                                    key="lvl"
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    defaultValue=""
-                                    onChange={this.props.onInputChange}
+                                    defaultValue={this.props.lvl}
+                                    options={levels}
+                                    onChange={this.onChange}
                                 >
-                                    <Option value="">Все уровни</Option>
-                                    <Option value="1">Первый уровень</Option>
-                                    <Option value="2">Второй уровень</Option>
-                                    <Option value="3">Третий уровень</Option>
-                                    <Option value="4">Четвертый уровень</Option>
-                                    <Option value="5">Пятый уровень</Option>
                                 </Select>
                             </Col>
                             <Col xs={{span: 6, offset: 2}} sm={{span: 6, offset: 3}} md={{span: 6, offset: 3}} lg={{span: 6, offset: 3}} xl={{span: 6, offset: 3}} xll={{span: 6, offset: 3}}>
@@ -54,12 +129,12 @@ class PropertyFilter extends Component {
                                 <InputNumber
                                     id="standard-full-width"
                                     label="Пропуски"
-                                    helperText="Значение и более"
                                     type="number"
                                     style={{width:'100%'}}
                                     name="missed"
+                                    defaultValue={this.props.missed}
                                     min={0}
-                                    onChange={this.props.onInputChange}
+                                    onChange={this.onInputNumberChange}
                                 />
                             </Col>
                         </Row>
