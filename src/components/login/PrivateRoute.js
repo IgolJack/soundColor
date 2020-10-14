@@ -4,10 +4,9 @@ import { AuthContext } from "./Auth";
 
 const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
   const {currentUser} = useContext(AuthContext);
-
+ console.log(window.location.hostname)
   var url = window.location.href;
-  url = url.replace(/(^\w+:|^)\/\//, '');
-  url = url.replace(/localhost:3000/i, '');
+  url = url.replace(/^.*?:\/\/.*?(?=\/|$)/,'')
 
   return (
     <Route
