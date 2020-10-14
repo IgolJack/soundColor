@@ -18,8 +18,7 @@ import HomeTeam from "./components/firebase/get"
 import CalendarNewEvent from './components/calendar/calendarEvents/calendarNewEvent'
 import deletePageTrigger from "./components/delete/deletePageTrigger"
 const App = () => {
-    
-        
+  
         return (
             <div>
                 <AuthProvider>

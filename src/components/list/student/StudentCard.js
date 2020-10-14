@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import DeleteStudent from './studentChange/DeleteStudent'
+import EditDetails from './studentChange/EditDetails'
 import {
     NavLink
 } from 'react-router-dom'
@@ -16,7 +17,14 @@ class StudentCard extends Component {
                     />
                 </div>
                 <div style={{ float: "right" }}>
-                    
+                    <EditDetails
+                        name={this.props.student.name}
+                        lvl={this.props.student.lvl}
+                        missed={this.props.student.missed}
+                        id={this.props.student.id}
+                        course={this.props.student.course}
+                        
+                    />
                 </div>
                 <div className="nameOfStudent" style={{ paddingLeft: 48 * 2 }}>
                     <h4 key={this.props.student.id}>

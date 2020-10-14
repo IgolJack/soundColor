@@ -1,77 +1,44 @@
-import React, { useEffect, useState } from "react";
-import { db } from "../../firebase/firebase";
+import React, { useState } from "react";
 import { Cascader, Collapse, InputNumber, Row, Col, Button } from 'antd';
 import { PlusCircleTwoTone } from '@ant-design/icons';
-const { Panel } = Collapse
+const {Panel} = Collapse
 
-
-
-function useEquipment() {
-  const [equip, setEquip] = useState([])
-  useEffect(() => {
-    db.collection('equipment').doc('equip')
-      .get()
-      .then(doc => {
-        const data = doc.data()
-        setEquip(data)
-        console.log(equip)
-      })
-      .catch(function (error) {
-        console.log("Error getting document:", error);
-      });
-  }, [])
-
-  return equip
+function onChange(value) {
+  console.log(value);
 }
 
 const Equipment = (props) => {
 
-  let equipment = useEquipment()
-  let equipGroup = []
+  let equipment = props.equipment
+  let equipGroup = props.equipGroup
   let options = []
   let fields = []
   const [count, setCount] = useState(1)
   const [fieldsCount, setFieldsCount] = useState(1)
-  const [equipOut, setEquipOut] = useState({})
 
   const onChangeNum = (value) => {
-    if(value){
     setCount(value)
-    console.log(count);
-    setEquipOut({ ...equipOut, count: value })
+    console.log(value);
+  }
+
+  console.log(equipment)
+  console.log(equipGroup)
+if(equipment !== null){
+  for (let index = 0; index < equipGroup.length; index++) {
+    console.log('зашел в цикл')
+    options[index] = {
+      value: `${equipGroup[index]}`,
+      label: `${equipGroup[index]}`,
+      children: []
     }
-  }
-
-  useEffect(() => {
-    props.updateEquip(equipOut)
-  }, [equipOut])
-
-const onChange = (value) => {
-  console.log(value);
-  setEquipOut({...equipOut, equipGroup: value[0], equip: value[1] })
-  console.log(equipOut);
-}
-
-  if (equipment !== null) {
-    equipGroup = Object.getOwnPropertyNames(equipment)
-  }
-
-  
-  if (equipment !== null) {
-    for (let index = 0; index < equipGroup.length; index++) {
-      options[index] = {
-        value: `${equipGroup[index]}`,
-        label: `${equipGroup[index]}`,
-        children: []
-      }
-      for (let i = 0; i < equipment[equipGroup[index]].length; i++) {
-        options[index]['children'][i] = {
-          value: `${equipment[equipGroup[index]][i]}`,
-          label: `${equipment[equipGroup[index]][i]}`
-        }
+    for (let i = 0; i < equipment[equipGroup[index]].length; i++) {
+      options[index]['children'][i] = {
+        value: `${equipment[equipGroup[index]][i]}`,
+        label: `${equipment[equipGroup[index]][i]}`
       }
     }
-  }
+  }}
+  console.log(options)
 
   const addField = () => {
     setFieldsCount(fieldsCount + 1)
@@ -87,9 +54,10 @@ const onChange = (value) => {
           <Col xs={{ span: 9, offset: 3 }} sm={{ span: 9, offset: 3 }} md={{ span: 9, offset: 3 }} lg={{ span: 9, offset: 3 }} xl={{ span: 9, offset: 3 }} xll={{ span: 9, offset: 3 }}>
             <InputNumber
               id="standard-full-width"
+              value={count}
               type="number"
               name="Количество"
-              min={0}
+              min={1}
               onChange={onChangeNum}
             />
           </Col>

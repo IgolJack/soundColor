@@ -19,8 +19,6 @@ const tailLayout = {
 };
 
 
-const LoginPage = (props) => {
-  let checked = false
 
 const LoginPage = (props) => {
   let checked = false
@@ -121,5 +119,5 @@ const LoginPage = (props) => {
     </div>
   );
 };
-}
-export default withRouter(LoginPage)
+
+export default withRouter(LoginPage);
