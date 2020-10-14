@@ -26,3 +26,9 @@ yarn-error.log*
 idea/
 functions/
 vscode/
+firestore.rules
+.firebaserc
+firebase.json
+firestore-debug.log
+firestore.indexes.json
+ui-debug.log

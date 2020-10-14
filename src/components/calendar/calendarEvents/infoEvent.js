@@ -3,7 +3,7 @@ import {db} from '../../firebase/firebase'
 import {NavLink} from "react-router-dom";
 import {Button} from "react-bootstrap";
 import * as firebase from "firebase";
-import BackToHome from "../../UI/backToHome";
+
 
 export default class InfoEvent extends React.Component{
     constructor(props) {
@@ -78,8 +78,8 @@ addUserToEvent(){
     render() {
 return(
     <div>
-            <NavLink to="/Calendar"><Button>Вернуться к каледарю</Button></NavLink>
-            <BackToHome/>
+           
+           
 
         <p>ID = {this.state.id}</p>
         <p>Название мероприятия = {this.state.title}</p>

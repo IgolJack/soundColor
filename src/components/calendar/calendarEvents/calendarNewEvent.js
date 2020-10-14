@@ -5,8 +5,6 @@ import Equipment from "./equipment";
 import StagePlan from "./stagePlan";
 
 
-import BackToHome from "../../UI/backToHome";
-
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -301,8 +299,8 @@ const CalendarNewEvent = () => {
                     <Button style={{ width: '100%', margin: '8px' }} type="primary" htmlType="submit">
                         Добавить мероприятие
                     </Button>
+                    <br/><br/><br/><br/>
                 </Form.Item>
-                <BackToHome />
             </Form>
         </div>
     );

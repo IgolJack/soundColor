@@ -2,7 +2,6 @@ import React, { useCallback, useContext, useState } from "react";
 import { auth, db } from '../firebase/firebase'
 import {AuthContext} from '../login/Auth'
 import { Form, Input, Button, message , Select} from 'antd';
-import BackToHome from '../UI/backToHome'
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 
@@ -147,7 +146,7 @@ const SignUpPage = (props) => {
 
   return (
     <div style={{ padding: '15px' }}>
-      <BackToHome />
+      
       <br />
       <Form
 

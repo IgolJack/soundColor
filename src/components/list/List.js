@@ -4,7 +4,6 @@ import './List.css';
 
 import Filter from './student/filter/Filter'
 import Students from './student/Students'
-import BackToHome from "../UI/backToHome";
 import {Link} from 'react-router-dom'
 import Navbar from 'react-bootstrap/Navbar'
 import { Button, Skeleton } from 'antd'
@@ -69,6 +68,7 @@ class List extends React.Component {
         console.log(localStorage.getItem('lastId'))        
         return (
             <div className="App">
+                 
                 <h2 style={{ textAlign: "center" }}>Студенты</h2>
                 
                 <Navbar bg="light" >
@@ -91,8 +91,9 @@ class List extends React.Component {
                     searchStudent={this.state.searchStudent}
                 />
                 </Skeleton>
-                <BackToHome />
+                <br/><br/><br/>
             </div>
+            
 
         )
     }

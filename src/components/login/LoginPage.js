@@ -68,7 +68,7 @@ const LoginPage = (props) => {
 
 
   return (
-    <div style={{ padding: '15px' }}>
+    <div style={{ padding: '15%' }}>
       <h1 style={{ textAlign: "center" }}>Авторизироваться</h1>
 
       <Form
@@ -81,7 +81,6 @@ const LoginPage = (props) => {
         onFinishFailed={onFinishFailed}
       >
         <Form.Item
-
           name="email"
           rules={[
             {
@@ -90,7 +89,7 @@ const LoginPage = (props) => {
             },
           ]}
         >
-          <Input addonBefore="Email" prefix={<UserOutlined className="site-form-item-icon" />} name="email" />
+          <Input addonBefore="Email" prefix={<UserOutlined className="site-form-item-icon" />} size="large" name="email" />
         </Form.Item>
 
         <Form.Item
@@ -103,7 +102,7 @@ const LoginPage = (props) => {
             },
           ]}
         >
-          <Input.Password addonBefore="Пароль" prefix={<LockOutlined className="site-form-item-icon" />} name="password" />
+          <Input.Password addonBefore="Пароль" prefix={<LockOutlined className="site-form-item-icon" />} size="large" name="password" />
         </Form.Item>
 
         <Form.Item {...tailLayout} name="remember" >
@@ -111,7 +110,7 @@ const LoginPage = (props) => {
         </Form.Item>
 
         <Form.Item {...tailLayout}>
-          <Button style={{ width: '100%', margin: '8px' }} type="primary" htmlType="submit">
+          <Button block size='large' type="primary" htmlType="submit">
             Войти
         </Button>
         </Form.Item>

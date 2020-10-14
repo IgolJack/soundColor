@@ -6,7 +6,6 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 
 import { Button } from 'antd'
-import BackToHome from "../UI/backToHome";
 import { NavLink } from 'react-router-dom'
 import {getInfoFromFirebase} from "../firebase/getInfoFromFirebase"
 import 'moment/locale/ru';
@@ -34,9 +33,6 @@ const CalendarApp = () => {
       
         return (
             <div >
-
-                
-                <BackToHome/>
                 <NavLink to="/Registration/AddEvent" style={{width: "100%", 'text-decoration': "none"}}>
                     <Button block size ="large" type="primary">Создать мероприятие</Button>
                 </NavLink>
