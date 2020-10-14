@@ -1,152 +1,359 @@
 import React, { Component } from 'react';
 import { db } from '../../../firebase/firebase'
-import Modal from 'react-bootstrap/Modal'
-import {Button} from "react-bootstrap";
-import Form from "react-bootstrap/Form";
+import { Card, Col, Row, Skeleton, Input, Select, Form, Button, message, Popconfirm } from 'antd';
 
-class EditDetails extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            name: "",
-            lvl: 0,
-            missed: 0,
-            id: "",
-            course: "Первый курс",
-            open: false
-        }
-    }
+const layout = {
+    labelCol: { span: 0 },
+    wrapperCol: { span: 0 },
+};
+const tailLayout = {
+    wrapperCol: { offset: 0, span: 0 },
+};
+const centerBoxNotRound = {
+    textAlign: "center",
+    height: '100px',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+}
+const centerBoxLeftRound = {
+    textAlign: "center",
+    borderRadius: '10px 0px 0px 10px',
+    height: '100px',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+}
+const centerBoxRightRound = {
+    borderRadius: '0px 10px 10px 0px',
+    height: '100px',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+}
+const { Option } = Select
 
+const EditDetails = (props) => {
+    const [form] = Form.useForm()
 
-    mapUserDetailToState = () => {
-        this.setState({
-            id: this.props.id ? this.props.id : '',
-            name: this.props.name ? this.props.name : '',
-            lvl: this.props.lvl ? this.props.lvl : 0,
-            missed: this.props.missed ? this.props.missed : 0,
-            course: this.props.course ? this.props.course : '',
-        })
-    }
+    let name = ''
+    let lateness = '0'
+    let lvl = '0'
+    let missed = '0'
+    let disgrace = '0'
+    let responsible = '0'
+    let concert = '0'
+    let equipment = '0'
+    let discharges = '0'
+    let count = '0'
+    let course = 'Первый курс'
 
-    handleOpen = () => {
-        this.setState({ open: true })
-        this.mapUserDetailToState()
-    }
+    let student = props.student
+    console.log(student.name)
 
-    handleClose = () => {
-        this.setState({ open: false })
-    }
-
-    componentDidMount(){
-        this.mapUserDetailToState()
-    }
-
-    onInputChange = event => {
-        const name = event.target.name;
-        const value = event.target.value;
-        this.setState({ [name]: value });
-    }
-
-    handleSubmit = () => {
+    const handleSubmit = () => {
         db.collection('students')
-            .doc(`${this.state.id}`)
+            .doc(`${student.id}`)
             .set({
-                id: this.state.id,
-                name: this.state.name,
-                course: this.state.course,
-                lvl: this.state.lvl,
-                missed: this.state.missed
-            });
-        this.handleClose()
+                name: (form.getFieldValue("name")),
+                lateness: (form.getFieldValue("lateness")),
+                lvl: (form.getFieldValue("lvl")),
+                missed: (form.getFieldValue("missed")),
+                disgrace: (form.getFieldValue("disgrace")),
+                responsible: (form.getFieldValue("responsible")),
+                concert: (form.getFieldValue("concert")),
+                equipment: (form.getFieldValue("equipment")),
+                count: (form.getFieldValue("count")),
+                course: (form.getFieldValue("course")),
+                discharges: (form.getFieldValue("discharges")),
+                uid: student.uid,
+                id: student.id,
+            })
+            .then(function () {
+                succes()
+            }
+            )
+            .catch(function (error) {
+                errorRed(error)
+            })
+        props.updateOpen()
     }
 
-    outputTextField = (props) => {
-        return(
-                <Form.Control
-                    id="standard-full-width"
-                    label={`${props.label}`}
-                    placeholder={`${props.placeholder}`}
-                    className={`input${props.className}`}
-                    required
-                    type={`${props.type}`}
-                    name={`${props.name}`}
-                    value={props.value}
-                    onChange={this.onInputChange}
-                />
-        )
-    }
+    const succes = () => {
+        message.success('Данные обновлены!', 2);
+    };
+    const errorRed = (error) => {
+        message.error(String(error));
+    };
 
-    render() {
-        return (
-            <div>
-                <Button variant="primary" block onClick={this.handleOpen}>Редактировать</Button>
-                <Modal
-                    show={this.state.open}
-                    onHide={this.handleClose}
-                    backdrop="static"
-                    keyboard={false}
-                >
-                    <Modal.Header>
-                        <Modal.Title>Редактирование данных</Modal.Title>
-                    </Modal.Header>
+    function confirm() {
+        props.updateOpen()
+      }
+      
 
-                    <Modal.Body>
-                        <Form>
-                                <Form.Group controlId="exampleForm.ControlInput1">
-                                    <Form.Label>Курс</Form.Label>
-                                    <Form.Control as="select"
+    return (
+        <div style={{ padding: '15px' }}>
+
+            <Popconfirm
+                title="Вы действительно хотите сейчас выйти?"
+                onConfirm={confirm}
+                okText="Да"
+                cancelText="Нет"
+            >
+                <Button type="primary" block>Назад</Button>
+            </Popconfirm>
+
+            <Form
+                form={form}
+                layout="auto"
+                size="large"
+                {...layout}
+                name="basic"
+                onFinish={handleSubmit}
+            >
+
+                <Form.Item>
+                    <Button type="primary" block htmlType="submit">Сохранить</Button>
+                </Form.Item>
+
+                <div style={{ paddingTop: '10px', paddingBottom: '10px',  }}>
+                    <Card style={{ borderRadius: '10px', textAlign: "center", display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center"}} >
+                        <Form.Item
+                            type="text"
+                            name="name"
+                            value={name}
+                            style={{ display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",}}
+                        >
+                            
+                                <Input name="name" defaultValue={student.name} size="default"/>
+                            
+                            
+                        </Form.Item>
+                    </Card>
+
+                </div>
+
+
+                <div style={{ width: '60%', paddingBottom: '10px' }}>
+                    <Row>
+                        <Col flex={8}>
+                            <Card style={{ textAlign: "center", borderRadius: '10px 0px 0px 10px' }}>
+                                Уровень
+              </Card>
+                        </Col>
+                        <Col flex={2}>
+                            <Card style={{ textAlign: "center", borderRadius: '0px 10px 10px 0px' }}>
+                                <Form.Item
+                                    type="number"
+                                    name="lvl"
+                                    value={lvl}
+                                >
+                                    <Input name="lvl" defaultValue={student.lvl} />
+                                </Form.Item>
+                            </Card>
+                        </Col>
+                    </Row>
+                </div>
+
+                <div style={{ width: '60%', paddingBottom: '10px' }}>
+                    <Row>
+                        <Col flex={10}>
+                            <Card style={{ textAlign: "center", borderRadius: '10px 10px 10px 10px' }}>
+                                <Form.Item
+                                    type="text"
+                                    name="course"
+                                    value={course}
+                                >
+                                    <Select
                                         name="course"
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={this.state.course}
-                                        onChange={this.onInputChange}
+                                        defaultValue={student.course}
                                     >
-                                        <option value="Первый курс">Первый курс</option>
-                                        <option value="Второй курс">Второй курс</option>
-                                        <option value="Третий курс">Третий курс</option>
-                                        <option value="Четвертый курс">Четвертый курс</option>
-                                        <option value="Пятый курс">Пятый курс</option>
-                                    </Form.Control>
+                                        <Option value="Первый курс">Первый курс</Option>
+                                        <Option value="Второй курс">Второй курс</Option>
+                                        <Option value="Третий курс">Третий курс</Option>
+                                        <Option value="Четвертый курс">Четвертый курс</Option>
+                                        <Option value="Пятый курс">Пятый курс</Option>
 
-                            <Form.Label>ФИО</Form.Label>
-                            <this.outputTextField
-                                label="ФИО"
-                                placeholder="Иванов Иван Иванович"
-                                className="Name"
-                                type="text"
-                                name="name"
-                                value={this.state.name}
-                            />
-                            <Form.Label>Уровень</Form.Label>
-                            <this.outputTextField
-                                label="Уровень"
-                                placeholder="Уровень"
-                                className="Lvl"
-                                type="number"
-                                name="lvl"
-                                value={this.state.lvl}
-                            />
-                            <Form.Label>Пропуски</Form.Label>
-                            <this.outputTextField
-                                label="Пропусков"
-                                placeholder="Пропусков"
-                                className="inputMiss"
-                                type="number"
-                                name="missed"
-                                value={this.state.missed}
-                            />
-                                </Form.Group>
-                        </Form>
-                    </Modal.Body>
+                                    </Select>
+                                </Form.Item>
+                            </Card>
+                        </Col>
+                    </Row>
+                </div>
 
-                    <Modal.Footer>
-                        <Button onClick={this.handleClose}>Закрыть</Button>
-                        <Button onClick={this.handleSubmit}>Сохранить</Button>
-                    </Modal.Footer>
-                </Modal>
-            </div>
-        );
-    }
+                <div style={{ paddingBottom: '10px' }}>
+                    <Row>
+                        <Col xs={4} sm={2} md={2} lg={2} xl={2} xxl={2}>
+                            <Card style={centerBoxLeftRound}>
+                                <div style={centerBoxLeftRound}>
+                                    <Form.Item
+                                        type="number"
+                                        name="course"
+                                    >
+                                        1
+            </Form.Item>
+                                </div>
+                            </Card>
+                        </Col>
+                        <Col xs={8} sm={10} md={10} lg={10} xl={10} xll={10}>
+                            <Card style={centerBoxNotRound}>
+                                Не сданных записей
+              </Card>
+                        </Col>
+                        <Col xs={8} sm={10} md={10} lg={10} xl={10} xll={10}>
+                            <Card style={centerBoxNotRound}>
+                                Вовремя сданных
+              </Card>
+                        </Col>
+                        <Col xs={4} sm={2} md={2} lg={2} xl={2} xxl={2}>
+                            <Card style={centerBoxRightRound}>
+                                <Form.Item
+                                    type="number"
+                                    name="count"
+                                    value={count}
+                                >
+                                    <Input name="count" defaultValue={student.count} />
+                                </Form.Item>
+                            </Card>
+                        </Col>
+                    </Row>
+                </div>
+
+                <div style={{ paddingBottom: '10px' }}>
+                    <Row>
+                        <Col xs={7} sm={9} md={9} lg={9} xl={9} xll={9}>
+                            <Card style={centerBoxLeftRound}>
+                                Опозданий
+              </Card>
+                        </Col>
+                        <Col xs={4} sm={2} md={2} lg={2} xl={2} xxl={2}>
+                            <Card style={centerBoxRightRound}>
+                                <Form.Item
+                                    type="number"
+                                    name="lateness"
+                                    value={lateness}
+                                >
+                                    <Input name="lateness" defaultValue={student.lateness} />
+                                </Form.Item>
+                            </Card>
+                        </Col>
+                        <Col xs={{ span: 4, offset: 2 }} sm={{ span: 2, offset: 2 }} md={{ span: 2, offset: 2 }} lg={{ span: 2, offset: 2 }} xl={{ span: 2, offset: 2 }} xxl={{ span: 2, offset: 2 }}>
+                            <Card style={centerBoxLeftRound}>
+                                <Form.Item
+                                    type="number"
+                                    name="responsible"
+                                    value={responsible}
+                                >
+                                    <Input name="responsible" defaultValue={student.responsible} />
+                                </Form.Item>
+                            </Card>
+                        </Col>
+                        <Col xs={7} sm={9} md={9} lg={9} xl={9} xll={9}>
+                            <Card style={centerBoxRightRound}>
+                                Ответственнен
+              </Card>
+                        </Col>
+                    </Row>
+                </div>
+
+                <div style={{ paddingBottom: '10px' }}>
+                    <Row>
+                        <Col xs={7} sm={9} md={9} lg={9} xl={9} xll={9}>
+                            <Card style={centerBoxLeftRound}>
+                                Пропусков
+              </Card>
+                        </Col>
+                        <Col xs={4} sm={2} md={2} lg={2} xl={2} xxl={2}>
+                            <Card style={centerBoxRightRound}>
+                                <Form.Item
+                                    type="number"
+                                    name="missed"
+                                    value={missed}
+                                >
+                                    <Input name="missed" defaultValue={student.missed} />
+                                </Form.Item>
+                            </Card>
+                        </Col>
+                        <Col xs={{ span: 4, offset: 2 }} sm={{ span: 2, offset: 2 }} md={{ span: 2, offset: 2 }} lg={{ span: 2, offset: 2 }} xl={{ span: 2, offset: 2 }} xxl={{ span: 2, offset: 2 }}>
+                            <Card style={centerBoxLeftRound}>
+                                <Form.Item
+                                    type="number"
+                                    name="concert"
+                                    value={concert}
+                                >
+                                    <Input name="concert" defaultValue={student.concert} />
+                                </Form.Item>
+                            </Card>
+                        </Col>
+                        <Col xs={7} sm={9} md={9} lg={9} xl={9} xll={9}>
+                            <Card style={centerBoxRightRound}>
+                                Концертов
+              </Card>
+                        </Col>
+                    </Row>
+                </div>
+
+                <div style={{ paddingBottom: '10px' }}>
+                    <Row>
+                        <Col xs={7} sm={9} md={9} lg={9} xl={9} xll={9}>
+                            <Card style={centerBoxLeftRound}>
+                                Опозорил
+              </Card>
+                        </Col>
+                        <Col xs={4} sm={2} md={2} lg={2} xl={2} xxl={2}>
+                            <Card style={centerBoxRightRound}>
+                                <Form.Item
+                                    type="number"
+                                    name="disgrace"
+                                    value={disgrace}
+                                >
+                                    <Input name="disgrace" defaultValue={student.disgrace} />
+                                </Form.Item>
+                            </Card>
+                        </Col>
+                        <Col xs={{ span: 4, offset: 2 }} sm={{ span: 2, offset: 2 }} md={{ span: 2, offset: 2 }} lg={{ span: 2, offset: 2 }} xl={{ span: 2, offset: 2 }} xxl={{ span: 2, offset: 2 }}>
+                            <Card style={centerBoxLeftRound}>
+                                <Form.Item
+                                    type="number"
+                                    name="equipment"
+                                    value={equipment}
+                                >
+                                    <Input name="equipment" defaultValue={student.equipment} />
+                                </Form.Item>
+                            </Card>
+                        </Col>
+                        <Col xs={7} sm={9} md={9} lg={9} xl={9} xll={9}>
+                            <Card style={centerBoxRightRound}>
+                                Оборудование
+              </Card>
+                        </Col>
+                    </Row>
+                </div>
+
+                <div style={{ paddingBottom: '10px' }}>
+                    <Row>
+                        <Col flex={10}>
+                            <Card style={{ textAlign: "center", borderRadius: '10px' }}>
+                                Выписываний:
+                    <Form.Item
+                                    type="number"
+                                    name="discharges"
+                                    value={discharges}
+                                >
+                                    <Input name="discharges" defaultValue={student.discharges} />
+                                </Form.Item>
+                            </Card>
+                        </Col>
+                    </Row>
+                </div>
+
+            </Form>
+        </div>
+    );
 }
 
 export default EditDetails;

@@ -17,8 +17,8 @@ import SignUpPage from "./components/registration/signUpPage"
 import HomeTeam from "./components/firebase/get"
 import CalendarNewEvent from './components/calendar/calendarEvents/calendarNewEvent'
 const App = () => {
-
     
+        
         return (
             <div>
                 <AuthProvider>

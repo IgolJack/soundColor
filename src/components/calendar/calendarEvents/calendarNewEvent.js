@@ -19,23 +19,7 @@ const radio = [
 ]
 
 
-function useEquipment() {
-    const [equip, setEquip] = useState([])
-    useEffect(() => {
-        db.collection('equipment').doc('equip')
-            .get()
-            .then(doc => {
-                const data = doc.data()
-                setEquip(data) 
-                console.log(equip)
-            })
-            .catch(function (error) {
-                console.log("Error getting document:", error);
-            });
-    }, [])
 
-    return equip
-}
 
 const CalendarNewEvent = () => {
     const [form] = Form.useForm()
@@ -47,13 +31,12 @@ const CalendarNewEvent = () => {
     let description = ''
     let lastId = localStorage.getItem('EventLastId')
     let typeOfEvent = ''
-    
+    let equipment = []
     let eventDate = ''
     let eventTime = ''
     let eventPlace = ''
     let cast = []
-    let equipment = useEquipment()
-    let equipGroup = []
+    
 
     const [cloth, setCloth] = useState('Свободная')
     console.log(cloth)
@@ -94,13 +77,22 @@ const CalendarNewEvent = () => {
         setCloth( e.target.value );
       };
 
-
-    if (equipment !== null) {
-        equipGroup = Object.getOwnPropertyNames(equipment)
-        console.log(equipGroup)
+    const updateEquip = (equipOut) => {
+        for (let index = 0; index < equipment.length; index++) {
+            if (equipment[index] === {}) {
+                equipment.splice(index, 1)
+            }
+            if ( equipment[index]['equipGroup'] === equipOut['equipGroup'] && equipment[index]['equip'] === equipOut['equip']) {
+                equipment.splice(index, 1)
+            }            
+        }
+        equipment.push(equipOut)
+        console.log(equipment)
     }
+
+    
     console.log(lastId)
-    console.log(equipment)
+    
     return (
 
         <div style={{ padding: '15px' }}>
@@ -288,7 +280,7 @@ const CalendarNewEvent = () => {
                     </Select>
                 </Form.Item>
 
-                <Equipment equipment={equipment} equipGroup={equipGroup} />
+                <Equipment updateEquip={updateEquip} />
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '15px' }}>
                     <StagePlan />

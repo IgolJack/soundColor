@@ -17,7 +17,7 @@ const tailLayout = {
 };
 
 
-const LoginPage = () => {
+const LoginPage = (props) => {
   let checked = false
 
   const handleLogin = useCallback(
