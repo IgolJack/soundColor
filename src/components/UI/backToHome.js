@@ -1,41 +1,67 @@
 import React from "react";
-import {NavLink} from "react-router-dom";
-import { Button, Affix, Row, Col } from 'antd'
-import { HomeTwoTone } from '@ant-design/icons';
+import { NavLink } from "react-router-dom";
+import { Button, Affix, Row, Col } from "antd";
+import { CustomerServiceTwoTone } from "@ant-design/icons";
+import { Spin } from 'antd';
 
+const antIcon = <CustomerServiceTwoTone style={{ fontSize: 35 }} spin />;
+class BackToHome extends React.Component {
+  render() {
+    return (
+      <div>
+        <Affix offsetBottom={0}>
+          <div srtyle={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center', flexDirection: 'row', alignContent: 'center', alignItems: 'stretch', margin: 'auto', flex: 'auto'}}>
+           
+            
+                <NavLink to="/list">
+                  <Button
+                    size="large"
+                    type="primary"
+                    style={{width:  `calc(50% - 30px)`}}
+                  >
+                    Список студентов
+                  </Button>
+                </NavLink>
+              
 
-class BackToHome extends React.Component{
-    render() {
-        return (
-            <div>
-                <Affix offsetBottom={0}>
-                    <div style={{ height: '50px' }}>
-                        <Row>
-                            <Col xs={10} sm={11} md={11} lg={11} xl={11} xll={11}>
-                                <NavLink to="/list" style={{ 'text-decoration': "none" }}>
-                                    <Button size="large" type="primary" style={{ height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Список студентов</Button>
-                                </NavLink>
-                            </Col>
-                            
-                            <Col xs={4} sm={2} md={2} lg={2} xl={2} xll={2}>
-                                <NavLink to="/" style={{ 'text-decoration': "none" }}>
-                                    <Button size="large" shape="circle" type="primary" icon={<HomeTwoTone style={{ fontSize: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }} />} style={{ height: '100%', width: '100%' }} />
-                                </NavLink>
-                            </Col>
-                            
-                            <Col xs={10} sm={11} md={11} lg={11} xl={11} xll={11}>
-                                <NavLink to="/Calendar" style={{ 'text-decoration': "none" }}>
-                                    <Button size="large" type="primary" style={{ height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Календарь мероприятий</Button>
-                                </NavLink>
-                            </Col>
-                        </Row>
-                    </div>
-                </Affix>
-            </div>
-        )
-    }
+             
+                <NavLink to="/" >
+                  <Button
+                    size="large"
+                    shape="circle"
+                    icon={
+                        <CustomerServiceTwoTone 
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      />
+                    }
+                    style={{ height: "50px", width: "50px", margin:'5px' }}
+                  />
+                </NavLink>
+              
+
+              
+                <NavLink to="/Calendar">
+                  <Button
+                    size="large"
+                    type="primary"
+                    style={{width:  `calc(50% - 30px)`}}
+                  >
+                    Календарь мероприятий
+                  </Button>
+                </NavLink>
+             
+          
+          </div>
+        </Affix>
+      </div>
+    );
+  }
 }
 
-
-
-export default BackToHome
+export default BackToHome;

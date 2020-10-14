@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {
     BrowserRouter as Router,
     Route,
@@ -16,6 +16,7 @@ import PrivateRoute from "./components/login/PrivateRoute";
 import SignUpPage from "./components/registration/signUpPage"
 import HomeTeam from "./components/firebase/get"
 import CalendarNewEvent from './components/calendar/calendarEvents/calendarNewEvent'
+import deletePageTrigger from "./components/delete/deletePageTrigger"
 const App = () => {
     
         
@@ -24,7 +25,6 @@ const App = () => {
                 <AuthProvider>
                     <Router>
                         <Switch>
-
                             <Route exact path="/login" component={LoginPage} />
                             <PrivateRoute exact path="/" component={Home} />
                             <PrivateRoute exact path="/list" component={List} />
@@ -34,6 +34,7 @@ const App = () => {
                             <PrivateRoute exact path="/Registration/AddEvent" component={CalendarNewEvent} />
                             <PrivateRoute exact path="/Registration" component={SignUpPage} />
                             <PrivateRoute exact path="/Get" component={HomeTeam} />
+                            <PrivateRoute exact path="/DeleteByLife" component={deletePageTrigger} />
                             <Route component={NotFound} />
                         </Switch>
                     </Router>

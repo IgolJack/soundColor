@@ -1,8 +1,9 @@
-
+import React, { useEffect, useState } from "react";
 import {db} from "../firebase/firebase";
 
+
 const getInfoFromFirebase = () => {
-    const events = []
+    const [events, setEvents] = useState([])
     const fire = (col) => {
         events.length = 0
         db.collection(String(col))
@@ -12,20 +13,12 @@ const getInfoFromFirebase = () => {
                 const data = doc.data()
                 events.push(data)
             })
+            setEvents(events)
+            console.log(events)
         })
-
-        events.map(event => { 
-            events.push ({ 
-              id: event.id,
-              start: new Date(event.start),
-              end:new Date(event.end), 
-              title: event.title, 
-              }) 
-            })
-            
     }
-
 	return {fire, events}
 }
 
 export { getInfoFromFirebase }
+

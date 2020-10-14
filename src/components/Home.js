@@ -3,9 +3,10 @@ import { auth } from './firebase/firebase'
 import {NavLink} from 'react-router-dom'
 import Navbar from 'react-bootstrap/Navbar'
 import { Button } from 'antd'
+import {getInfoFromFirebase} from "./firebase/getInfoFromFirebase"
 
 class Home extends React.Component{
-    
+
     render(){
         return(            
             <div>
@@ -20,6 +21,11 @@ class Home extends React.Component{
                 <Navbar bg="light" >
                         <NavLink to="/Calendar" style={{ width: "100%",  'text-decoration': "none"}} >
                             <Button block size ="large" type="primary" >Календарь</Button>
+                        </NavLink>
+                </Navbar>
+                <Navbar bg="light" >
+                        <NavLink to="/DeleteByLife" style={{ width: "100%",  'text-decoration': "none"}} >
+                            <Button block size ="large" type="primary" >Удоли</Button>
                         </NavLink>
                 </Navbar>
             </div>

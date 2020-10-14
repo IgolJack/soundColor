@@ -4,7 +4,7 @@ import {AuthContext} from '../login/Auth'
 import { Form, Input, Button, message , Select} from 'antd';
 import BackToHome from '../UI/backToHome'
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import './Box.css';
+
 
 
 

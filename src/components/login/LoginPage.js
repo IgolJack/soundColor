@@ -8,6 +8,8 @@ import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 
+
+            
 const layout = {
   labelCol: { span: 0 },
   wrapperCol: { span: 0 },
@@ -20,6 +22,8 @@ const tailLayout = {
 const LoginPage = (props) => {
   let checked = false
 
+const LoginPage = (props) => {
+  let checked = false
   const handleLogin = useCallback(
     async values => {
       try {
@@ -46,7 +50,7 @@ const LoginPage = (props) => {
   }
 
   const onFinish = (values) => {
-    console.log('Success:', values);
+    message.info('Вы упешно вошли!', 0.4);
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -60,7 +64,7 @@ const LoginPage = (props) => {
   const { currentUser } = useContext(AuthContext);
 
   if (currentUser) {
-    return <Redirect to="/" />;
+    return <Redirect to={props.location.url} />;
   }
 
 
@@ -117,5 +121,5 @@ const LoginPage = (props) => {
     </div>
   );
 };
-
-export default withRouter(LoginPage);
+}
+export default withRouter(LoginPage)

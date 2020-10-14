@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Calendar, momentLocalizer} from 'react-big-calendar'
 import moment from 'moment'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -14,15 +14,19 @@ import 'moment/locale/ru';
 
 
 const CalendarApp = () => {
-  const {events, fire} = getInfoFromFirebase()
-  fire("eventsCalendar")
-  const localizer = momentLocalizer(moment)
-
   
+  const localizer = momentLocalizer(moment)
+  const {fire, events} =  getInfoFromFirebase()
+  fire("eventsCalendar")
+  
+
+
+
+
     
-      
-    
-      const Event= ({ event }) => {
+  
+      const Event = ({ event }) => {
+        
         return (
               <NavLink style={{textDecoration:'none', color: 'white'}} to={"/Calendar/"+ event.id}> {event.title} </NavLink>
         );
@@ -37,16 +41,13 @@ const CalendarApp = () => {
                     <Button block size ="large" type="primary">Создать мероприятие</Button>
                 </NavLink>
 
-                <p>Что бы события начали отображаться нужно сменить тууда обратно вид календаря или перейти вперед назад.</p>
+                
                 <Calendar 
-                    showMultiDayTimes
-                    culture='ru-RU'
-                    style={{minHeight:'500px'}}
+                    style={{minHeight:'800px'}}
                     localizer = {localizer} 
                     events = {events} 
                     startAccessor = "start" 
                     endAccessor = "end" 
-                    defaultDate={moment().toDate()}
                     components={{
                         event: Event
 
