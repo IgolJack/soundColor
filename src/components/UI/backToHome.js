@@ -28,12 +28,15 @@ class BackToHome extends React.Component {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    alignItems: "center",
-                    justifyContent: "center",
                   }}
                 />
               }
-              style={{ height: "50px", width: "50px", marginLeft: '5px', marginRight:'5px'}}
+              style={{
+                height: "50px",
+                width: "50px",
+                marginLeft: "5px",
+                marginRight: "5px",
+              }}
             />
           </NavLink>
 

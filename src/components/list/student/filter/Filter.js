@@ -60,7 +60,7 @@ class Filter extends React.Component{
 
     render() {
         return(
-           <div>
+           <div style={{marginBottom:'10px'}}>
                 <SearchFilter search={this.search}/>
                 <PropertyFilter
                     onInputChange={this.onInputChange}

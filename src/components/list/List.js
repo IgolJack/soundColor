@@ -84,14 +84,15 @@ class List extends React.Component {
                     updateData={this.updateData}
                 />
 
-                <Skeleton active loading={this.state.loading} paragraph={{rows: 25}} title={false} >
+                <Skeleton active loading={this.state.loading} paragraph={{rows: 30}} title={false} >
+               
                 <Students
                     students={this.state.students}
                     filterName={this.state.filterName}
                     searchStudent={this.state.searchStudent}
                 />
                 </Skeleton>
-                <br/><br/><br/>
+                <br/><br/><br/><br/>
             </div>
             
 

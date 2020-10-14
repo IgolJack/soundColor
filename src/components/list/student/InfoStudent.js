@@ -2,11 +2,10 @@ import React from 'react'
 import { db } from '../../firebase/firebase'
 import EditDetails from './studentChange/EditDetails'
 import { Card, Col, Row, Timeline, Skeleton } from 'antd';
-import { SmileTwoTone } from '@ant-design/icons';
+
 
 
 const { Meta } = Card;
-const antIcon = <SmileTwoTone style={{ fontSize: 50 }} spin />;
 
 const centerBoxNotRound = {
   textAlign: "center",

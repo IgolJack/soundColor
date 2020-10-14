@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { Collapse, Select, InputNumber, Row, Col } from 'antd';
 
 const { Panel } = Collapse;
-const { Option } = Select;
 
 const courses = [
     {

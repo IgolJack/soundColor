@@ -3,7 +3,7 @@ import { db } from '../../../firebase/firebase'
 import Modal from 'react-bootstrap/Modal'
 import {Button} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-
+import { EditTwoTone } from "@ant-design/icons";
 class EditDetails extends Component {
     constructor(props) {
         super(props)
@@ -79,7 +79,18 @@ class EditDetails extends Component {
     render() {
         return (
             <div>
-                <Button variant="primary" block onClick={this.handleOpen}>Редактировать</Button>
+                   <EditTwoTone
+            size="large"
+            onClick={this.handleOpen}
+            
+              style={{
+                fontSize: "35px",
+                width:'100%',
+                display: 'inline-block', 
+                verticalAlign: 'middle'
+              }}
+            />
+               
                 <Modal
                     show={this.state.open}
                     onHide={this.handleClose}

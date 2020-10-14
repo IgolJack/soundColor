@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../../firebase/firebase";
-import { Form, Input, Button, DatePicker, Row, Col, Select, TimePicker, Checkbox, Radio } from 'antd';
+import { Form, Input, Button, DatePicker, Row, Col, Select, TimePicker, Radio } from 'antd';
 import Equipment from "./equipment";
 import StagePlan from "./stagePlan";
 

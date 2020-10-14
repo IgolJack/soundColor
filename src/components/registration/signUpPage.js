@@ -19,8 +19,6 @@ const tailLayout = {
 };
 
 const SignUpPage = (props) => {
-  
-  let password = ''
   let email = ''
   let name = ''
   let lateness = '0'
@@ -38,7 +36,7 @@ const SignUpPage = (props) => {
   const { currentUser } = useContext(AuthContext);
   const [form] = Form.useForm()
   const Password = {
-
+// eslint-disable-next-line
     _pattern: /[a-zA-Z0-9_\-\+\.]/,
 
 
@@ -50,6 +48,7 @@ const SignUpPage = (props) => {
         return result[0];
       }
       else if (window.msCrypto && window.msCrypto.getRandomValues) {
+        // eslint-disable-next-line
         var result = new Uint8Array(1);
         window.msCrypto.getRandomValues(result);
         return result[0];
