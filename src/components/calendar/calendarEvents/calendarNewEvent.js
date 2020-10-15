@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+
+import React, {  useState } from "react";
 import { db } from "../../firebase/firebase";
 import { Form, Input, Button, DatePicker, Row, Col, Select, TimePicker, Radio } from 'antd';
 import Equipment from "./equipment";
 import StagePlan from "./stagePlan";
+
 
 
 
@@ -39,9 +41,10 @@ const CalendarNewEvent = () => {
         children.push(<OptionSel key={i.toString(36) + i}>{i.toString(36) + i}</OptionSel>);
     }
 
-    const addNewEvent = () => {
-        localStorage.setItem('lastId', Number(lastId) + 1)
-        let id = localStorage.getItem('lastId')
+    const addNewEvent = (values) => {
+        onFinish(values);
+        localStorage.setItem('EventLastId', Number(lastId) + 1)
+        let id = localStorage.getItem('EventLastId')
         let name = id
         db.collection('eventsCalendar')
             .doc(name)
@@ -54,7 +57,7 @@ const CalendarNewEvent = () => {
                 description: form.getFieldValue("description"),
                 typeOfEvent: form.getFieldValue("typeOfEvent"),
                 cloth: form.getFieldValue("cloth"),
-                eventDate: String(form.getFieldValue("eventDate")),
+                eventDate:String(form.getFieldValue("eventDate")),
                 eventTime: String(form.getFieldValue("eventTime")),
                 eventPlace: form.getFieldValue("eventPlace"),
                 cast: form.getFieldValue("cast"),
@@ -73,6 +76,9 @@ const CalendarNewEvent = () => {
       
 
     console.log(lastId)
+    console.log(equipment)
+
+
     return (
 
         <div style={{ padding: '15px' }}>
@@ -110,7 +116,7 @@ const CalendarNewEvent = () => {
                                 rules={[{ required: true, message: 'Введите значение!' }]}
                                 label="Дата сбора"
                             >
-                                <DatePicker name="meetDate" />
+                                <DatePicker name="meetDate"/>
                             </Form.Item>
                         </div>
                     </Col>
@@ -123,7 +129,7 @@ const CalendarNewEvent = () => {
                                 value={meetTime}
                                 rules={[{ required: true, message: 'Введите значение!' }]}
                             >
-                                <TimePicker />
+                                <TimePicker  />
                             </Form.Item>
                         </div>
                     </Col>
