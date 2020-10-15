@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import DeleteStudent from "./studentChange/DeleteStudent";
 import EditDetails from "./studentChange/EditDetails";
 import { NavLink } from "react-router-dom";
-import { Card, Badge } from "antd";
+import { Card } from "antd";
 import { Divider } from "antd";
 const { Meta } = Card;
 class StudentCard extends Component {

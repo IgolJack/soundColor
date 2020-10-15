@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { db } from "../../firebase/firebase";
 import { Form, Input, Button, DatePicker, Row, Col, Select, TimePicker, Radio } from 'antd';
 import Equipment from "./equipment";
@@ -31,10 +31,8 @@ const CalendarNewEvent = () => {
     let eventTime = ''
     let eventPlace = ''
     let cast = []
-    let equipment = []
-    let equipGroup = []
 
-    const [cloth, setCloth] = useState('Свободная')
+    let cloth = 'Свободная'
     console.log(cloth)
     let children = []
     for (let i = 10; i < 36; i++) {
@@ -60,38 +58,21 @@ const CalendarNewEvent = () => {
                 eventTime: String(form.getFieldValue("eventTime")),
                 eventPlace: form.getFieldValue("eventPlace"),
                 cast: form.getFieldValue("cast"),
-                equipment: equipment,
             })
     };
 
     const onFinish = (values) => {
         console.log(values)
-        console.log(form.getFieldValue("title"))
-        console.log(equipment)
-        let meet = new Date(values.meetDate)
-        console.log(meet)
     }
 
 
     const onChange4 = e => {
         console.log('radio4 checked', e.target.value);
-        setCloth( e.target.value );
+        cloth = e.target.value;
       };
       
 
-    const updateEquip = (equipData) => {
-        if (equipData !== null) {
-            equipment = equipData
-        }
-        console.log(equipment)
-    }
-
-    if (equipment !== null) {
-        equipGroup = Object.getOwnPropertyNames(equipment)
-        console.log(equipGroup)
-    }
     console.log(lastId)
-    console.log(equipment)
     return (
 
         <div style={{ padding: '15px' }}>
@@ -197,7 +178,7 @@ const CalendarNewEvent = () => {
                                 <Group
                                     options={radio}
                                     onChange={onChange4}
-                                    value={cloth}
+                                    defaultValue={cloth}
                                     optionType="button"
                                     buttonStyle="solid"
                                 />
@@ -279,7 +260,7 @@ const CalendarNewEvent = () => {
                     </Select>
                 </Form.Item>
 
-                <Equipment equipment={equipment} equipGroup={equipGroup} updateEquip={updateEquip}/>
+                <Equipment />
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '15px' }}>
                     <StagePlan />

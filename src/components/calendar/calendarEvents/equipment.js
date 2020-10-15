@@ -1,8 +1,8 @@
 
 import React, { useEffect, useState } from "react";
 import { db } from "../../firebase/firebase";
-import { Cascader, Collapse, InputNumber, Row, Col, Button, Form, Space, message } from 'antd';
-import { PlusCircleTwoTone, MinusCircleTwoTone, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Cascader, Collapse, InputNumber, Button, Form, Space, message } from 'antd';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 const { Panel } = Collapse
 
 
@@ -24,44 +24,19 @@ function useEquipment() {
   return equip
 }
 
-function useStandartEquipment() {
-  const [equipSt, setEquipSt] = useState([])
-  useEffect(() => {
-    db.collection('equipment').doc('standart')
-      .get()
-      .then(doc => {
-        const data = doc.data()
-        setEquipSt(data)
-      })
-      .catch(function (error) {
-        console.log("Error getting document:", error);
-      });
-  }, [])
-
-  return equipSt
-}
-
 const Equipment = (props) => {
   const [form] = Form.useForm()
 
 
   let equipment = useEquipment()
-  let standartEquipment = useStandartEquipment()
-  let standartOptions = []
   let equipGroup = []
   let options = []
   let equipData = []
-  let repeat = false
-  let see = 'visible'
   let selected = []
-
-  let field = []
 
   if (equipment !== null) {
     equipGroup = Object.getOwnPropertyNames(equipment)
   }
-
-  console.log(standartEquipment)
 
   if (equipment !== null) {
     for (let index = 0; index < equipGroup.length; index++) {
@@ -81,18 +56,6 @@ const Equipment = (props) => {
   }
   console.log(options)
 
-const standart = () => {
-  
-}
-
-
-  // if (standartEquipment !== null) {
-  //   for (let index = 0; index < array.length; index++) {
-  //     const element = array[index];
-      
-  //   }
-  // }
-
   const onFinish = values => {
     console.log('Received values of form:', values);
     equipData = []
@@ -105,65 +68,42 @@ const standart = () => {
           quantity: `${values.equipmentData[index]['quantity']}`,
         }
       }
-      repeat = false
-      for (let index = 0; index < equipData.length; index++) {
-        let checking = equipData[index]
-        console.log(checking)
-        for (let i = 0; i < equipData.length; i++) {
-          if (i !== index && equipData[i]['equipGroup'] === checking['equipGroup'] && equipData[i]['equipType'] === checking['equipType']) {
-            repeat = true
+      message.success('Ваше оборудование сохранено!')
+    }
+    console.log(equipData)
+  };
+
+  const onChange = () => {
+
+    //обнуление
+    for (let index = 0; index < options.length; index++) {
+      for (let i = 0; i < options[index]['children'].length; i++) {
+        options[index]['children'][i]['disabled'] = false
+      }      
+    }
+
+    selected = form.getFieldValue('equipmentData')
+
+    for (let index = 0; index < selected.length; index++) {
+      for (let ind = 0; ind < options.length; ind++) {
+        if (options[ind]['value'] === selected[index]['equipment'][0]) {
+          for (let i = 0; i < options[ind]['children'].length; i++) {
+            if (options[ind]['children'][i]['value'] === selected[index]['equipment'][1]) {
+              options[ind]['children'][i]['disabled'] = true
+            }
           }
         }
       }
-      if (repeat) {
-        message.error('У вас есть повторяющееся оборудование! Исправьтесь!', 0)
-      }
-      else {
-        message.destroy()
-      }
-      if (!repeat) {
-        message.success('Ваше оборудование сохранено!')
-        props.updateEquip(equipData)
-      }
-      else {
-        message.destroy()
-      }
-
-      console.log(repeat)
-
-
     }
-
-    console.log(equipData)
-
-
-
-  };
-
-  const onChange = value => {
-    console.log(value)
-    console.log(options)
-    console.log( form.getFieldValue(['equipmentData', 0, "equipment"]) )
+    
 
     
-    // for (let index = 0; index < options.length; index++) {
-    //   if(options[index]['value'] === value[0]){
-    //     for (let i = 0; i < options[index]['children'].length; i++) {
-    //       if (options[index]['children'][i]['value'] === value[1]) {
-    //         options[index]['children'][i]['disabled'] = true
-    //       }
-          
-    //     }
-    //   }
-      
-    // }
     
   }
 
   return (
     <Collapse>
       <Panel header="Оборудование" key="1">
-      <Button type="primary" onClick={standart}>Выбрать стандартное</Button>
         
         <Form name="dynamic_form_nest_item" onFinish={onFinish} autoComplete="off" form={form}>
           
@@ -199,6 +139,7 @@ const standart = () => {
                       <MinusCircleOutlined
                         onClick={() => {
                           remove(field.name);
+                          onChange()
                         }}
                       />
                     </Space>
