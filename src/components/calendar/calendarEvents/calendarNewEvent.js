@@ -16,25 +16,6 @@ const radio = [
     { label: 'Парадная', value: 'Парадная' },
 ]
 
-
-function useEquipment() {
-    const [equip, setEquip] = useState([])
-    useEffect(() => {
-        db.collection('equipment').doc('equip')
-            .get()
-            .then(doc => {
-                const data = doc.data()
-                setEquip(data) 
-                console.log(equip)
-            })
-            .catch(function (error) {
-                console.log("Error getting document:", error);
-            });
-    }, [])
-
-    return equip
-}
-
 const CalendarNewEvent = () => {
     const [form] = Form.useForm()
 
@@ -50,7 +31,7 @@ const CalendarNewEvent = () => {
     let eventTime = ''
     let eventPlace = ''
     let cast = []
-    let equipment = useEquipment()
+    let equipment = []
     let equipGroup = []
 
     const [cloth, setCloth] = useState('Свободная')
@@ -69,21 +50,26 @@ const CalendarNewEvent = () => {
             .set({
                 id: id,
                 title: form.getFieldValue("title"),
-                meetDate: form.getFieldValue("meetDate"),
-                meetTime: form.getFieldValue("meetTime"),
+                meetDate: String(form.getFieldValue("meetDate")),
+                meetTime: String(form.getFieldValue("meetTime")),
                 meetPlace: form.getFieldValue("meetPlace"),
                 description: form.getFieldValue("description"),
                 typeOfEvent: form.getFieldValue("typeOfEvent"),
                 cloth: form.getFieldValue("cloth"),
-                eventDate: form.getFieldValue("eventDate"),
-                eventTime: form.getFieldValue("eventTime"),
+                eventDate: String(form.getFieldValue("eventDate")),
+                eventTime: String(form.getFieldValue("eventTime")),
                 eventPlace: form.getFieldValue("eventPlace"),
                 cast: form.getFieldValue("cast"),
+                equipment: equipment,
             })
     };
 
     const onFinish = (values) => {
         console.log(values)
+        console.log(form.getFieldValue("title"))
+        console.log(equipment)
+        let meet = new Date(values.meetDate)
+        console.log(meet)
     }
 
 
@@ -91,7 +77,14 @@ const CalendarNewEvent = () => {
         console.log('radio4 checked', e.target.value);
         setCloth( e.target.value );
       };
+      
 
+    const updateEquip = (equipData) => {
+        if (equipData !== null) {
+            equipment = equipData
+        }
+        console.log(equipment)
+    }
 
     if (equipment !== null) {
         equipGroup = Object.getOwnPropertyNames(equipment)
@@ -112,7 +105,7 @@ const CalendarNewEvent = () => {
                 layout="auto"
                 size="large"
                 name="basic"
-                onFinish={onFinish}
+                onFinish={addNewEvent}
 
             >
 
@@ -286,7 +279,7 @@ const CalendarNewEvent = () => {
                     </Select>
                 </Form.Item>
 
-                <Equipment equipment={equipment} equipGroup={equipGroup} />
+                <Equipment equipment={equipment} equipGroup={equipGroup} updateEquip={updateEquip}/>
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '15px' }}>
                     <StagePlan />
