@@ -23,12 +23,21 @@ yarn-debug.log*
 yarn-error.log*
 
 
-idea/
+.idea/
 functions/
-vscode/
+.vscode/
 firestore.rules
 .firebaserc
 firebase.json
 firestore-debug.log
 firestore.indexes.json
 ui-debug.log
+
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/soundColor.iml
+.idea/vcs.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/soundColor.iml

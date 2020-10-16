@@ -1,34 +1,12 @@
 import React from 'react'
 import { db } from '../../firebase/firebase'
 import EditDetails from './studentChange/EditDetails'
-import { Card, Col, Row, Timeline, Skeleton } from 'antd';
+import { Card, Timeline, Skeleton, Typography, Popover, InputNumber, Input } from 'antd';
+import { EditTwoTone } from "@ant-design/icons";
+const { Paragraph } = Typography;
 
 
 
-const { Meta } = Card;
-
-const centerBoxNotRound = {
-  textAlign: "center",
-  height: '100px',
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}
-const centerBoxLeftRound = {
-  textAlign: "center",
-  borderRadius: '10px 0px 0px 10px',
-  height: '100px',
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}
-const centerBoxRightRound = {
-  borderRadius: '0px 10px 10px 0px',
-  height: '100px',
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}
 
 class InfoStudent extends React.Component {
   constructor(props) {
@@ -73,176 +51,72 @@ class InfoStudent extends React.Component {
  
 
   outputInfo() {
+    
+  const contentLvl = (
+    <div>
+    <InputNumber style={{width:'100%'}} min={1} max={10} defaultValue={this.state.student.lvl} />
+    </div>
+  );
+  const contentName = (
+    <div>
+    <Input style={{width:'100%'}} defaultValue={this.state.student.name} />
+    </div>
+  );
     return (
-      <div style={{ padding: '15px' }}>
-        <EditDetails
-          name={this.state.name}
-          lvl={this.state.lvl}
-          missed={this.state.missed}
-          id={this.state.id}
-          course={this.state.course}
-          componentDidMount={this.componentDidMount}
-          outputInfo={this.outputInfo}
-        />
-        <Skeleton active loading={this.state.loading} paragraph={{ rows: 25 }} title={false}>
+      <div>
+        <Skeleton
+          active
+          loading={this.state.loading}
+          paragraph={{ rows: 25 }}
+          title={false}
+        >
+         
+         
+          <Popover content={contentName} title="Задайте имя" trigger="click">
+            <span style={{ fontSize: "calc(1em + 4vw)"}}>
+              {this.state.student.name}
+            </span>
+            <EditTwoTone />
+          </Popover>
+         <br/>
+          <Popover content={contentLvl} title="Задайте уровень" trigger="click">
+            <span style={{ fontSize: "calc(1em + 3vw)" }}>
+              Уровень - {this.state.student.lvl}
+            </span>
+            <EditTwoTone />
+          </Popover>
 
-          <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-            <Card style={{ borderRadius: '10px' }} >
-              <Meta
-                title={this.state.student.name}
-                style={{ textAlign: "center" }}
-              />
-            </Card>
-          </div>
-
-          <div style={{ width: '60%', paddingBottom: '10px' }}>
-            <Row>
-              <Col flex={8}>
-                <Card style={{ textAlign: "center", borderRadius: '10px 0px 0px 10px' }}>
-                  Уровень
-              </Card>
-              </Col>
-              <Col flex={2}>
-                <Card style={{ textAlign: "center", borderRadius: '0px 10px 10px 0px' }}>
-                  {this.state.student.lvl}
-                </Card>
-              </Col>
-            </Row>
-          </div>
-
-          <div style={{ width: '60%', paddingBottom: '10px' }}>
-            <Row>
-              <Col flex={10}>
-                <Card style={{ textAlign: "center", borderRadius: '10px 10px 10px 10px' }}>
-                  {this.state.student.course}
-                </Card>
-              </Col>
-            </Row>
-          </div>
-
-          <div style={{ paddingBottom: '10px' }}>
-            <Row>
-              <Col xs={4} sm={2} md={2} lg={2} xl={2} xxl={2}>
-                <Card style={centerBoxLeftRound}>
-                  <div style={centerBoxLeftRound}>1</div>
-                </Card>
-              </Col>
-              <Col xs={8} sm={10} md={10} lg={10} xl={10} xll={10}>
-                <Card style={centerBoxNotRound}>
-                  Не сданных записей
-              </Card>
-              </Col>
-              <Col xs={8} sm={10} md={10} lg={10} xl={10} xll={10}>
-                <Card style={centerBoxNotRound}>
-                  Вовремя сданных
-              </Card>
-              </Col>
-              <Col xs={4} sm={2} md={2} lg={2} xl={2} xxl={2}>
-                <Card style={centerBoxRightRound}>
-                  {this.state.student.count}
-                </Card>
-              </Col>
-            </Row>
-          </div>
-
-          <div style={{ paddingBottom: '10px' }}>
-            <Row>
-              <Col xs={7} sm={9} md={9} lg={9} xl={9} xll={9}>
-                <Card style={centerBoxLeftRound}>
-                  Опозданий
-              </Card>
-              </Col>
-              <Col xs={4} sm={2} md={2} lg={2} xl={2} xxl={2}>
-                <Card style={centerBoxRightRound}>
-                  {this.state.student.lateness}
-                </Card>
-              </Col>
-              <Col xs={{ span: 4, offset: 2 }} sm={{ span: 2, offset: 2 }} md={{ span: 2, offset: 2 }} lg={{ span: 2, offset: 2 }} xl={{ span: 2, offset: 2 }} xxl={{ span: 2, offset: 2 }}>
-                <Card style={centerBoxLeftRound}>
-                  {this.state.student.responsible}
-                </Card>
-              </Col>
-              <Col xs={7} sm={9} md={9} lg={9} xl={9} xll={9}>
-                <Card style={centerBoxRightRound}>
-                  Ответственнен
-              </Card>
-              </Col>
-            </Row>
-          </div>
-
-          <div style={{ paddingBottom: '10px' }}>
-            <Row>
-              <Col xs={7} sm={9} md={9} lg={9} xl={9} xll={9}>
-                <Card style={centerBoxLeftRound}>
-                  Пропусков
-              </Card>
-              </Col>
-              <Col xs={4} sm={2} md={2} lg={2} xl={2} xxl={2}>
-                <Card style={centerBoxRightRound}>
-                  {this.state.student.missed}
-                </Card>
-              </Col>
-              <Col xs={{ span: 4, offset: 2 }} sm={{ span: 2, offset: 2 }} md={{ span: 2, offset: 2 }} lg={{ span: 2, offset: 2 }} xl={{ span: 2, offset: 2 }} xxl={{ span: 2, offset: 2 }}>
-                <Card style={centerBoxLeftRound}>
-                  {this.state.student.concert}
-                </Card>
-              </Col>
-              <Col xs={7} sm={9} md={9} lg={9} xl={9} xll={9}>
-                <Card style={centerBoxRightRound}>
-                  Концертов
-              </Card>
-              </Col>
-            </Row>
-          </div>
-
-          <div style={{ paddingBottom: '10px' }}>
-            <Row>
-              <Col xs={7} sm={9} md={9} lg={9} xl={9} xll={9}>
-                <Card style={centerBoxLeftRound}>
-                  Опозорил
-              </Card>
-              </Col>
-              <Col xs={4} sm={2} md={2} lg={2} xl={2} xxl={2}>
-                <Card style={centerBoxRightRound}>
-                  {this.state.student.disgrace}
-                </Card>
-              </Col>
-              <Col xs={{ span: 4, offset: 2 }} sm={{ span: 2, offset: 2 }} md={{ span: 2, offset: 2 }} lg={{ span: 2, offset: 2 }} xl={{ span: 2, offset: 2 }} xxl={{ span: 2, offset: 2 }}>
-                <Card style={centerBoxLeftRound}>
-                  {this.state.student.equipment}
-                </Card>
-              </Col>
-              <Col xs={7} sm={9} md={9} lg={9} xl={9} xll={9}>
-                <Card style={centerBoxRightRound}>
-                  Оборудование
-              </Card>
-              </Col>
-            </Row>
-          </div>
-
-          <div style={{ paddingBottom: '10px' }}>
-            <Row>
-              <Col flex={10}>
-                <Card style={{ textAlign: "center", borderRadius: '10px' }}>
-                  Выписываний: {this.state.student.discharges}
-                </Card>
-              </Col>
-            </Row>
-          </div>
-
-          <div style={{ paddingBottom: '10px' }}>
-            <Card style={{ borderRadius: '10px', padding: '20px' }}>
+          <br/>
+          {this.state.student.course}
+          Не сданных записей Вовремя сданных
+          {this.state.student.count}
+          Опозданий
+          {this.state.student.lateness}
+          {this.state.student.responsible}
+          Ответственнен Пропусков
+          {this.state.student.missed}
+          {this.state.student.concert}
+          Концертов Опозорил
+          {this.state.student.disgrace}
+          {this.state.student.equipment}
+          Оборудование Выписываний: {this.state.student.discharges}
+          <div style={{ paddingBottom: "10px" }}>
+            <Card style={{ borderRadius: "10px", padding: "20px" }}>
               <Timeline>
                 <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
-                <Timeline.Item>Solve initial network problems 2015-09-01</Timeline.Item>
+                <Timeline.Item>
+                  Solve initial network problems 2015-09-01
+                </Timeline.Item>
                 <Timeline.Item>Technical testing 2015-09-01</Timeline.Item>
-                <Timeline.Item>Network problems being solved 2015-09-01</Timeline.Item>
+                <Timeline.Item>
+                  Network problems being solved 2015-09-01
+                </Timeline.Item>
               </Timeline>
             </Card>
           </div>
         </Skeleton>
       </div>
-    )
+    );
   }
 
   render() {
