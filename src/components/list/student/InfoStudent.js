@@ -1,9 +1,9 @@
 import React from 'react'
 import { db } from '../../firebase/firebase'
 import EditDetails from './studentChange/EditDetails'
-import { Card, Timeline, Skeleton, Typography, Popover, InputNumber, Input } from 'antd';
+import { Card, Timeline, Skeleton, Popover, Input, Select, message } from 'antd';
 import { EditTwoTone } from "@ant-design/icons";
-const { Paragraph } = Typography;
+
 
 
 
@@ -50,11 +50,12 @@ class InfoStudent extends React.Component {
 
  
 
+
   outputInfo() {
     
   const contentLvl = (
     <div>
-    <InputNumber style={{width:'100%'}} min={1} max={10} defaultValue={this.state.student.lvl} />
+    <Input type="number" style={{width:'100%'}} min={1} max={10} defaultValue={this.state.student.lvl} />
     </div>
   );
   const contentName = (
@@ -62,6 +63,83 @@ class InfoStudent extends React.Component {
     <Input style={{width:'100%'}} defaultValue={this.state.student.name} />
     </div>
   );
+  const contentCourse = (
+    <div>
+       <Select style={{width:'100%'}} defaultValue={this.state.student.course}>  
+          <option value="Первый курс">Первый курс</option>
+          <option value="Второй курс">Второй курс</option>
+          <option value="Третий курс">Третий курс</option>
+          <option value="Четвертый курс">Четвертый курс</option>
+          <option value="Пятый курс">Пятый курс</option>
+          </Select>
+    </div>
+  )
+  const contentLateness = (
+    <div>
+      <Input type="number" style={{width:'100%'}} min={0} defaultValue={this.state.student.lateness} />
+    </div>
+  )
+  const contentMissed = (
+    <div>
+      <Input type="number" style={{width:'100%'}} min={0} defaultValue={this.state.student.missed} />
+    </div>
+  )
+  const contentDisgrace = (
+    <div>
+      <Input type="number" style={{width:'100%'}} min={0} defaultValue={this.state.student.disgrace} />
+    </div>
+  )
+  const contentResponsible = (
+    <div>
+      <Input type="number" style={{width:'100%'}} min={0} defaultValue={this.state.student.responsible} />
+    </div>
+  )
+  const contentConcert= (
+    <div>
+      <Input type="number" style={{width:'100%'}} min={0} defaultValue={this.state.student.concert} />
+    </div>
+  )
+  
+    const contentEquipment= (
+    <div>
+      <Input type="number" style={{width:'100%'}} min={0} defaultValue={this.state.student.equipment} />
+    </div>
+  )
+  const contentDischarges= (
+    <div>
+      <Input type="number" style={{width:'100%'}} min={0} defaultValue={this.state.student.discharges} />
+    </div>
+  )
+   const contentСount= (
+    <div>
+      <Input type="number" style={{width:'100%'}} min={0} defaultValue={this.state.student.count} />
+    </div>
+  )
+    const contentExchange = (
+    <div>
+      <Input type="number" style={{width:'100%'}} min={0} defaultValue={this.state.student.exchange} onChange={this.Edit}/>
+    </div>
+   
+  )
+
+  const Edit = (par) => {
+    let nameOfValue =  par.replace('this.state.student.', '')
+    console.log(nameOfValue)
+    db.collection('students')
+        .doc(`${this.state.student.id}`)
+        .set(
+        `${nameOfValue}: ${par}`
+        )
+        .then(function () {
+          message.success('Значение записано!');
+        })
+        .catch(function (error) {
+          console.log("Error getting document:", error);
+        });
+        
+    
+}
+  
     return (
       <div>
         <Skeleton
@@ -70,7 +148,6 @@ class InfoStudent extends React.Component {
           paragraph={{ rows: 25 }}
           title={false}
         >
-         
          
           <Popover content={contentName} title="Задайте имя" trigger="click">
             <span style={{ fontSize: "calc(1em + 4vw)"}}>
@@ -85,21 +162,80 @@ class InfoStudent extends React.Component {
             </span>
             <EditTwoTone />
           </Popover>
-
           <br/>
-          {this.state.student.course}
-          Не сданных записей Вовремя сданных
-          {this.state.student.count}
-          Опозданий
-          {this.state.student.lateness}
-          {this.state.student.responsible}
-          Ответственнен Пропусков
-          {this.state.student.missed}
-          {this.state.student.concert}
-          Концертов Опозорил
-          {this.state.student.disgrace}
-          {this.state.student.equipment}
-          Оборудование Выписываний: {this.state.student.discharges}
+          <Popover content={contentCourse} title="Задайте курс" trigger="click">
+            <span style={{ fontSize: "calc(1em + 3vw)"}}>
+             {this.state.student.course}
+            </span>
+            <EditTwoTone />
+          </Popover>
+          <br/>
+          <Popover content={contentLateness} title="Задайте количество опазданий" trigger="click">
+            <span style={{ fontSize: "calc(1em + 3vw)"}}>
+             Опазданий - {this.state.student.lateness}
+            </span>
+            <EditTwoTone />
+          </Popover>
+          <br/>
+          <Popover content={contentMissed} title="Задайте количество пропусков" trigger="click">
+            <span style={{ fontSize: "calc(1em + 3vw)"}}>
+             Пропусков - {this.state.student.missed}
+            </span>
+            <EditTwoTone />
+          </Popover>
+          <br/>
+          <Popover content={contentDisgrace} title="Задайте количество позора" trigger="click">
+            <span style={{ fontSize: "calc(1em + 3vw)"}}>
+             Опозорил - {this.state.student.disgrace}
+            </span>
+            <EditTwoTone />
+          </Popover>
+          <br/>
+          <Popover content={contentResponsible} title="Задайте количество ответсвтенности" trigger="click">
+            <span style={{ fontSize: "calc(1em + 3vw)"}}>
+             Ответсвтенн - {this.state.student.responsible}
+            </span>
+            <EditTwoTone />
+          </Popover>
+          <br/>
+          <Popover content={contentConcert} title="Задайте кол-во песещённых мероприятий" trigger="click">
+            <span style={{ fontSize: "calc(1em + 3vw)"}}>
+             Мероприятий - {this.state.student.concert}
+            </span>
+            <EditTwoTone />
+          </Popover>
+          <br/>
+          <Popover content={contentEquipment} title="Раз принесено свое оборудование" trigger="click">
+            <span style={{ fontSize: "calc(1em + 3vw)"}}>
+             Оборудование - {this.state.student.equipment}
+            </span>
+            <EditTwoTone />
+          </Popover>
+          <br/>
+          <Popover content={contentDischarges} title="Выписывания" trigger="click">
+            <span style={{ fontSize: "calc(1em + 3vw)"}}>
+             Выписываний - {this.state.student.discharges}
+            </span>
+            <EditTwoTone />
+          </Popover>
+        <br/>
+          <Popover content={contentСount} title="Выписывания" trigger="click">
+            <span style={{ fontSize: "calc(1em + 3vw)"}}>
+            Записей сдано - {this.state.student.count}
+            </span>
+            <EditTwoTone />
+          </Popover>
+
+      <br/>
+            <Popover content={contentExchange} title="Замен" trigger="click">
+              <span style={{ fontSize: "calc(1em + 3vw)"}}>
+             Замен - {this.state.student.exchange}
+              </span>
+              <EditTwoTone />
+            </Popover>
+
+        
+    
           <div style={{ paddingBottom: "10px" }}>
             <Card style={{ borderRadius: "10px", padding: "20px" }}>
               <Timeline>
