@@ -13,7 +13,7 @@ class InfoStudent extends React.Component {
     super(props)
     this.state = {
       student: {},
-      loading: "hidden",
+      loading: true,
       icon: true,
     }
 

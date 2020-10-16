@@ -73,7 +73,7 @@ const CalendarNewEvent = () => {
         console.log('radio4 checked', e.target.value);
         cloth = e.target.value;
       };
-    
+
 
     return (
 
