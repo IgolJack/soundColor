@@ -122,23 +122,23 @@ class InfoStudent extends React.Component {
    
   )
 
-  const Edit = (par) => {
-    let nameOfValue =  par.replace('this.state.student.', '')
-    console.log(nameOfValue)
-    db.collection('students')
-        .doc(`${this.state.student.id}`)
-        .set(
-        `${nameOfValue}: ${par}`
-        )
-        .then(function () {
-          message.success('Значение записано!');
-        })
-        .catch(function (error) {
-          console.log("Error getting document:", error);
-        });
-        
-    
-}
+//   const Edit = (par) => {
+//     let nameOfValue =  par.replace('this.state.student.', '')
+//     console.log(nameOfValue)
+//     db.collection('students')
+//         .doc(`${this.state.student.id}`)
+//         .set(
+//         `${nameOfValue}: ${par}`
+//         )
+//         .then(function () {
+//           message.success('Значение записано!');
+//         })
+//         .catch(function (error) {
+//           console.log("Error getting document:", error);
+//         })  
+// }
+
+
   
     return (
       <div>
