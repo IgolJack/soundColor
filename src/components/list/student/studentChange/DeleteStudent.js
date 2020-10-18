@@ -50,8 +50,8 @@ class DeleteStudent extends Component {
             size="large"
             onClick={this.handleOpen}
               style={{
-                  width:'100%',
-                fontSize: "35px",
+                width:'100%',
+                fontSize: "25px",
                 display: 'inline-block', 
                 verticalAlign: 'middle'
               }}

@@ -62,9 +62,9 @@ const SignUpPage = (props) => {
   let count = "0";
   let exchange = "0";
   let course = "Первый курс";
-
+  let uid = '';
   const [lastId, setLastId] = useState(localStorage.getItem("lastId"));
-  const { currentUser } = useContext(AuthContext);
+  
 
   const succes = () => {
     message.success("Студент успешно создан", 2);
@@ -95,6 +95,8 @@ const SignUpPage = (props) => {
       await auth
         .createUserWithEmailAndPassword(values.email, values.password)
         .then(function (result) {
+          uid = result.user.uid
+          console.log(uid);
           succesRed();
           return result.user.updateProfile({
             displayName: values.name,
@@ -102,7 +104,7 @@ const SignUpPage = (props) => {
         });
       localStorage.setItem("lastId", Number(lastId) + 1);
       setLastId(localStorage.getItem("lastId"));
-
+     
       console.log(localStorage.getItem("lastId"));
       db.collection("students")
         .doc(localStorage.getItem("lastId"))
@@ -121,7 +123,7 @@ const SignUpPage = (props) => {
           course: form.getFieldValue("course"),
           discharges: form.getFieldValue("discharges"),
           exchange: form.getFieldValue("exchange"),
-          uid: currentUser.uid,
+          uid: uid,
           id: localStorage.getItem("lastId"),
         })
         .then(function () {

@@ -9,14 +9,13 @@ class StudentCard extends Component {
   render() {
     return (
       <div key={this.props.student.id}>
- 
         <Card
           style={{
             borderColor: this.props.colorPick,
             borderWidth: "4px",
             marginLeft: "15px",
             marginRight: "15px",
-            marginBottom:'10px',
+            marginBottom: "10px",
           }}
           hoverable
           actions={[
@@ -38,9 +37,8 @@ class StudentCard extends Component {
                   dashed="true"
                   style={{ color: this.props.colorPick, borderTop: "3px" }}
                 >
-                  <div style={{ textAlign: "center", margin: "0" }}>
-                    {" "}
-                    <h2> {this.props.student.name}</h2>
+                  <div style={{ textAlign: "center", margin: "0", fontSize: '5vw' }}>
+                    {this.props.student.name}
                   </div>
                 </Divider>
               }
@@ -48,30 +46,27 @@ class StudentCard extends Component {
                 <div>
                   <div
                     style={{
-                      width: "8em",
-                      height: "4em",
+                      width: "8vw",
+                      height: "4vw",
                       border: "2px",
                       top: 0,
                       right: 0,
                       bottom: 0,
                       left: 0,
-
                       position: "absolute",
                       borderRadius: "0 0 50% 50% / 0 0 100% 100%",
                       background: this.props.colorPick,
                       textAlign: "center",
                     }}
                   >
-                    <h1 style={{ color: "white" }}>{this.props.student.lvl}</h1>
+                    <span style={{ color: "white", fontSize:'3vw', display: 'block'}}>{this.props.student.lvl}</span>
                   </div>
-                  <h5>{this.props.student.course}</h5>
-                  <h5> Пропусков - {this.props.student.missed}</h5>
+                  <h6>{this.props.student.course}</h6>
                 </div>
               }
             />
           </NavLink>
         </Card>
-      
       </div>
     );
   }

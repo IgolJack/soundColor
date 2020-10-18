@@ -84,7 +84,7 @@ class EditDetails extends Component {
             onClick={this.handleOpen}
             
               style={{
-                fontSize: "35px",
+                fontSize: "25px",
                 width:'100%',
                 display: 'inline-block', 
                 verticalAlign: 'middle'
