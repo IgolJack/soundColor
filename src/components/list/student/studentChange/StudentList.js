@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
-import StudentCard from './StudentCard'
-
-
+import React, { Component } from "react";
+import StudentListCard from './StudentListCard'
 
 var bgColors = {
     "Default": "#81b71a",
@@ -14,9 +12,8 @@ var bgColors = {
 
 var colorPick = bgColors.Blue
 
-
-class Students extends Component {
-        
+class StudentList extends Component {
+          
     render() {
         console.log(this.props.students)
 
@@ -69,10 +66,12 @@ class Students extends Component {
 
                         return (
                            
-                            <StudentCard
-                            student={student}
-                            colorPick={colorPick}
-                            />
+                          
+                               <StudentListCard
+                               student={student}
+                               colorPick={colorPick}
+                                /> 
+                              
                             
                        )
                    })
@@ -83,4 +82,9 @@ class Students extends Component {
     }
 }
 
-export default Students;
+
+
+ 
+
+
+export default StudentList;

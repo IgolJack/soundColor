@@ -1,13 +1,16 @@
 import React from 'react'
 import {db} from '../firebase/firebase'
-import './List.css';
+
 
 import Filter from './student/filter/Filter'
 import Students from './student/Students'
 import {Link} from 'react-router-dom'
 import Navbar from 'react-bootstrap/Navbar'
 import { Button, Skeleton } from 'antd'
-
+import StudentList from './student/studentChange/StudentList';
+import { Tabs } from 'antd';
+import SearchFilter from './student/filter/SearchFilter';
+const TabPane = Tabs.TabPane;
 
 
 class List extends React.Component {
@@ -69,12 +72,17 @@ class List extends React.Component {
         return (
             <div className="App">
                  
-                <h2 style={{ textAlign: "center" }}>Студенты</h2>
+                
                 
                 <Navbar bg="light" >
-                    <Link to={{ pathname: "/Registration", state: { lastId: this.state.lastId } }} style={{ width: "100%", 'text-decoration': "none" }} >
-                        <Button block size="large" type="primary" >Регистрация</Button>
+                <h2 style={{ textAlign: "center" }}>Студенты</h2>
+                    <Link to={{ pathname: "/Registration", state: { lastId: this.state.lastId } }} style={{'text-decoration': "none" }} >
+                        <Button type="link" >Регистрация</Button>
                     </Link>
+                    
+             <SearchFilter  search={this.search} />
+
+                
                 </Navbar>
 
                 <Filter
@@ -85,12 +93,22 @@ class List extends React.Component {
                 />
 
                 <Skeleton active loading={this.state.loading} paragraph={{rows: 30}} title={false} >
-               
-                <Students
+                <Tabs defaultActiveKey="1" style={{marginRight:'10px', marginLeft:'10px'}}>
+    <TabPane tab="Карточки" key="1"> <Students
                     students={this.state.students}
                     filterName={this.state.filterName}
                     searchStudent={this.state.searchStudent}
-                />
+                /></TabPane>
+    <TabPane tab="Компактный вид" key="2">  <StudentList
+                  students={this.state.students}
+                  filterName={this.state.filterName}
+                  searchStudent={this.state.searchStudent}
+                /></TabPane>
+   
+  </Tabs>
+               
+              
+
                 </Skeleton>
                 <br/><br/><br/><br/>
             </div>

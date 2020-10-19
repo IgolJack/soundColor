@@ -13,8 +13,6 @@ class StudentCard extends Component {
           style={{
             borderColor: this.props.colorPick,
             borderWidth: "4px",
-            marginLeft: "15px",
-            marginRight: "15px",
             marginBottom: "10px",
           }}
           hoverable

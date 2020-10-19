@@ -3,7 +3,7 @@ import {db} from '../../firebase/firebase'
 import {Button} from "react-bootstrap";
 import * as firebase from "firebase";
 import { Card, Col, Row, Skeleton, Collapse, Tag, Divider } from 'antd';
-import { SettingOutlined } from '@ant-design/icons';
+
 
 const { Meta } = Card;
 const { Panel } = Collapse;
@@ -17,6 +17,7 @@ export default class InfoEvent extends React.Component{
             cast: [],
             equipment: [],
             equipGroup: [],
+            
         }
     this.addUserToEvent = this.addUserToEvent.bind(this)
     this.componentDidMount = this.componentDidMount.bind(this)
@@ -30,6 +31,8 @@ componentDidMount() {
     this.setState({ id: eventId })
     const docRef = db.collection('eventsCalendar').doc(eventId);
     this.getInfo(docRef)
+
+    
 }
 
 getInfo(docRef){
@@ -87,26 +90,32 @@ getInfo(docRef){
     }
 
 addUserToEvent(){
-    let uid = firebase.auth().currentUser.uid //или email
+    let uid = firebase.auth().currentUser.uid 
+    let nowMember = this.state.event.members
+    let someDupl = false;
+    
+    nowMember.forEach(function(entry) {
+    if(uid == entry){
+        console.log(entry, '=', uid)
+        someDupl = true
+    }
+});
 
-
-    //нужно предотвротить попадекние уже сущ. uid/email в массив members (для отладки)
-    // в последствии просто не будет кнопки если человек записался (хотя можно для безопасности)
+    nowMember.push(uid)
+    console.log('Nowmember', nowMember)
     console.log('Уникальный идентификатор пользователя - ' + uid)
-
-
-    this.state.event.members.push(uid)
-    db.collection('eventsCalendar')
-        .doc(String(this.state.event.id))
-        .set({
-            members: this.state.event.members,
-            id: this.state.event.id,
-            title: this.state.event.title,
-            start:this.state.event.start,
-            end: this.state.event.end,
+    
+    if(someDupl == false) {
+        db.collection('eventsCalendar')
+        .doc(this.state.event.id)
+        .update({
+            members: nowMember
         })
-    this.componentDidMount()
-}
+    }else {console.log('Одинаковые')}
+
+
+
+ }
 
 
     render() {
@@ -222,7 +231,8 @@ addUserToEvent(){
                     <p>Время начала = {this.state.event.start}</p>
                     <p>Время конца = {this.state.event.end}</p>
 
-                    <Button variant="contained" onClick={this.addUserToEvent}>Принять участие</Button>
+                    <Button variant="contained" onClick={this.addUserToEvent}>Принять участие
+                            <p key={1}>{this.state.members}</p></Button>
                 </Skeleton>
             </div>
         )
