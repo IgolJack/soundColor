@@ -125,8 +125,8 @@ const CalendarNewEvent = () => {
                                 value={meetTime}
                                 rules={[{ required: true, message: 'Введите значение!' }]}
                             >
-                                <TimePicker  />
-                            </Form.Item>
+                                <Input />
+                            </Form.Item>                            
                         </div>
                     </Col>
                     <Col flex={8}>

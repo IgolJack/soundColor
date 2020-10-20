@@ -90,6 +90,7 @@ getInfo(docRef){
     }
 
 addUserToEvent(){
+
     let uid = firebase.auth().currentUser.uid 
     let nowMember = this.state.event.members
     let someDupl = false;
@@ -100,6 +101,7 @@ addUserToEvent(){
         someDupl = true
     }
 });
+
 
     nowMember.push(uid)
     console.log('Nowmember', nowMember)
@@ -115,7 +117,9 @@ addUserToEvent(){
 
 
 
+
  }
+
 
 
     render() {
@@ -223,7 +227,7 @@ addUserToEvent(){
                         </Collapse>
                     </div>
 
-
+<Button variant="contained" onClick={this.addUserToEvent}>Принять участие</Button>
 
 
                     <p>ID = {this.state.event.id}</p>
@@ -231,8 +235,10 @@ addUserToEvent(){
                     <p>Время начала = {this.state.event.start}</p>
                     <p>Время конца = {this.state.event.end}</p>
 
+
                     <Button variant="contained" onClick={this.addUserToEvent}>Принять участие
                             <p key={1}>{this.state.members}</p></Button>
+
                 </Skeleton>
             </div>
         )

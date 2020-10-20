@@ -3,6 +3,16 @@ import { Input } from 'antd';
 
 class SearchFilter extends Component {
     
+    state = {
+        searchStudent: "",
+    }
+
+    search = event => {
+        console.log(event.target.name)
+        const name = event.target.name
+        this.setState({ searchStudent: event.target.value }, () => this.props.updateData(name, this.state.searchStudent))
+    }
+
     render() {
         return (
             <div style={{ margin: 12 }}>
@@ -14,7 +24,7 @@ class SearchFilter extends Component {
                     size="Large"
                     fullWidth
                     value={this.props.searchStudent}
-                    onChange={this.props.search}
+                    onChange={this.search}
                 />
             </div>
         );
