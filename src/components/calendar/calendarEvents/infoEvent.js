@@ -49,33 +49,34 @@ getInfo(docRef){
 
                 let strings = []
                 let resultGroup = []
-                for (let index = 0; index < data.equipment.length; index++) {
-                    strings.push(data.equipment[index]['equipGroup'])
-                }
-                for (let str of strings) {
-                    if (!resultGroup.includes(str)) {
-                        resultGroup.push(str);
-                    }
-                }
-
                 let equip = []
-                for (let index = 0; index < resultGroup.length; index++) {
-                    equip[index] = {
-                        equipGroup: resultGroup[index],
-                        groupChildren: []
+                if (data.equipment !== undefined) {
+                    
+                    for (let index = 0; index < data.equipment.length; index++) {
+                        strings.push(data.equipment[index]['equipGroup'])
                     }
-                    for (let i = 0; i < data.equipment.length; i++) {
-                        if (data.equipment[i]['equipGroup'] === resultGroup[index]) {
-                            equip[index]['groupChildren'].push({
-                                equipType: data.equipment[i]['equipType'],
-                                quantity: data.equipment[i]['quantity'],
-                            }) 
+                    for (let str of strings) {
+                        if (!resultGroup.includes(str)) {
+                            resultGroup.push(str);
+                        }
+                    }
+
+                    for (let index = 0; index < resultGroup.length; index++) {
+                        equip[index] = {
+                            equipGroup: resultGroup[index],
+                            groupChildren: []
+                        }
+                        for (let i = 0; i < data.equipment.length; i++) {
+                            if (data.equipment[i]['equipGroup'] === resultGroup[index]) {
+                                equip[index]['groupChildren'].push({
+                                    equipType: data.equipment[i]['equipType'],
+                                    quantity: data.equipment[i]['quantity'],
+                                })
+                            }
                         }
                     }
                 }
                 
-                
-
                 this.setState({
                     event: data,
                     loading: !this.state.loading,
@@ -115,16 +116,11 @@ addUserToEvent(){
         })
     }else {console.log('Одинаковые')}
 
-
-
-
  }
 
 
 
     render() {
-        console.log(this.state.equipGroup)
-        console.log(this.state.equipment)
         return (
             <div style={{ padding: '15px' }}>
                 <Skeleton active loading={this.state.loading} paragraph={{ rows: 25 }} title={false}>
@@ -226,26 +222,8 @@ addUserToEvent(){
                             </Panel>
                         </Collapse>
                     </div>
-
-<Button variant="contained" onClick={this.addUserToEvent}>Принять участие</Button>
-
-
-                    <p>ID = {this.state.event.id}</p>
-                    <p>Название мероприятия = {this.state.event.title}</p>
-                    <p>Время начала = {this.state.event.start}</p>
-                    <p>Время конца = {this.state.event.end}</p>
-
-
-                    <Button variant="contained" onClick={this.addUserToEvent}>Принять участие
-                            <p key={1}>{this.state.members}</p></Button>
-
                 </Skeleton>
             </div>
         )
-
-
-
-
-
     }
 }
