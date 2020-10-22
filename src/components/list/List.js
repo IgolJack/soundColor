@@ -1,7 +1,7 @@
 import React from "react";
 import { db } from "../firebase/firebase";
 
-import Filter from "./student/filter/Filter";
+import PropertyFilter from './student/filter/PropertyFilter'
 import Students from "./student/Students";
 import { Link } from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
@@ -65,10 +65,19 @@ class List extends React.Component {
   }
 
   updateData = (name, value) => {
-    this.setState({ [name]: value });
-    console.log(this.state.searchStudent);
-    console.log(this.state.filterName);
-  };
+    this.setState({[name]: value})
+    if (name === "searchStudent") {
+        const { filterName } = this.state;
+        delete filterName.course;
+        delete filterName.lvl;
+        delete filterName.missed;
+    }
+    if (name === "filterName") {
+        this.setState({searchStudent: ""})
+    }
+    console.log(this.state.searchStudent)
+    console.log(this.state.filterName)
+}
 
   render() {
     console.log(localStorage.getItem("lastId"));
@@ -86,15 +95,14 @@ class List extends React.Component {
             <Button type="link">Регистрация</Button>
           </Link>
 
-          <SearchFilter search={this.search} />
+          <SearchFilter search={this.search} updateData={this.updateData} />
         </Navbar>
 
-        <Filter
-          students={this.state.students}
-          filterName={this.state.filterName}
-          searchStudent={this.state.searchStudent}
-          updateData={this.updateData}
-        />
+        <PropertyFilter
+                    onInputChange={this.onInputChange}
+                    updateData={this.updateData}
+                />
+
 
         <Skeleton
           active

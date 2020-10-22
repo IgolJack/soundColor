@@ -57,30 +57,33 @@ export default class InfoEvent extends React.Component {
 
         let strings = [];
         let resultGroup = [];
-        for (let index = 0; index < data.equipment.length; index++) {
-          strings.push(data.equipment[index]["equipGroup"]);
-        }
-        for (let str of strings) {
-          if (!resultGroup.includes(str)) {
-            resultGroup.push(str);
-          }
-        }
-
         let equip = [];
-        for (let index = 0; index < resultGroup.length; index++) {
-          equip[index] = {
-            equipGroup: resultGroup[index],
-            groupChildren: [],
-          };
-          for (let i = 0; i < data.equipment.length; i++) {
-            if (data.equipment[i]["equipGroup"] === resultGroup[index]) {
-              equip[index]["groupChildren"].push({
-                equipType: data.equipment[i]["equipType"],
-                quantity: data.equipment[i]["quantity"],
-              });
-            }
+        if (data.equipment !== undefined) {
+
+          for (let index = 0; index < data.equipment.length; index++) {
+              strings.push(data.equipment[index]['equipGroup'])
           }
+          for (let str of strings) {
+              if (!resultGroup.includes(str)) {
+                  resultGroup.push(str);
+              }
+          }
+
+          for (let index = 0; index < resultGroup.length; index++) {
+            equip[index] = {
+                equipGroup: resultGroup[index],
+                groupChildren: []
+            }
+            for (let i = 0; i < data.equipment.length; i++) {
+                if (data.equipment[i]['equipGroup'] === resultGroup[index]) {
+                    equip[index]['groupChildren'].push({
+                        equipType: data.equipment[i]['equipType'],
+                        quantity: data.equipment[i]['quantity'],
+                    })
+                }
+            }
         }
+    }
 
         this.setState({
           event: data,

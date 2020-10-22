@@ -77,18 +77,36 @@ class PropertyFilter extends Component {
         course: "",
         lvl: "",
         missed: "",
+        filterName: {},
     }
 
     onInputNumberChange = (value) => {
         console.log(value)
         let key = { value: value, name: 'missed' }
+        console.log(key)
+
         this.setState({ missed: value }, this.onChange(value, key))
         console.log(this.state.missed)
     }
 
     onChange = (value, key) => {
         console.log(key)
-        this.props.onInputChange(key)
+        console.log(key.name)
+        console.log(key.value)
+        
+        this.setState({ searchStudent: "" })
+
+        if(key.value !== ""){
+            this.setState({ filterName: {...this.state.filterName, [key.name]: key.value}}, () => this.props.updateData("filterName", this.state.filterName));
+        }
+        else if(key.name in this.state.filterName && key.value === ""){
+            //console.log("обнуление")
+            const { filterName } = this.state;
+            delete filterName[`${key.name}`];
+            this.setState({ filterName: filterName }, () => this.props.updateData("filterName", this.state.filterName))            
+        }
+        console.log(this.state.filterName)
+
     }
 
     render() {

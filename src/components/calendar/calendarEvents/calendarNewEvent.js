@@ -2,7 +2,6 @@
 import React, {  useState } from "react";
 import { db } from "../../firebase/firebase";
 import { Form, Input, Button, DatePicker, Row, Col, Select, TimePicker, Radio } from 'antd';
-import Equipment from "./equipment";
 import StagePlan from "./stagePlan";
 
 
@@ -112,7 +111,7 @@ const CalendarNewEvent = () => {
                                 rules={[{ required: true, message: 'Введите значение!' }]}
                                 label="Дата сбора"
                             >
-                                <DatePicker name="meetDate"/>
+                                <Input type="date" />
                             </Form.Item>
                         </div>
                     </Col>
@@ -125,8 +124,8 @@ const CalendarNewEvent = () => {
                                 value={meetTime}
                                 rules={[{ required: true, message: 'Введите значение!' }]}
                             >
-                                <TimePicker  />
-                            </Form.Item>
+                                <Input type="time" />
+                            </Form.Item>                            
                         </div>
                     </Col>
                     <Col flex={8}>
@@ -203,7 +202,7 @@ const CalendarNewEvent = () => {
                                 label="Дата проведения"
                                 rules={[{ required: true, message: 'Введите значение!' }]}
                             >
-                                <DatePicker name="eventDate" />
+                                <Input type="date" />
                             </Form.Item>
                         </div>
                     </Col>
@@ -217,7 +216,7 @@ const CalendarNewEvent = () => {
                                 placeholder="Время проведения"
                                 rules={[{ required: true, message: 'Введите значение!' }]}
                             >
-                                <TimePicker />
+                                <Input type="time" />
                             </Form.Item>
                         </div>
                     </Col>
@@ -261,8 +260,6 @@ const CalendarNewEvent = () => {
                         <OptionSel key={'Гитара'}>Гитара</OptionSel>
                     </Select>
                 </Form.Item>
-
-                <Equipment />
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '15px' }}>
                     <StagePlan />
