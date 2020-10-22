@@ -2,22 +2,19 @@ import React from "react";
 import { db } from "../../firebase/firebase";
 import { Button } from "react-bootstrap";
 import * as firebase from "firebase";
+import { Card, Col, Skeleton, Collapse, Popover, Select, Row, Tag, Divider} from "antd";
 import {
-  Card,
-  Col,
-  Row,
-  Skeleton,
-  Collapse,
-  Tag,
-  Divider,
-  Popover,
-  Input,
-  Select,
-} from "antd";
+  studentsWithPass,
+  GetInformationWithPass,
+} from "../../abstract/universalFirebase";
 
 const { Meta } = Card;
 const { Panel } = Collapse;
 const { Option } = Select;
+
+GetInformationWithPass(true);
+console.log(studentsWithPass);
+
 export default class InfoEvent extends React.Component {
   constructor(props) {
     super(props);
@@ -43,6 +40,7 @@ export default class InfoEvent extends React.Component {
     this.getInfo(docRef);
   }
 
+  
   getInfo(docRef) {
     docRef
       .get()
@@ -98,6 +96,7 @@ export default class InfoEvent extends React.Component {
       });
   }
 
+
   addUserToEvent() {
     let uid = firebase.auth().currentUser.uid;
     let nowMember = this.state.event.members;
@@ -123,11 +122,12 @@ export default class InfoEvent extends React.Component {
     }
   }
 
+
   TakeAPart = (props) => {
     let uid = firebase.auth().currentUser.uid;
     let nowMember = this.state.event.members;
     let someDupl = false;
-    let namesOfStudents = [] = localStorage.getItem('namesOfStudents')
+    let namesOfStudents = ([] = localStorage.getItem("namesOfStudents"));
     nowMember.forEach(function (entry) {
       if (uid == entry) {
         console.log(entry, "=", uid);
@@ -135,37 +135,44 @@ export default class InfoEvent extends React.Component {
       }
     });
 
-    console.log(namesOfStudents)
-    namesOfStudents = namesOfStudents.split(',')
-    console.log(namesOfStudents)
+    var studentsWhoWorks = [];
+    studentsWithPass.forEach((element) => {
+      nowMember.forEach((ep) => {
+        if (ep == element.uid) {
+          studentsWhoWorks.push(element.name);
+        }
+      });
+    });
+    console.log("----------", studentsWhoWorks);
+
+    const SomeShit = () => {
+      studentsWhoWorks.map((member, index) => <p key={index}>{member}</p>);
+    };
+
+    console.log(namesOfStudents);
+    namesOfStudents = namesOfStudents.split(",");
+    console.log(namesOfStudents);
     const children = [];
-    {namesOfStudents.map(option=> children.push(
-      <Option key={option}>{option}</Option>
-    ))}
 
-   
-
- 
-for (let i = 10; i < 36; i++) {
-  children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
-}
-
+    for (let i = 10; i < 36; i++) {
+      children.push(
+        <Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>
+      );
+    }
 
     if (someDupl) {
       const searchForChangeMe = (
         <div>
-          <Select
-          style={{width:'100%'}}
-            allowClear
-            showSearch
-            size='large'
-          >
+          <Select style={{ width: "100%" }} allowClear showSearch size="large">
             {children}
           </Select>
         </div>
       );
       return (
         <div>
+          {namesOfStudents.map((option) =>
+            children.push(<Option key={option}>{option}</Option>)
+          )}
           <p>Вы принимаете участие в этом мероприятии</p>
           <Popover
             content={searchForChangeMe}
@@ -177,14 +184,11 @@ for (let i = 10; i < 36; i++) {
               Заменить себя
             </Button>
           </Popover>
+
+          <SomeShit />
         </div>
       );
     }
-    return (
-      <Button block shape="round" type="primary" onClick={this.addUserToEvent}>
-        Принять участие
-      </Button>
-    );
   };
 
   render() {
@@ -316,6 +320,14 @@ for (let i = 10; i < 36; i++) {
               expandIconPosition="right"
               style={{ borderRadius: "10px" }}
             >
+              <Button
+                block
+                shape="round"
+                type="primary"
+                onClick={this.addUserToEvent}
+              >
+                Принять участие
+              </Button>
               <Panel
                 header="Студенты"
                 key="2"

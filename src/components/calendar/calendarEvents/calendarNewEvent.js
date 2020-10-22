@@ -1,25 +1,22 @@
 
 import React, {  useState } from "react";
-import { db } from "../../firebase/firebase";
 import { Form, Input, Button, DatePicker, Row, Col, Select, TimePicker, Radio } from 'antd';
 import StagePlan from "./stagePlan";
-
-
-
-
+import { addEvent } from "../../abstract/universalFirebase";
 const { TextArea } = Input;
 const { Option } = Select;
 const { Group } = Radio;
+
 const OptionSel = Select.Option;
 
 const radio = [
-    { label: 'Свободная', value: 'Свободная' },
-    { label: 'Парадная', value: 'Парадная' },
-]
+  { label: "Свободная", value: "Свободная" },
+  { label: "Парадная", value: "Парадная" },
+];
 
 const CalendarNewEvent = () => {
-    const [form] = Form.useForm()
 
+    const [form] = Form.useForm()
     let title = ''
     let meetDate = ''
     let meetTime = ''
@@ -27,7 +24,6 @@ const CalendarNewEvent = () => {
     let description = ''
     let lastId = localStorage.getItem('EventLastId')
     let typeOfEvent = ''
-    
     let eventDate = ''
     let eventTime = ''
     let eventPlace = ''
@@ -40,39 +36,38 @@ const CalendarNewEvent = () => {
         children.push(<OptionSel key={i.toString(36) + i}>{i.toString(36) + i}</OptionSel>);
     }
 
+
+
+
     const addNewEvent = (values) => {
-        onFinish(values);
-        localStorage.setItem('EventLastId', Number(lastId) + 1)
-        let id = localStorage.getItem('EventLastId')
-        let name = id
-        db.collection('eventsCalendar')
-            .doc(name)
-            .set({
-                id: id,
-                title: form.getFieldValue("title"),
-                meetDate: String(form.getFieldValue("meetDate")),
-                meetTime: String(form.getFieldValue("meetTime")),
-                meetPlace: form.getFieldValue("meetPlace"),
-                description: form.getFieldValue("description"),
-                typeOfEvent: form.getFieldValue("typeOfEvent"),
-                cloth: form.getFieldValue("cloth"),
-                eventDate:String(form.getFieldValue("eventDate")),
-                eventTime: String(form.getFieldValue("eventTime")),
-                eventPlace: form.getFieldValue("eventPlace"),
-                cast: form.getFieldValue("cast"),
-            })
+      onFinish(values);
+      localStorage.setItem("EventLastId", Number(lastId) + 1);
+      let id = localStorage.getItem("EventLastId");
+      let name = id;
+      addEvent(
+        name,
+        form.getFieldValue("title"),
+        String(form.getFieldValue("meetDate")),
+        String(form.getFieldValue("meetTime")),
+        form.getFieldValue("meetPlace"),
+        form.getFieldValue("description"),
+        form.getFieldValue("typeOfEvent"),
+        form.getFieldValue("cloth"),
+        String(form.getFieldValue("eventDate")),
+        String(form.getFieldValue("eventTime")),
+        form.getFieldValue("eventPlace"),
+        form.getFieldValue("cast")
+      );
     };
-
+  
     const onFinish = (values) => {
-        console.log(values)
-    }
-
-
-    const onChange4 = e => {
-        console.log('radio4 checked', e.target.value);
-        cloth = e.target.value;
-      };
-
+      console.log(values);
+    };
+  
+    const onChange4 = (e) => {
+      cloth = e.target.value;
+    };
+  
 
     return (
 
@@ -276,8 +271,9 @@ const CalendarNewEvent = () => {
                 </Form.Item>
             </Form>
         </div>
-    );
 
-}
+    );
+  }
+
 
 export default CalendarNewEvent;

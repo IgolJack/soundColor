@@ -12,57 +12,66 @@ import SearchFilter from "./student/filter/SearchFilter";
 const TabPane = Tabs.TabPane;
 
 class List extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      students: null,
-      filterName: {},
-      searchStudent: "",
-      lastId: "",
-      loading: true,
-      
-    };
+    constructor(props) {
+        super(props)
+        this.state = {
+            students: null,
+            filterName: {},
+            searchStudent: "",
+            lastId: "",
+            loading: true,
+        }
 
-    this.getStudents = this.getStudents.bind(this);
-    this.updateData = this.updateData.bind(this);
-  }
+        this.getStudents = this.getStudents.bind(this)
+        this.updateData = this.updateData.bind(this)
 
-  getStudents() {
-    db.collection("students")
-      .orderBy("name")
-      .get()
-      .then((snapshot) => {
-        const students = [];
-        var lastId = 0;
-        var namesOfStudents = []
-        snapshot.forEach((doc) => {
-          const data = doc.data();
-          data.id = Number(data.id);
-          if (lastId < data.id) {
-            lastId = data.id;
-          }
-          namesOfStudents.push(data.name)
-          students.push(data);
-        });
-        this.setState({ students: students, loading: !this.state.loading });
-        localStorage.setItem("lastId", lastId);
-        localStorage.setItem("namesOfStudents", namesOfStudents);
-        console.log(snapshot);
-      })
-      .catch((error) => console.log(error));
-  }
-
-  componentDidMount() {
-    this.getStudents();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props !== prevProps) {
-      this.fetchData(this.props);
     }
-    console.log(this.state.searchStudent);
-    console.log(this.state.filterName);
-  }
+
+    getStudents() {
+        db.collection('students').orderBy('name').get().then(snapshot => {
+            const students = []
+            var lastId = 0
+            snapshot.forEach(doc => {
+                const data = doc.data()
+                data.id = Number(data.id)
+                if (lastId < data.id) {
+                    lastId = data.id
+                }
+                students.push(data)               
+            })             
+            this.setState({students: students, loading: !this.state.loading })
+            localStorage.setItem('lastId', lastId)
+            console.log(snapshot)
+        })
+            .catch(error => console.log(error))
+    }
+
+    componentDidMount() {
+        this.getStudents()
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props !== prevProps) {
+            this.fetchData(this.props);
+        }
+        console.log(this.state.searchStudent)
+        console.log(this.state.filterName)
+    }
+
+    updateData = (name, value) => {
+        this.setState({[name]: value})
+        if (name === "searchStudent") {
+            const { filterName } = this.state;
+            delete filterName.course;
+            delete filterName.lvl;
+            delete filterName.missed;
+        }
+        if (name === "filterName") {
+            this.setState({searchStudent: ""})
+        }
+        console.log(this.state.searchStudent)
+        console.log(this.state.filterName)
+    }
 
   updateData = (name, value) => {
     this.setState({[name]: value})
