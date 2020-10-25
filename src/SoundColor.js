@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import InfoEvent from "./components/calendar/calendarEvents/infoEvent";
 import List from "./components/list/List";
-import NotFound from "./components/NotFound";
+import NotFound from "./components/404/NotFound";
 import Home from "./components/Home";
 import InfoStudent from "./components/list/student/InfoStudent";
 import LoginPage from "./components/login/LoginPage";
@@ -14,7 +14,8 @@ import HomeTeam from "./components/firebase/get";
 import CalendarNewEvent from "./components/calendar/calendarEvents/calendarNewEvent";
 import deletePageTrigger from "./components/delete/deletePageTrigger";
 import BackToHome from "./components/UI/backToHome";
-const App = () => {
+import EmailPage from "./components/email/emailPage";
+const SoundColor = () => {
   return (
     <div>
       <AuthProvider>
@@ -46,23 +47,14 @@ const App = () => {
               path="/DeleteByLife"
               component={deletePageTrigger}
             />
+            <PrivateRoute exact path="/Email" component={EmailPage} />
             <Route component={NotFound} />
           </Switch>
-          <div
-            style={{
-              position: "fixed",
-              left: "0",
-              bottom: "0",
-              width: "100%",
-              
-            }}
-          >
-            <BackToHome />
-          </div>
+          <BackToHome />
         </Router>
       </AuthProvider>
     </div>
   );
 };
 
-export default App;
+export default SoundColor;

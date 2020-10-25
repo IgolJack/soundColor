@@ -16,8 +16,8 @@ const { Meta } = Card;
 const { Panel } = Collapse;
 const { Option } = Select;
 
-GetInformationWithPass(true);
-console.log(studentsWithPass);
+GetInformationWithPass(false);
+
 
 export default class InfoEvent extends React.Component {
   constructor(props) {

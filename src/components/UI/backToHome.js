@@ -6,7 +6,16 @@ import { CustomerServiceTwoTone } from "@ant-design/icons";
 class BackToHome extends React.Component {
   render() {
     return (
-      <Affix offsetBottom={0} style={{ bottom: "0" }}>
+      <Affix
+        offsetBottom={0}
+        style={{
+          position: "fixed",
+          left: "0",
+          bottom: "0",
+          width: "100%",
+          zIndex:'1000',
+        }}
+      >
         <div>
           <NavLink to="/list">
             <Button
@@ -14,7 +23,7 @@ class BackToHome extends React.Component {
               type="primary"
               style={{ width: `calc(50% - 30px)` }}
             >
-              Список студентов
+              Студенты
             </Button>
           </NavLink>
 
@@ -46,7 +55,7 @@ class BackToHome extends React.Component {
               type="primary"
               style={{ width: `calc(50% - 30px)` }}
             >
-              Календарь мероприятий
+              Календарь
             </Button>
           </NavLink>
         </div>

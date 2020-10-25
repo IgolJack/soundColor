@@ -116,10 +116,10 @@ class PropertyFilter extends Component {
                     <Panel header="Фильтры" key="1">
                         <Row>
                             <Col xs={7} sm={6} md={6} lg={6} xl={6} xll={6}>
-                                <h6>Курс</h6>
                                 <Select
                                     style={{width:'100%'}}
                                     key="course"
+                                    placeholder="Курс"
                                     id="demo-simple-select"
                                     defaultValue={this.props.course}
                                     options={courses}
@@ -129,10 +129,11 @@ class PropertyFilter extends Component {
                                 </Select>
                             </Col>
                             <Col xs={{span: 7, offset: 1}} sm={{span: 6, offset: 3}} md={{span: 6, offset: 3}} lg={{span: 6, offset: 3}} xl={{span: 6, offset: 3}} xll={{span: 6, offset: 3}}>
-                                <h6>Уровень</h6>
+                                
                                 <Select
                                     style={{width:'100%'}}
                                     key="lvl"
+                                    placeholder="Уровень"
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
                                     defaultValue={this.props.lvl}
@@ -141,11 +142,11 @@ class PropertyFilter extends Component {
                                 >
                                 </Select>
                             </Col>
-                            <Col xs={{span: 6, offset: 2}} sm={{span: 6, offset: 3}} md={{span: 6, offset: 3}} lg={{span: 6, offset: 3}} xl={{span: 6, offset: 3}} xll={{span: 6, offset: 3}}>
-                                <h6>Пропуски</h6>
+                            <Col xs={{span: 7, offset: 1}} sm={{span: 6, offset: 3}} md={{span: 6, offset: 3}} lg={{span: 6, offset: 3}} xl={{span: 6, offset: 3}} xll={{span: 6, offset: 3}}>
+                               
                                 <InputNumber
                                     id="standard-full-width"
-                                    label="Пропуски"
+                                    placeholder="Пропуски"
                                     type="number"
                                     style={{width:'100%'}}
                                     name="missed"

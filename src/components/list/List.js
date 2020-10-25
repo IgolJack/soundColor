@@ -92,8 +92,8 @@ class List extends React.Component {
     console.log(localStorage.getItem("lastId"));
     return (
       <div className="App">
-        <Navbar bg="light">
-          <h2 style={{ textAlign: "center" }}>Студенты</h2>
+        <Navbar>
+          <h5 style={{ textAlign: "center" }}>Студенты</h5>
           <Link
             to={{
               pathname: "/Registration",
@@ -101,10 +101,10 @@ class List extends React.Component {
             }}
             style={{ "text-decoration": "none" }}
           >
-            <Button type="link">Регистрация</Button>
+            <Button type="link" size='small'>Регистрация</Button>
           </Link>
 
-          <SearchFilter search={this.search} updateData={this.updateData} />
+          <SearchFilter search={this.search} updateData={this.updateData}/>
         </Navbar>
 
         <PropertyFilter
@@ -121,7 +121,6 @@ class List extends React.Component {
         >
           <Tabs
             defaultActiveKey="1"
-            style={{ marginRight: "10px", marginLeft: "10px" }}
           >
             <TabPane tab="Карточки" key="1">
               {" "}

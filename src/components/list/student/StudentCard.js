@@ -13,20 +13,9 @@ class StudentCard extends Component {
           style={{
             borderColor: this.props.colorPick,
             borderWidth: "4px",
-            marginBottom: "10px",
+            marginBottom: '5px',
           }}
           hoverable
-          actions={[
-            <DeleteStudent id={this.props.student.id} />,
-            <EditDetails
-              type="setting"
-              name={this.props.student.name}
-              lvl={this.props.student.lvl}
-              missed={this.props.student.missed}
-              id={this.props.student.id}
-              course={this.props.student.course}
-            />,
-          ]}
         >
           <NavLink to={`/list/${this.props.student.id}`}>
             <Meta
@@ -35,7 +24,7 @@ class StudentCard extends Component {
                   dashed="true"
                   style={{ color: this.props.colorPick, borderTop: "3px" }}
                 >
-                  <div style={{ textAlign: "center", margin: "0", fontSize: '5vw' }}>
+                  <div style={{ textAlign: "center", fontSize: '5vw' }}>
                     {this.props.student.name}
                   </div>
                 </Divider>

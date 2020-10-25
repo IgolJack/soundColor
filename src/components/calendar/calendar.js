@@ -1,58 +1,46 @@
-import React from "react";
-import { Calendar, momentLocalizer} from 'react-big-calendar'
-import moment from 'moment'
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-//import NewBookingButton from './NewBookingButton'
+import React, { useEffect } from "react";
+import { Calendar, momentLocalizer } from "react-big-calendar";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import { NavLink } from "react-router-dom";
+import { Tabs } from "antd";
+import {
+  calendarEvents,
+  getInfoToCalendar,
+} from "../abstract/universalFirebase";
+import moment from "moment";
+getInfoToCalendar();
+const TabPane = Tabs.TabPane;
 
-
-import { Button } from 'antd'
-import { NavLink } from 'react-router-dom'
-import {getInfoFromFirebase} from "../firebase/getInfoFromFirebase"
-import 'moment/locale/ru';
-
-
+const localizer = momentLocalizer(moment);
 
 const CalendarApp = () => {
-  
-  const localizer = momentLocalizer(moment)
-  const {fire, events} =  getInfoFromFirebase()
-  fire("eventsCalendar")
-  
+  var events = calendarEvents;
 
+  const Event = ({ event }) => {
+    if (events)
+      return (
+        <NavLink
+          style={{ textDecoration: "none", color: "white" }}
+          to={"/Calendar/" + event.id}
+        >
+          {" "}
+          {event.title}{" "}
+        </NavLink>
+      );
+  };
 
+  return (
+    <Calendar
+      style={{ height: 'calc(100vh - 100px)', margin: '10px' }}
+      localizer={localizer}
+      events={events}
+      startAccessor="start"
+      endAccessor="end"
+      components={{
+        event: Event,
+      }}
+    />
+  );
+};
 
-
-    
-  
-      const Event = ({ event }) => {
-        
-        return (
-              <NavLink style={{textDecoration:'none', color: 'white'}} to={"/Calendar/"+ event.id}> {event.title} </NavLink>
-        );
-      }
-      
-        return (
-            <div >
-                <NavLink to="/Registration/AddEvent" style={{width: "100%", 'text-decoration': "none"}}>
-                    <Button block size ="large" type="primary">Создать мероприятие</Button>
-                </NavLink>
-
-                
-                <Calendar 
-                    style={{minHeight:'800px'}}
-                    localizer = {localizer} 
-                    events = {events} 
-                    startAccessor = "start" 
-                    endAccessor = "end" 
-                    components={{
-                        event: Event
-
-                      }}
-                    />  
-               
-            </div>
-        )
-    
-}
-
-export default CalendarApp
+export default CalendarApp;

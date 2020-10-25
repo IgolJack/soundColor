@@ -68,8 +68,8 @@ const LoginPage = (props) => {
 
 
   return (
-    <div style={{ padding: '15%' }}>
-      <h1 style={{ textAlign: "center" }}>Авторизироваться</h1>
+    <div style={{ padding: '3vh' }}>
+      <p style={{ textAlign: "center" }}>Авторизироваться</p>
 
       <Form
         {...layout}

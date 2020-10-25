@@ -264,7 +264,7 @@ const CalendarNewEvent = () => {
 
 
                 <Form.Item>
-                    <Button style={{ width: '100%', margin: '8px' }} type="primary" htmlType="submit">
+                    <Button style={{ width: '100%'}} type="primary" htmlType="submit">
                         Добавить мероприятие
                     </Button>
                     <br/><br/><br/><br/>

@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import SoundColor from './SoundColor';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'antd/dist/antd.css';
-
+import './index.css'
 ReactDOM.render(
     <React.StrictMode>
-        <App />
+        <SoundColor />
     </React.StrictMode>,
     document.getElementById('root')
 );

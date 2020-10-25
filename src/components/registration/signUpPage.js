@@ -52,7 +52,7 @@ const SignUpPage = (props) => {
   let email = "";
   let name = "";
   let lateness = "0";
-  let lvl = "1";
+  let lvl = 1;
   let missed = "0";
   let disgrace = "0";
   let responsible = "0";
@@ -230,22 +230,14 @@ const SignUpPage = (props) => {
             flex: "auto",
           }}
         >
-          <Form.Item name="lateness" style={{ margin: 5 }} value={lateness}>
-            <Input
-              type="number"
-              style={{ width: 150 }}
-              addonBefore="Опозданий"
-              name="lateness"
-              min={0}
-              defaultValue={lateness}
-            />
-          </Form.Item>
 
-          <Form.Item
+
+        <Form.Item
             name="lvl"
             value={lvl}
             style={{ margin: 5 }}
             rules={[{ required: true, message: "Введите уровень!" }]}
+            
           >
             <Input
               type="number"
@@ -254,6 +246,17 @@ const SignUpPage = (props) => {
               name="lvl"
               min={1}
               defaultValue={lvl}
+            />
+          </Form.Item>
+          
+          <Form.Item name="lateness" style={{ margin: 5 }} value={lateness}>
+            <Input
+              type="number"
+              style={{ width: 150 }}
+              addonBefore="Опозданий"
+              name="lateness"
+              min={0}
+              defaultValue={lateness}
             />
           </Form.Item>
 
