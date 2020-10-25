@@ -93,7 +93,6 @@ class List extends React.Component {
     return (
       <div className="App">
         <Navbar>
-          <h5 style={{ textAlign: "center" }}>Студенты</h5>
           <Link
             to={{
               pathname: "/Registration",

@@ -15,9 +15,10 @@ import CalendarNewEvent from "./components/calendar/calendarEvents/calendarNewEv
 import deletePageTrigger from "./components/delete/deletePageTrigger";
 import BackToHome from "./components/UI/backToHome";
 import EmailPage from "./components/email/emailPage";
+import './SoundColor.css'
 const SoundColor = () => {
   return (
-    <div>
+    <div className='background'>
       <AuthProvider>
         <Router>
           <Switch>

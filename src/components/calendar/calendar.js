@@ -23,15 +23,14 @@ const CalendarApp = () => {
           style={{ textDecoration: "none", color: "white" }}
           to={"/Calendar/" + event.id}
         >
-          {" "}
-          {event.title}{" "}
+          {event.title}
         </NavLink>
       );
   };
 
   return (
     <Calendar
-      style={{ height: 'calc(100vh - 100px)', margin: '10px' }}
+      style={{ height: 'calc(100vh - 30px)', }}
       localizer={localizer}
       events={events}
       startAccessor="start"
