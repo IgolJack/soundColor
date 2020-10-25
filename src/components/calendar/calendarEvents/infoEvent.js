@@ -2,11 +2,15 @@ import React from "react";
 import { db } from "../../firebase/firebase";
 import { Button } from "react-bootstrap";
 import * as firebase from "firebase";
+
 import { Card, Col, Skeleton, Collapse, Popover, Select, Row, Tag, Divider} from "antd";
 import {
   studentsWithPass,
   GetInformationWithPass,
 } from "../../abstract/universalFirebase";
+
+import Equipment from './equipment';
+
 
 const { Meta } = Card;
 const { Panel } = Collapse;
@@ -120,6 +124,7 @@ export default class InfoEvent extends React.Component {
     } else {
       console.log("Одинаковые");
     }
+
   }
 
 
@@ -158,6 +163,7 @@ export default class InfoEvent extends React.Component {
       children.push(
         <Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>
       );
+
     }
 
     if (someDupl) {
@@ -248,6 +254,10 @@ export default class InfoEvent extends React.Component {
                 ))}
               </Panel>
             </Collapse>
+          </div>
+
+          <div>
+            <Equipment />
           </div>
 
           <div style={{ paddingBottom: "10px" }}>
