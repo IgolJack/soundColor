@@ -20,6 +20,9 @@ class List extends React.Component {
       searchStudent: "",
       lastId: "",
       loading: true,
+      course: "",
+        lvl: "",
+        missed: "",
     };
 
     this.getStudents = this.getStudents.bind(this);
@@ -67,6 +70,7 @@ class List extends React.Component {
       delete filterName.course;
       delete filterName.lvl;
       delete filterName.missed;
+      this.setState({ course: "", lvl: "", missed: "" })
     }
     if (name === "filterName") {
       this.setState({ searchStudent: "" });
@@ -92,10 +96,13 @@ class List extends React.Component {
             </Button>
           </Link>
 
-          <SearchFilter search={this.search} updateData={this.updateData} />
+          <SearchFilter search={this.search} searchStudent={this.state.searchStudent} updateData={this.updateData} />
         </Navbar>
 
         <PropertyFilter
+          course={this.state.course}
+          lvl={this.state.lvl}
+          missed={this.state.missed}
           onInputChange={this.onInputChange}
           updateData={this.updateData}
         />
