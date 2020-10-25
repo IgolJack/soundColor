@@ -12,7 +12,6 @@ import PrivateRoute from "./components/login/PrivateRoute";
 import SignUpPage from "./components/registration/signUpPage";
 import HomeTeam from "./components/firebase/get";
 import CalendarNewEvent from "./components/calendar/calendarEvents/calendarNewEvent";
-import deletePageTrigger from "./components/delete/deletePageTrigger";
 import BackToHome from "./components/UI/backToHome";
 import EmailPage from "./components/email/emailPage";
 import './SoundColor.css'
@@ -43,11 +42,7 @@ const SoundColor = () => {
             />
             <PrivateRoute exact path="/Registration" component={SignUpPage} />
             <PrivateRoute exact path="/Get" component={HomeTeam} />
-            <PrivateRoute
-              exact
-              path="/DeleteByLife"
-              component={deletePageTrigger}
-            />
+           
             <PrivateRoute exact path="/Email" component={EmailPage} />
             <Route component={NotFound} />
           </Switch>

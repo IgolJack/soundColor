@@ -2,7 +2,7 @@ import React from 'react'
 import Calendar from './calendar'
  const CalendarPage = () => {
     return (
-            <div>
+            <div>  
                 <Calendar/>
             </div>
         )

@@ -1,22 +1,29 @@
+import { relativeTimeRounding } from "moment";
 import { db } from "../firebase/firebase";
 
 var studentsRef = db.collection("students");
 var eventsRef = db.collection("eventsCalendar");
 var equipmentRef = db.collection("equipment");
 
-export const students = [];
+export const Ustudents = [];
 export var equipments = [];
 export const studentsWithPass = [];
 export const calendarEvents = [];
 
 export const GetInformation = () => {
-  students.length = 0;
+  Ustudents.length = 0;
+  var lastId = localStorage.getItem('lastId')
   studentsRef
+    .orderBy('name')
     .get()
     .then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
         let data = doc.data();
-        students.push({
+        data.id = Number(data.id)
+          if (lastId < data.id) {
+            lastId = data.id
+          }
+        Ustudents.push({
           id: data.id,
           name: data.name,
           uid: data.uid,
@@ -33,7 +40,8 @@ export const GetInformation = () => {
           responsible: data.responsible,
         });
       });
-      console.log(students);
+      console.log(Ustudents);
+      localStorage.setItem('lastId', lastId)
     })
     .catch(function (error) {
       console.log("Error getting documents: ", error);
@@ -54,14 +62,16 @@ export const GetInformationWithPass = (pass) => {
             uid: data.uid,
             email: data.email,
             password: data.password,
-          });
+          })
+          return studentsWithPass
         } else {
           studentsWithPass.push({
             id: data.id,
             name: data.name,
             uid: data.uid,
             email: data.email,
-          });
+          })
+          return studentsWithPass
         }
       });
     })

@@ -29,14 +29,7 @@ class Home extends React.Component {
             </Button>
           </NavLink>
 
-          <NavLink
-            to="/DeleteByLife"
-            style={{ width: "100%", "text-decoration": "none" }}
-          >
-            <Button block size="large" type="primary">
-              Удоли
-            </Button>
-          </NavLink>
+         
           <NavLink
             to="/Email"
             style={{ width: "100%", "text-decoration": "none" }}
