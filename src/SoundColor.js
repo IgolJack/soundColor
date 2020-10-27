@@ -14,11 +14,7 @@ import HomeTeam from "./components/firebase/get";
 import CalendarNewEvent from "./components/calendar/calendarEvents/calendarNewEvent";
 import BackToHome from "./components/UI/backToHome";
 import EmailPage from "./components/email/emailPage";
-import getInfoFromServer from "./components/abstract/getInfoFromServer"
-
-
 import './SoundColor.css'
-
 const SoundColor = () => {
   return (
     <div className='background'>
@@ -46,8 +42,8 @@ const SoundColor = () => {
             />
             <PrivateRoute exact path="/Registration" component={SignUpPage} />
             <PrivateRoute exact path="/Get" component={HomeTeam} />
+           
             <PrivateRoute exact path="/Email" component={EmailPage} />
-            <PrivateRoute exact path="/GetInfo" component={getInfoFromServer} />
             <Route component={NotFound} />
           </Switch>
           <BackToHome />

@@ -1,6 +1,7 @@
 import React from "react";
 import { auth } from "./firebase/firebase";
 import { NavLink } from "react-router-dom";
+import Navbar from "react-bootstrap/Navbar";
 import { Button } from "antd";
 
 class Home extends React.Component {

@@ -4,6 +4,7 @@ import { AuthContext } from "./Auth";
 
 const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
   const {currentUser} = useContext(AuthContext);
+ console.log(window.location.hostname)
   var url = window.location.href;
   url = url.replace(/^.*?:\/\/.*?(?=\/|$)/,'')
 

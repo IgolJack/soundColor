@@ -43,6 +43,7 @@ class List extends React.Component {
         });
         this.setState({ students: students, loading: !this.state.loading });
         localStorage.setItem("lastId", lastId);
+        console.log(snapshot);
       })
       .catch((error) => console.log(error));
   }
@@ -53,6 +54,8 @@ class List extends React.Component {
     if (this.props !== prevProps) {
       this.setState(this.props);
     }
+    console.log(this.state.searchStudent);
+    console.log(this.state.filterName);
   }
   updateData = (name, value) => {
     this.setState({ [name]: value });
@@ -66,9 +69,11 @@ class List extends React.Component {
     if (name === "filterName") {
       this.setState({ searchStudent: "" });
     }
+    console.log(this.state.searchStudent);
+    console.log(this.state.filterName);
   };
   render() {
-    
+    console.log(localStorage.getItem("lastId"));
     return (
       <div className="App">
         <Navbar>
@@ -120,6 +125,10 @@ class List extends React.Component {
             </TabPane>
           </Tabs>
         </Skeleton>
+        <br />
+        <br />
+        <br />
+        <br />
       </div>
     );
   }
