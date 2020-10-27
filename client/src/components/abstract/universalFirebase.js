@@ -1,4 +1,4 @@
-import { relativeTimeRounding } from "moment";
+
 import { db } from "../firebase/firebase";
 
 var studentsRef = db.collection("students");
@@ -147,7 +147,6 @@ export const getInfoToCalendar = () => {
         allDay: true,
       });
     });
-    console.log(calendarEvents);
     localStorage.setItem("CalendarEvents", calendarEvents);
     return calendarEvents;
   });
