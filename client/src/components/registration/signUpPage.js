@@ -1,6 +1,5 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { auth, db } from "../firebase/firebase";
-import { AuthContext } from "../login/Auth";
 import { Form, Input, Button, message, Select } from "antd";
 import { UserOutlined, LockOutlined, ToolTwoTone } from "@ant-design/icons";
 
@@ -65,7 +64,6 @@ const SignUpPage = (props) => {
   let uid = '';
   const [lastId, setLastId] = useState(localStorage.getItem("lastId"));
   
-
   const succes = () => {
     message.success("Студент успешно создан", 2);
     form.setFieldsValue({ email: "" });
@@ -82,7 +80,6 @@ const SignUpPage = (props) => {
     form.setFieldsValue({ equipment: "0" });
     form.setFieldsValue({ discharges: "0" });
     form.setFieldsValue({ exchange: "0" });
-    console.log(localStorage.getItem("lastId"));
   };
   const succesRed = () => {
     message.info("Регистрация прошла успешно");
@@ -96,7 +93,6 @@ const SignUpPage = (props) => {
         .createUserWithEmailAndPassword(values.email, values.password)
         .then(function (result) {
           uid = result.user.uid
-          console.log(uid);
           succesRed();
           return result.user.updateProfile({
             displayName: values.name,
@@ -105,7 +101,6 @@ const SignUpPage = (props) => {
       localStorage.setItem("lastId", Number(lastId) + 1);
       setLastId(localStorage.getItem("lastId"));
      
-      console.log(localStorage.getItem("lastId"));
       db.collection("students")
         .doc(localStorage.getItem("lastId"))
         .set({

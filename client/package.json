@@ -42,5 +42,6 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "^7.10.4"
-  }
+  },
+  "proxy":"https://localhost:5000"
 }

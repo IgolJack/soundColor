@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import StudentListCard from './StudentListCard'
+import React, { Component } from 'react';
+import StudentCard from './StudentCard'
 
 var bgColors = {
     "Default": "#81b71a",
@@ -9,14 +9,13 @@ var bgColors = {
     "Red": "#E9573F",
     "Yellow": "#F6BB42",
 }
-
 var colorPick = bgColors.Blue
 
-class StudentList extends Component {
-          
-    render() {
-        console.log(this.props.students)
 
+class Students extends Component {
+        
+    render() {
+        
         let filteredStidents
         if (this.props.searchStudent === "") {
             filteredStidents = this.props.students && this.props.students.filter(item => {
@@ -39,10 +38,9 @@ class StudentList extends Component {
                 return student.name.toLowerCase().includes(this.props.searchStudent.toLowerCase())
             })
         }
-        console.log(filteredStidents)
         
         
-
+    
         
         return (
             <div>
@@ -66,12 +64,10 @@ class StudentList extends Component {
 
                         return (
                            
-                          
-                               <StudentListCard
-                               student={student}
-                               colorPick={colorPick}
-                                /> 
-                              
+                            <StudentCard
+                            student={student}
+                            colorPick={colorPick}
+                            />
                             
                        )
                    })
@@ -82,9 +78,4 @@ class StudentList extends Component {
     }
 }
 
-
-
- 
-
-
-export default StudentList;
+export default Students;
