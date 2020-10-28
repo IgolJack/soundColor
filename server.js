@@ -4,7 +4,7 @@ const nodemailer = require("nodemailer");
 
 
 require("dotenv").config({ path: __dirname + "/variables.env" });
-require('dotenv').config({path: __dirname + "/variables.env"})
+
 
 const sound_pass = process.env.SOUNDCOLOR_PASS;
 const google= JSON.parse(process.env.GOOGLE);
@@ -23,14 +23,15 @@ const { request } = require("express");
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 
+app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, 'build')));
 
 //======================================================================//
 //=============================GET=FIREBASE=============================//
 //======================================================================//
+
 
 
 //=================получить данные всех events [{a,b,c...}]=============//
@@ -294,7 +295,10 @@ transporter.sendMail(mailOptions, function(error, info){
 
 
 
-
+//обслуживание html
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 
 
