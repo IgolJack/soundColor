@@ -26,7 +26,8 @@
     "start": "node server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "vercel-build": "node ./server.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -47,4 +48,5 @@
     "@babel/plugin-transform-react-jsx": "^7.10.4"
   },
   "proxy": "https://sound-color.vercel.app:5000"
+ 
 }
