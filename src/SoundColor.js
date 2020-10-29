@@ -16,7 +16,6 @@ import BackToHome from "./components/UI/backToHome";
 import EmailPage from "./components/email/emailPage";
 import getInfoFromServer from "./components/abstract/getInfoFromServer"
 
-
 import './SoundColor.css'
 
 const SoundColor = () => {
