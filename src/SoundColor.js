@@ -15,7 +15,7 @@ import CalendarNewEvent from "./components/calendar/calendarEvents/calendarNewEv
 import BackToHome from "./components/UI/backToHome";
 import EmailPage from "./components/email/emailPage";
 import getInfoFromServer from "./components/abstract/getInfoFromServer"
-
+import listOfStudents from "./components/calendar/calendarEvents/infoEventBlocks/listOfStudents"
 import './SoundColor.css'
 
 const SoundColor = () => {
@@ -47,6 +47,8 @@ const SoundColor = () => {
             <PrivateRoute exact path="/Get" component={HomeTeam} />
             <PrivateRoute exact path="/Email" component={EmailPage} />
             <PrivateRoute exact path="/GetInfo" component={getInfoFromServer} />
+            <PrivateRoute exact path="/Li" component={listOfStudents} />
+            
             <Route component={NotFound} />
           </Switch>
           <BackToHome />

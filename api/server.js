@@ -77,6 +77,7 @@ app.get("/api/studentsName", (request, response) => {
         studentsNamesAndUids.push({
           name: doc.data().name,
           uid: doc.data().uid,
+          email: doc.data().email,
         });
       });
       return response.json(studentsNamesAndUids);
@@ -202,7 +203,13 @@ app.get("/api/createEvent", (req, res) => {
 
 
 
-
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'sound.color.app@gmail.com',
+    pass: sound_pass, 
+  }
+});
 
 
 
@@ -210,27 +217,13 @@ app.get("/api/createEvent", (req, res) => {
 //отправка email
 app.get("/api/pushEmail", (request, response) => {
   console.log(request.query.email)
-//========================================================================//
-//================================NODEMILER===============================//
-//========================================================================//
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'sound.color.app@gmail.com',
-    pass: sound_pass, // naturally, replace both with your real credentials or an application-specific password
-  }
-});
-//========================================================================//
-//================================NODEMILER===============================//
-//========================================================================//
-
 
 
 const mailOptions = {
   from: 'sound.color.app@gmail.com',
   to: request.query.email,
   subject: 'Замена',
-  text: "Plaintext version of the message",
+  text: "Вас просят заменить себя в мероприятии",
   html: "<p>Вас просят заменить себя в мероприятии</p>"
 };
 
