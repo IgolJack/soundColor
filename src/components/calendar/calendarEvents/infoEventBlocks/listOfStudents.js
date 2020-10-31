@@ -4,25 +4,10 @@ import PropTypes from "prop-types";
 import { Collapse, Button, Popover, Select, message } from "antd";
 import './lisyOfStudentsInEvent.css';
 import { NavLink } from "react-router-dom";
-// #region constants
-
-// #endregion
-
-// #region styled-components
-
-// #endregion
-
-// #region functions
-
-// #endregion
-
-// #region component
 
 const { Panel } = Collapse;
-
-const propTypes = {};
 const { Option } = Select;
-const defaultProps = {};
+
 const openNotification = () => {
   message.info('Пользователь успешно уведомлен!');
 };
@@ -38,7 +23,7 @@ class listOfStudents extends React.Component {
       allNamesAndUidOfStudents: [],
       emailer: [],
       changePerson: "",
-      
+      user: {},
       
       //небходимо передать 
       max: 6,
@@ -48,13 +33,13 @@ class listOfStudents extends React.Component {
           email: "igoljack@mail.ru",
           name: "Супер человек-кит",
           uid: "fwe[ofkowekfowekfoko34kfok4o",
-          lookForChange: "NDgEDIMDUZWO3eClal5WY8VPwow2",
+          lookForChange: "FHjZEVuKm0goXEZJW7RZ4REFoAG2",
         },
         {
           id:'27',
-          email: "iegolepic@gmail.com",
+          email: "iegolepic@mail.ru",
           name: "Единорог",
-          uid: "fwe[ofefefefe3kfoko34kfok4o",
+          uid: "fwe[oxxsxsxxefefefe3kfoko34kfok4o",
           lookForChange: "aJXFSBn15yf01nFY8G970io5sXJ2",
         },
       ],
@@ -63,11 +48,21 @@ class listOfStudents extends React.Component {
 
   componentDidMount() {
     console.log("=========ОБНОВЛЕНИЕ=========");
+    this.getUser();
     this.getAllNamesAndUidOfStudentsFunc();
-
-    this.listOfEnrolledStudents();
-    this.createOptionsForSelect();
     this.inMemberFunc();
+    this.createOptionsForSelect();
+    this.listOfEnrolledStudents();
+   
+  }
+
+  getUser = () => {
+    let user = {
+      name: firebase.auth().currentUser.displayName,
+      email: firebase.auth().currentUser.email,
+      uid: firebase.auth().currentUser.uid,
+    };
+    this.setState({user: user}, () => {console.log("User info > ",this.state.user)})
   }
 
   getAllNamesAndUidOfStudentsFunc = async () => {
@@ -75,13 +70,13 @@ class listOfStudents extends React.Component {
       .then((response) => response.json())
       .then((jsondata) =>
         this.setState({ allNamesAndUidOfStudents: jsondata }, () => {
+          console.log('======',this.state.allNamesAndUidOfStudents)
           this.createOptionsForSelect() ;
         })
       );
   };
 
   pushEmail = async (email) => {
-
     fetch(`/api/pushEmail?email=${email}`)
       .then((response) => {
         console.log(response)
@@ -89,10 +84,7 @@ class listOfStudents extends React.Component {
           openNotification()
         }
       })
-     
   }
-
- 
 
   createOptionsForSelect = () => {
     let studentsList = [];
@@ -112,122 +104,124 @@ class listOfStudents extends React.Component {
   };
 
   listOfEnrolledStudents = () => {
-    let user = firebase.auth().currentUser;
     let allStudents = [];
+    console.log(this.state.user.uid, 'Жопа')
     this.state.members.map((member) => {
-
-      //если человека пригласили заменить себя, он увидит
-      if (member.lookForChange == user.uid) {
+       //ЗАМЕНИТЬ
+       if(member.lookForChange == this.state.user.uid){
         allStudents.push(
           <p key={member.email}>
-            <NavLink to={`/list/${member.id}`} className="navText">
+          <NavLink className="navText" to={`/list/${member.id}`}>
             {member.name}
-            </NavLink> 
-            <Button type="link" style={{padding:'0px'}} className="Zamena" onClick={(e) => this.changePerson(e, member)}>
-              Заменить
-            </Button>
+          </NavLink> 
+          <span style={{float:'right', cursor:'pointer', color:'red'}}   onClick={(e) => this.changePerson(e, member)}>Заменить</span>
           </p>
         );
-      } 
-      //если человек принимает участие в мероприятии увидит
-      else if (user.uid == member.uid) {
+      }
+       //ОЖИДАЕМ ОТВЕТА
+       else if(member.uid == this.state.user.uid && member.lookForChange){
         allStudents.push(
-          <Popover
-            content={
-              <Select
-                allowClear
-                style={{ width: "100%" }}
-                showSearch
-                size="large"
-                onChange={(e) => {
-                  let en = e.split(",");
-                  en = { uid: en[0], email: en[1] };
-                  this.setState({ emailer: en }, () => {
-                    console.log(this.state.emailer);
-                  });
-                }}
-              >
-                {this.state.allStudentsList}
-              </Select>
-            }
-            title="Выберете себе замену. Этому человеку прийдет email и если он согласится все будет хорошо"
-            trigger="click"
-            onVisibleChange={(e) => {
-              if (e == false && this.state.emailer) {
-                this.changeMe();
-              }
-            }}
-          >
-            <p key={member.email}>
-            <NavLink className="navText" to={`/list/${member.id}` }>
+          <p key={member.email}>
+          <NavLink className="navText" to={`/list/${member.id}`}>
             {member.name}
-            </NavLink> 
-              <Button type="link" style={{padding:'0px'}} className="OjidZamena" danger>
-                Замениться
-              </Button>
-            </p>
-          </Popover>
+          </NavLink> 
+          <span style={{float:'right', cursor:'pointer', color:'blue'}}  >Ожидаем ответа</span>
+          </p>
         );
-      } 
-
-
-      //человек ожидает замены
-      else if( member.lookForChange &&  member.lookForChange != user.uid){
+      }
+      //ЗАМЕНИТЬСЯ
+        else if (this.state.user.uid == member.uid && !member.lookForChange){
+          allStudents.push(
+                  <Popover
+                    content={
+                      <Select
+                        allowClear
+                        style={{ width: "100%" }}
+                        showSearch
+                        size="large"
+                        onChange={(e) => {
+                          let en = e.split(",");
+                          en = { uid: en[0], email: en[1] };
+                          this.setState({ emailer: en }, () => {
+                            console.log(this.state.emailer);
+                          });
+                        }}
+                      >
+                        {this.state.allStudentsList}
+                      </Select>
+                    }
+                    title="Выберете себе замену. Этому человеку прийдет email и если он согласится все будет хорошо"
+                    trigger="click"
+                    onVisibleChange={(e) => {
+                      if (e == false && this.state.emailer) {
+                        this.changeMe();
+                      }
+                    }}
+                  >
+                    <p key={member.email}>
+                    <NavLink className="navText" to={`/list/${member.id}` }>
+                    {member.name}
+                    </NavLink> 
+                    
+                    <span  style={{float:'right', cursor:'pointer', color:'red'}} >Замениться</span>
+                        
+                     
+                    </p>
+                  </Popover>
+                );
+        }
+        else {
           allStudents.push(
             <p key={member.email}>
             <NavLink className="navText" to={`/list/${member.id}`}>
               {member.name}
             </NavLink> 
-            <span className="OjidZamena" >Ожидает замены</span>
+            
             </p>
           );
-        } 
-      
-      else {
-        allStudents.push(<p key={member.email}>
-            <NavLink className="navText" to={`/list/${member.id}`}>
-            {member.name}
-            </NavLink> 
-          </p>);
-      }
-    });
+        }
+      })
+
+
     this.setState({ studentsEnrolList: allStudents }, () => {
       console.log(allStudents);
-    });
+    })
   };
 
   inMemberFunc = () => {
-    let user = firebase.auth().currentUser;
+    
     let mem = false;
     this.state.members.map((member) => {
-      if (member.uid == user.uid) {
+      if (member.uid == this.state.user.uid) {
         mem = true;
       }
     });
     this.setState({ inMember: mem }, () => {
       console.log("In member func = ", this.state.inMember);
     });
+    this.createOptionsForSelect();
+    this.listOfEnrolledStudents();
+   
   };
 
   changePerson = (e, n) => {
-    let user = firebase.auth().currentUser;
     let nowMembers = this.state.members;
-    console.log("Замена", n);
-    if (user.uid == n.lookForChange) {
-      console.log(nowMembers.indexOf(n));
 
+    if (this.state.user.uid == n.lookForChange) {
+     
       nowMembers[nowMembers.indexOf(n)] = {
-        email: user.email,
-        uid: user.uid,
-        name: user.displayName,
+        email: this.state.user.email,
+        uid: this.state.user.uid,
+        name: this.state.user.name,
         lookForChange: "",
       };
 
       this.setState({ members: nowMembers }, () => {
         console.log("Update ", this.state.members);
       });
-
-      this.componentDidMount();
+      this.createOptionsForSelect();
+      this.listOfEnrolledStudents();
+      this.inMemberFunc();
     }
   };
 
@@ -235,40 +229,49 @@ class listOfStudents extends React.Component {
     let uid = this.state.emailer.uid;
     let email = this.state.emailer.email;
     let nowMembers = this.state.members;
-    let user = firebase.auth().currentUser;
+    
     if (email != undefined){
       nowMembers.map((member) => {
-        if (member.uid == user.uid) {
+        if (member.uid == this.state.user.uid) {
           member.lookForChange = uid;
   
           this.setState({ members: nowMembers }, () => {
             console.log(this.state.members);
           });
-  
           this.pushEmail(email);
         }
       });
     }
- 
+    this.createOptionsForSelect();
+    this.listOfEnrolledStudents();
+    this.inMemberFunc();
   };
 
   isPersonInMembers = () => {
     let newMembers = this.state.members;
-    const user = firebase.auth().currentUser;
-    console.log(user.uid);
+    let id = 0;
 
+    this.state.allNamesAndUidOfStudents.map((student) => {
+      if(this.state.user.uid == student.uid){
+        id = student.id
+      }
+    })
+    console.log(id)
     if (this.state.inMember == false) {
-      console.log("Запись ", user.uid, "-", user.email, "-", user.displayName);
+      console.log("Запись ", this.state.user.uid, "-", this.state.user.email, "-", this.state.user.displayName);
       newMembers.push({
-        uid: user.uid,
-        email: user.email,
-        name: user.displayName,
+        uid: this.state.user.uid,
+        email: this.state.user.email,
+        name: this.state.user.name,
+        id: id,
       });
       this.setState(
         { members: newMembers, inMember: true },
         console.log(this.state.members)
       );
+      this.createOptionsForSelect();
       this.listOfEnrolledStudents();
+      this.inMemberFunc();
     }
   };
 
@@ -309,12 +312,18 @@ class listOfStudents extends React.Component {
      button = <p style={{textAlign:'center'}}>Больше людей вступить не может</p>
     }
     
+    
+
+
     return (
       <div>
         <Collapse
           expandIconPosition="right"
           style={{ borderRadius: "10px" }}
-          
+          onChange={ () => {
+            this.createOptionsForSelect();
+            this.listOfEnrolledStudents();
+          }}
         >
           <Panel
             header="Студенты"
@@ -331,8 +340,5 @@ class listOfStudents extends React.Component {
   }
 }
 
-listOfStudents.propTypes = propTypes;
-listOfStudents.defaultProps = defaultProps;
-// #endregion
 
 export default listOfStudents;

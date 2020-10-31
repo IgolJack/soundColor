@@ -5,25 +5,20 @@ const nodemailer = require("nodemailer");
 
 require("dotenv").config({ path: __dirname + "/variables.env" });
 
-
 const sound_pass = process.env.SOUNDCOLOR_PASS;
 const google= JSON.parse(process.env.GOOGLE);
 const admin = require("firebase-admin");
 const serviceAccount = google;
-
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 const db = admin.firestore();
 
-
 const bodyParser = require("body-parser");
 const { request } = require("express");
 const app = express();
 const port = process.env.PORT || 5000;
-
-
 
 app.use(express.static(__dirname));
 app.use(express.static(path.join(__dirname, 'build')));
@@ -31,7 +26,6 @@ app.use(express.static(path.join(__dirname, 'build')));
 //======================================================================//
 //=============================GET=FIREBASE=============================//
 //======================================================================//
-
 
 
 //=================получить данные всех events [{a,b,c...}]=============//
@@ -78,6 +72,7 @@ app.get("/api/studentsName", (request, response) => {
           name: doc.data().name,
           uid: doc.data().uid,
           email: doc.data().email,
+          id: doc.data().id,
         });
       });
       return response.json(studentsNamesAndUids);
@@ -96,7 +91,11 @@ app.get("/api/fromUidToName", (request, response) => {
     .then((data) => {
       data.forEach((doc) => {
         if (uid == doc.data().uid) {
-          return response.json(doc.data().name);
+          return response.json({
+            name: doc.data().name,
+            id: doc.data().id,
+            email: doc.data().email,
+          });
         }
       });
     })

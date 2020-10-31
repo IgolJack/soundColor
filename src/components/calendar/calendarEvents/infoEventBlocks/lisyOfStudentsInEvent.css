@@ -1,16 +1,8 @@
-.Zamena {
-    text-align: right;
+.Zamena .Otvet .MyZamena{
     float: right;
-    padding: 0px;
   
 }
 
-.OjidZamena{
-    text-align: right;
-    float: right;
-    vertical-align: auto;
-    line-height: 1.5715;
-}
 
 .navText{
     color: black;
