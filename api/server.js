@@ -26,6 +26,22 @@ app.use(express.static(path.join(__dirname, 'build')));
 //======================================================================//
 //=============================GET=FIREBASE=============================//
 //======================================================================//
+app.get("/api/deleteThisStudByAdmin", (request, response) => {
+  let uid = request.query.uid || "";
+  let user = request.query.user || "";
+
+
+  admin
+    .auth()
+    .deleteUser(uid)
+    .then(function () {
+      console.log("Successfully deleted user");
+    })
+    .catch(function (error) {
+      console.log("Error deleting user:", error);
+    });
+});
+
 
 
 //=================получить данные всех events [{a,b,c...}]=============//

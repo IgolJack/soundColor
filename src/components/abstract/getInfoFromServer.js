@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import * as firebase from "firebase";
 class getInfoFromServer extends Component {
   state = {
     allNamesAndUidOfStudents: [],
@@ -30,11 +30,12 @@ class getInfoFromServer extends Component {
 
     //this.getAllNamesAndUidOfStudentsFunc();
     //this.getNameFromUid('NDgEDIMDUZWO3eClal5WY8VPwow2');
-    this.getAllStudents();
+    //this.getAllStudents();
     //this.getAllStudentsWithoutPersons(['Собака Куколдинго'], ['G6K5czYS1HgzBMN5xHJbtSnwzdG3', 'DFxuUpShFU6bzvJrhWFqFd3DoA2', '2K3wvhFALsPIKemqtatZjevLM8J2'])
-    this.pushEmail('iegolepic@gmail.com')
+    //this.pushEmail('iegolepic@gmail.com')
     //this.setCalendarEvent(event);
-    this.getAllEvents();
+    //this.getAllEvents();
+    this.deleteStudent('WKlsl5b5dIdvj1NUISJlR4e3dre2');
   }
 
   getAllNamesAndUidOfStudentsFunc = async () => {
@@ -62,6 +63,14 @@ class getInfoFromServer extends Component {
     fetch(`/api/createEvent?event=${e}`)
       .then((response) => response.json())
       .then((jsondata) => this.setState({ allStudents: jsondata }));
+  };
+
+ 
+  deleteStudent = async (uid) => {
+    let user =  firebase.auth().currentUser.uid;
+    fetch(`/api/deleteThisStudByAdmin?uid=${uid}&user=${user}`)
+      .then((response) => response.json())
+      .then((jsondata) => console.log(jsondata));
   };
 
   // getAllStudentsWithoutPersons = async (names, uids) => {
