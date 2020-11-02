@@ -1,6 +1,5 @@
 import React from "react";
 import * as firebase from "firebase";
-import PropTypes from "prop-types";
 import { Collapse, Button, Popover, Select, message } from "antd";
 import "./lisyOfStudentsInEvent.css";
 import { NavLink } from "react-router-dom";
@@ -12,44 +11,34 @@ const openNotification = () => {
   message.info("Пользователь успешно уведомлен!");
 };
 
-class listOfStudents extends React.Component {
-  constructor(props) {
-    super(props);
+class ListOfStudents extends React.Component {
+  state = {
+    studentsEnrolList: [],
+    allStudentsList: [],
+    inMember: false,
+    allNamesAndUidOfStudents: [],
+    emailer: [],
+    changePerson: "",
+    user: {},
 
-    this.state = {
-      studentsEnrolList: [],
-      allStudentsList: [],
-      inMember: false,
-      allNamesAndUidOfStudents: [],
-      emailer: [],
-      changePerson: "",
-      user: {},
+    //небходимо передать
+    max: this.props.max,
+    members: this.props.members,
+  };
 
-      //небходимо передать
-      max: 6,
-      members: [
-        {
-          id: "18",
-          email: "igoljack@mail.ru",
-          name: "Супер человек-кит",
-          uid: "fwe[ofkowekfowekfoko34kfok4o",
-          lookForChange: " ",
-          senior: false,
-        },
-        {
-          id: "27",
-          email: "iegolepic@8788.tu",
-          name: "Собака Куколдинго",
-          uid: "G6K5czYS1HgzBMN5xHJbtSnwzdG3",
-          lookForChange: "pCJ8AJihdnbDUB5XTHrzeoAvb0D2",
-          senior: true,
-        },
-      ],
-    };
-  }
+  // {
+  //   id: "27",
+  //   email: "iegolepic@8788.tu",
+  //   name: "Собака Куколдинго",
+  //   uid: "G6K5czYS1HgzBMN5xHJbtSnwzdG3",
+  //   lookForChange: "pCJ8AJihdnbDUB5XTHrzeoAvb0D2",
+  //   senior: true,
+  // },
 
   componentDidMount() {
+    console.log("this.props.members", this.props.members, this.props.max);
     console.log("=========ОБНОВЛЕНИЕ=========");
+
     this.getUser();
     this.getAllNamesAndUidOfStudentsFunc();
     this.inMemberFunc();
@@ -111,7 +100,6 @@ class listOfStudents extends React.Component {
 
   listOfEnrolledStudents = () => {
     let allStudents = [];
-    console.log(this.state.user.uid, "Жопа");
     this.state.members.map((member) => {
       //ЗАМЕНИТЬ
       if (member.lookForChange == this.state.user.uid) {
@@ -128,7 +116,8 @@ class listOfStudents extends React.Component {
                   }}
                 />
               )}
-              {member.name}
+              {member.uid == this.state.user.uid && member.name}
+              {member.uid != this.state.user.uid && member.name}
             </NavLink>
             <span
               style={{ float: "right", cursor: "pointer", color: "red" }}
@@ -144,7 +133,11 @@ class listOfStudents extends React.Component {
         allStudents.push(
           <p key={member.email}>
             <NavLink className="navText" to={`/list/${member.id}`}>
-              {member.name}
+              {member.uid == this.state.user.uid && (
+                <span style={{ textDecoration: "underline" }}>
+                  {member.name}
+                </span>
+              )}
             </NavLink>
             <span style={{ float: "right", color: "blue" }}>
               Ожидаем ответа
@@ -193,7 +186,11 @@ class listOfStudents extends React.Component {
                     }}
                   />
                 )}
-                {member.name}
+                {member.uid == this.state.user.uid && (
+                  <span style={{ textDecoration: "underline" }}>
+                    {member.name}
+                  </span>
+                )}
               </NavLink>
 
               <span
@@ -372,30 +369,22 @@ class listOfStudents extends React.Component {
     if (!isSenior && this.state.inMember) {
       seniorButton = (
         <Button
-          style={{ marginBottom: "10px" }}
-          shape="round"
-          block
+        style={{ marginBottom: "10px", paddingLeft: '0px'}}
           type="link"
           size="small"
           onClick={this.setSenior}
         >
-          Возвысится
+          Стать ответственным
         </Button>
       );
     }
 
     if (this.state.members.length < this.state.max) {
-      if (this.state.inMember) {
-        button = (
-          <p style={{ textAlign: "center" }}>Вы уже принимаете участие</p>
-        );
-      } else {
+      if (!this.state.inMember) {
         button = (
           <Button
-            block
-            shape="round"
-            style={{ marginBottom: "10px" }}
-            type="primary"
+            style={{ marginBottom: "10px", paddingLeft: '0px'}}
+            type="link"
             size="small"
             onClick={this.isPersonInMembers}
           >
@@ -435,4 +424,4 @@ class listOfStudents extends React.Component {
   }
 }
 
-export default listOfStudents;
+export default ListOfStudents;

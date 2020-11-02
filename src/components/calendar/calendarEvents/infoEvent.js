@@ -1,25 +1,17 @@
 import React from "react";
 import { db } from "../../firebase/firebase";
 import * as firebase from "firebase";
-
-import {
-  Card,
-  Col,
-  Skeleton,
-  Collapse,
-  Popover,
-  Select,
-  Row,
-  Tag,
-  Divider,
-  Button,
-} from "antd";
+import ListOfStudents from "./infoEventBlocks/listOfStudents";
+import MeetTimeAndDate from "./infoEventBlocks/meetTimeAndDate";
+import Cloth from "./infoEventBlocks/cloth"
+import { Card, Skeleton, Collapse, Select, Row, Tag, Button } from "antd";
 import {
   studentsWithPass,
   GetInformationWithPass,
 } from "../../abstract/universalFirebase";
+import Description from "./infoEventBlocks/description";
+import EventTimeAndDate from "./infoEventBlocks/eventTimeAndDate";
 
-import Equipment from "./equipment";
 GetInformationWithPass();
 
 const { Meta } = Card;
@@ -37,7 +29,7 @@ export default class InfoEvent extends React.Component {
       equipGroup: [],
       allStudents: [],
       allStudentsNamesAndUids: [],
-      allNamesAndUidOfStudents:[],
+      allNamesAndUidOfStudents: [],
       studentsEnrol: [],
       nowMember: [],
     };
@@ -51,18 +43,12 @@ export default class InfoEvent extends React.Component {
     } = this.props;
     const { eventId } = params;
 
-    //сервер 
-    this.getAllNamesAndUidOfStudentsFunc()
-
-
+    //сервер
+    this.getAllNamesAndUidOfStudentsFunc();
     this.setState({ id: eventId });
     const docRef = db.collection("eventsCalendar").doc(eventId);
     this.getInfo(docRef);
- 
   }
-  
- 
-  
 
   getInfo(docRef) {
     docRef
@@ -119,7 +105,6 @@ export default class InfoEvent extends React.Component {
   }
 
   addUserToEvent() {
-   
     let uid = firebase.auth().currentUser.uid;
     let nowMember = this.state.event.members;
     let someDupl = false;
@@ -143,19 +128,27 @@ export default class InfoEvent extends React.Component {
       console.log("Список", nowMember);
     }
   }
- 
+
   getAllNamesAndUidOfStudentsFunc = async () => {
     fetch("/api/studentsName")
       .then((response) => response.json())
-      .then((jsondata) => this.setState({ allNamesAndUidOfStudents: jsondata }, console.log(this.state.allNamesAndUidOfStudents)));
+      .then((jsondata) =>
+        this.setState(
+          { allNamesAndUidOfStudents: jsondata },
+          console.log(this.state.allNamesAndUidOfStudents)
+        )
+      );
   };
 
   studentsStats = () => {
-    var allStudentsList = []
-    this.state.allNamesAndUidOfStudents.map(e =>{
-    allStudentsList.push(<Option key={e.uid}>{e.name}</Option>)
-    this.setState({ allStudents: allStudentsList }, console.log(this.state.allStudents));
-    })
+    var allStudentsList = [];
+    this.state.allNamesAndUidOfStudents.map((e) => {
+      allStudentsList.push(<Option key={e.uid}>{e.name}</Option>);
+      this.setState(
+        { allStudents: allStudentsList },
+        console.log(this.state.allStudents)
+      );
+    });
   };
 
   enrolStudents = () => {
@@ -180,7 +173,7 @@ export default class InfoEvent extends React.Component {
         <p key={index.uid}>
           {index.name}
 
-         {index.uid != firebase.auth().currentUser.uid &&
+          {index.uid != firebase.auth().currentUser.uid && (
             <Button
               type="link"
               onClick={() => {
@@ -189,211 +182,78 @@ export default class InfoEvent extends React.Component {
             >
               Заменить
             </Button>
-          }
+          )}
         </p>
       );
     });
     console.log(studentsWhoEnrol);
 
     this.setState({ studentsEnrol: studentsWhoEnrol });
-
-  
   };
 
-
-  
-
   render() {
-    const searchForChangeMe = (
-      <Select style={{ width: "100%" }} allowClear showSearch size="large">
-        {this.state.allStudents}
-      </Select>
-    );
-
     return (
-      <div style={{ padding: "15px", height: "calc(100% + 50px)" }}>
+      <>
         <Skeleton
           active
           loading={this.state.loading}
           paragraph={{ rows: 25 }}
           title={false}
         >
-          <div style={{ paddingTop: "10px", paddingBottom: "10px" }}>
-            <Card style={{ borderRadius: "10px" }}>
-              <Meta
-                title={`${this.state.event.typeOfEvent}: ${this.state.event.title}`}
-                style={{ textAlign: "center" }}
-              />
-            </Card>
-          </div>
+         
+          
+          
+          <span style={{fontSize:'18px', verticalAlign:'center'}}> <Tag color="red" >{this.state.event.typeOfEvent}</Tag>{this.state.event.title}</span>
+
+
+          <span style={{textAlign:'right'}}>{this.state.cast.map((cast) => (
+              <Tag color="cyan" style={{fontWeight:200}}>{cast}</Tag>
+            ))} </span>
+        
+          <Cloth cloth={this.state.event.cloth} />
+
+          <MeetTimeAndDate
+            meetTime={this.state.event.meetTime}
+            meetDate={this.state.event.meetDate}
+          />
+
+            
+<>
+            <span style={{textAlign:'right'}}>  
+            <span style={{float:'left'}}>Место сбора</span> 
+            <Tag color="red" style={{textAlign:'center'}}> {this.state.event.meetPlace}</Tag>
+            </span>
+       
+        
+      </>
+
+          <EventTimeAndDate
+            eventTime={this.state.event.eventTime}
+            eventDate={this.state.event.eventDate}
+          />
+          
+          <>
+            <span style={{textAlign:'right'}}>  
+            <span style={{float:'left'}}>Место мероприятия</span> 
+            <Tag color="cyan" style={{textAlign:'center'}}> {this.state.event.eventPlace}</Tag>
+            </span>
+       
+        
+      </>
+
+
+        
+           <Description description={this.state.event.description}/>
+           
+
           <div style={{ paddingBottom: "10px" }}>
-            <Row>
-              <Col xs={9} sm={10} md={10} lg={10} xl={10} xxl={10}>
-                <Card style={{ borderRadius: "10px", textAlign: "center" }}>
-                  Стейдж-план: опвопшвыщацушк
-                </Card>
-              </Col>
-              <Col
-                xs={{ span: 9, offset: 6 }}
-                sm={{ span: 10, offset: 4 }}
-                md={{ span: 10, offset: 4 }}
-                lg={{ span: 10, offset: 4 }}
-                xl={{ span: 10, offset: 4 }}
-                xll={{ span: 10, offset: 4 }}
-              >
-                <Card style={{ borderRadius: "10px", textAlign: "center" }}>
-                  Форма одежды: {this.state.event.cloth}
-                </Card>
-              </Col>
-            </Row>
-          </div>
-          <div style={{ paddingBottom: "10px" }}>
-            <Collapse
-              expandIconPosition="right"
-              style={{ borderRadius: "10px" }}
-            >
-              <Panel
-                header="Состав исполнителей"
-                key="1"
-                style={{ borderRadius: "10px" }}
-              >
-                {this.state.cast.map((cast) => (
-                  <Tag color="magenta">{cast}</Tag>
-                ))}
-              </Panel>
-            </Collapse>
-          </div>
-          <div style={{ paddingBottom: "10px" }}>
-            <Card style={{ borderRadius: "10px" }}>
-              <Card style={{ borderRadius: "10px", marginBottom: "10px" }}>
-                <Row>
-                  <Col xs={9} sm={10} md={10} lg={10} xl={10} xxl={10}>
-                    <Card
-                      title="Дата/время сбора"
-                      style={{ borderRadius: "10px", marginBottom: "10px" }}
-                    >
-                      {this.state.event.meetDate}, {this.state.event.meetTime}
-                    </Card>
-                  </Col>
-                  <Col
-                    xs={{ span: 14, offset: 1 }}
-                    sm={{ span: 12, offset: 2 }}
-                    md={{ span: 12, offset: 2 }}
-                    lg={{ span: 12, offset: 2 }}
-                    xl={{ span: 12, offset: 2 }}
-                    xxl={{ span: 12, offset: 2 }}
-                  >
-                    <Card
-                      title="Место сбора"
-                      style={{ borderRadius: "10px", marginBottom: "10px" }}
-                    >
-                      {this.state.event.meetPlace}
-                    </Card>
-                  </Col>
-                </Row>
-              </Card>
-              <Card style={{ borderRadius: "10px" }}>
-                <Row>
-                  <Col xs={9} sm={10} md={10} lg={10} xl={10} xxl={10}>
-                    <Card
-                      title="Дата/время начала мероприятия"
-                      style={{ borderRadius: "10px", marginBottom: "10px" }}
-                    >
-                      {this.state.event.eventDate}, {this.state.event.eventTime}
-                    </Card>
-                  </Col>
-                  <Col
-                    xs={{ span: 14, offset: 1 }}
-                    sm={{ span: 12, offset: 2 }}
-                    md={{ span: 12, offset: 2 }}
-                    lg={{ span: 12, offset: 2 }}
-                    xl={{ span: 12, offset: 2 }}
-                    xxl={{ span: 12, offset: 2 }}
-                  >
-                    <Card
-                      title="Место проведения мероприятия"
-                      style={{ borderRadius: "10px", marginBottom: "10px" }}
-                    >
-                      {this.state.event.eventPlace}
-                    </Card>
-                  </Col>
-                </Row>
-              </Card>
-            </Card>
-          </div>
-          <div style={{ paddingTop: "10px", paddingBottom: "10px" }}>
-            <Card style={{ borderRadius: "10px" }}>
-              Описание: {this.state.event.description}
-            </Card>
-          </div>
-          <div style={{ paddingBottom: "10px" }}>
-            <Collapse
-              expandIconPosition="right"
-              style={{ borderRadius: "10px" }}
-              onChange={this.enrolStudents}
-            >
-              <Panel
-                header="Студенты"
-                key="2"
-                extra={"2/5"}
-                style={{ borderRadius: "10px" }}
-              >
-                <Button
-                  block
-                  shape="round"
-                  type="primary"
-                  onClick={this.addUserToEvent && this.studentsStats}
-                >
-                  Принять участие
-                </Button>
-                {this.state.studentsEnrol}
-                <Popover
-                  content={searchForChangeMe}
-                  title="Выберете себе замену. Этому человеку прийдет email и если он согласится все будет хорошо"
-                  trigger="click"
-                  
-                >
-                  <Button
-                    block
-                    shape="round"
-                    type="danger"
-                    onClick={this.changeMe}
-                  >
-                    Заменить себя
-                  </Button>
-                </Popover>
-              </Panel>
-            </Collapse>
-          </div>
-          <div style={{ paddingBottom: "10px" }}>
-            <Collapse
-              expandIconPosition="right"
-              style={{ borderRadius: "10px" }}
-            >
-              <Panel
-                header="Оборудование"
-                key="3"
-                style={{ borderRadius: "10px" }}
-              >
-                {this.state.equipment &&
-                  this.state.equipment.map((equip) => {
-                    return (
-                      <div>
-                        <Divider orientation="left">{equip.equipGroup}</Divider>
-                        {equip.groupChildren &&
-                          equip.groupChildren.map((child) => (
-                            <p>
-                              {child.equipType}: {child.quantity}
-                            </p>
-                          ))}
-                      </div>
-                    );
-                  })}
-              </Panel>
-            </Collapse>
+            <ListOfStudents
+              members={this.state.event.members}
+              max={this.state.event.max}
+            />
           </div>
         </Skeleton>
-      </div>
+      </>
     );
   }
 }

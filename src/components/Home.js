@@ -30,11 +30,11 @@ class Home extends React.Component {
 
          
           <NavLink
-            to="/Email"
+            to="/Time"
             style={{ width: "100%", "text-decoration": "none" }}
           >
             <Button block size="large" type="primary">
-              Email
+              Time
             </Button>
           </NavLink>
 

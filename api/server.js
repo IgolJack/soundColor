@@ -191,7 +191,17 @@ app.get("/api/createEvent", (req, res) => {
 
 
 
+app.get("/api/time", (request, response) => {
+  let id = request.query.id;
+  console.log(id)
+  const rocks = id => {
+    console.log(id + ' rocks');
+  };
+ setTimeout(rocks, id, 'Node.js');
 
+  
+  
+});
 
 
 
