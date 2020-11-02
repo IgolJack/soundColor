@@ -4,18 +4,17 @@ import * as firebase from "firebase";
 import ListOfStudents from "./infoEventBlocks/listOfStudents";
 import MeetTimeAndDate from "./infoEventBlocks/meetTimeAndDate";
 import Cloth from "./infoEventBlocks/cloth"
-import { Card, Skeleton, Collapse, Select, Row, Tag, Button } from "antd";
+import { Skeleton, Select, Tag, Button } from "antd";
 import {
   studentsWithPass,
   GetInformationWithPass,
 } from "../../abstract/universalFirebase";
 import Description from "./infoEventBlocks/description";
 import EventTimeAndDate from "./infoEventBlocks/eventTimeAndDate";
+import Equipment from "./equipment/equipment";
 
 GetInformationWithPass();
 
-const { Meta } = Card;
-const { Panel } = Collapse;
 const { Option } = Select;
 
 export default class InfoEvent extends React.Component {
@@ -67,26 +66,11 @@ export default class InfoEvent extends React.Component {
         let equip = [];
         if (data.equipment !== undefined) {
           for (let index = 0; index < data.equipment.length; index++) {
-            strings.push(data.equipment[index]["equipGroup"]);
+            strings.push(data.equipment[index]["group"]);
           }
           for (let str of strings) {
             if (!resultGroup.includes(str)) {
               resultGroup.push(str);
-            }
-          }
-
-          for (let index = 0; index < resultGroup.length; index++) {
-            equip[index] = {
-              equipGroup: resultGroup[index],
-              groupChildren: [],
-            };
-            for (let i = 0; i < data.equipment.length; i++) {
-              if (data.equipment[i]["equipGroup"] === resultGroup[index]) {
-                equip[index]["groupChildren"].push({
-                  equipType: data.equipment[i]["equipType"],
-                  quantity: data.equipment[i]["quantity"],
-                });
-              }
             }
           }
         }
@@ -96,7 +80,7 @@ export default class InfoEvent extends React.Component {
           loading: !this.state.loading,
           cast: data.cast,
           equipGroup: resultGroup,
-          equipment: equip,
+          equipment: data.equipment,
         });
       })
       .catch(function (error) {
@@ -200,6 +184,7 @@ export default class InfoEvent extends React.Component {
           paragraph={{ rows: 25 }}
           title={false}
         >
+
          
           
           
@@ -250,6 +235,11 @@ export default class InfoEvent extends React.Component {
             <ListOfStudents
               members={this.state.event.members}
               max={this.state.event.max}
+            />
+
+            <Equipment
+              equipment={this.state.equipment}
+              equipGroup={this.state.equipGroup}
             />
           </div>
         </Skeleton>

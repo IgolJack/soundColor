@@ -113,9 +113,9 @@ class PropertyFilter extends Component {
   render() {
     return (
       <div>
-        <Collapse>
+        <Collapse ghost>
           <Panel header="Фильтры" key="1">
-            <Row>
+            <Row style={{height: '20px'}} align='middle'>
               <Col xs={7} sm={6} md={6} lg={6} xl={6} xll={6}>
                 <Select
                   style={{ width: "100%" }}

@@ -1,9 +1,18 @@
 import React, { useCallback, useState } from "react";
 import { auth, db } from "../firebase/firebase";
-import { Form, Input, Button, message, Select } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  message,
+  Select,
+  AutoComplete,
+  Collapse,
+} from "antd";
 import { UserOutlined, LockOutlined, ToolTwoTone } from "@ant-design/icons";
 
 const { Option } = Select;
+const { Panel } = Collapse;
 
 const layout = {
   labelCol: { span: 0 },
@@ -61,25 +70,13 @@ const SignUpPage = (props) => {
   let count = "0";
   let exchange = "0";
   let course = "Первый курс";
-  let uid = '';
+  let uid = "";
   const [lastId, setLastId] = useState(localStorage.getItem("lastId"));
-  
+  const [result, setResult] = useState([]);
+
   const succes = () => {
     message.success("Студент успешно создан", 2);
-    form.setFieldsValue({ email: "" });
-    form.setFieldsValue({ name: "" });
-    form.setFieldsValue({ lateness: "0" });
-    form.setFieldsValue({ lvl: "0" });
-    form.setFieldsValue({ missed: "0" });
-    form.setFieldsValue({ disgrace: "0" });
-    form.setFieldsValue({ responsible: "0" });
-    form.setFieldsValue({ concert: "0" });
-    form.setFieldsValue({ equipment: "0" });
-    form.setFieldsValue({ count: "0" });
-    form.setFieldsValue({ course: "" });
-    form.setFieldsValue({ equipment: "0" });
-    form.setFieldsValue({ discharges: "0" });
-    form.setFieldsValue({ exchange: "0" });
+    form.resetFields();
   };
   const succesRed = () => {
     message.info("Регистрация прошла успешно");
@@ -92,7 +89,7 @@ const SignUpPage = (props) => {
       await auth
         .createUserWithEmailAndPassword(values.email, values.password)
         .then(function (result) {
-          uid = result.user.uid
+          uid = result.user.uid;
           succesRed();
           return result.user.updateProfile({
             displayName: values.name,
@@ -100,7 +97,7 @@ const SignUpPage = (props) => {
         });
       localStorage.setItem("lastId", Number(lastId) + 1);
       setLastId(localStorage.getItem("lastId"));
-     
+
       db.collection("students")
         .doc(localStorage.getItem("lastId"))
         .set({
@@ -133,6 +130,23 @@ const SignUpPage = (props) => {
       password: Password.generate(8),
     });
   };
+  const handleSearch = (value) => {
+    setResult(
+      !value
+        ? []
+        : [
+            {
+              value: `${value}@gmail.com`,
+            },
+            {
+              value: `${value}@mail.ru`,
+            },
+            {
+              value: `${value}@yandex.ru`,
+            },
+          ]
+    );
+  };
   return (
     <div style={{ padding: "15px" }}>
       <br />
@@ -142,10 +156,24 @@ const SignUpPage = (props) => {
         size="large"
         {...layout}
         name="basic"
+        initialValues={{
+          course: course,
+          lvl: lvl,
+          lateness: lateness,
+          missed: missed,
+          disgrace: disgrace,
+          responsible: responsible,
+          concert: concert,
+          equipment: equipment,
+          discharges: discharges,
+          count: count,
+          exchange: exchange,
+        }}
         onFinish={handleLogin}
       >
         <Form.Item
           name="email"
+          hasFeedback
           value={email}
           rules={[
             {
@@ -158,11 +186,13 @@ const SignUpPage = (props) => {
             },
           ]}
         >
-          <Input
-            addonBefore="Email"
-            prefix={<UserOutlined className="site-form-item-icon" />}
-            name="email"
-          />
+          <AutoComplete onSearch={handleSearch} options={result}>
+            <Input
+              addonBefore="Email"
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              name="email"
+            />
+          </AutoComplete>
         </Form.Item>
 
         <Form.Item
@@ -190,19 +220,35 @@ const SignUpPage = (props) => {
 
         <Form.Item
           name="name"
+          hasFeedback
           value={name}
-          rules={[{ required: true, message: "Введите ФИО!" }]}
+          rules={[
+            { required: true, message: "Введите ФИО!" },
+            () => ({
+              validator(rule, value) {
+                if (!value || value.split(" ").length === 3) {
+                  return Promise.resolve();
+                }
+                return Promise.reject("Имя должно содержать 3 слова!");
+              },
+            }),
+          ]}
         >
           <Input addonBefore="ФИО" name="name" />
         </Form.Item>
 
-        <Form.Item type="number" name="course" value={course}>
+        <Form.Item
+          hasFeedback
+          type="number"
+          name="course"
+          value={course}
+          rules={[{ required: true, message: "Выберете курс!" }]}
+        >
           <Select
             placeholder="Выберите курс"
             name="course"
             value={course}
             addonBefore="ФИО"
-            rules={[{ required: true, message: "Выберете курс!" }]}
           >
             <Option value="Первый курс">Первый курс</Option>
             <Option value="Второй курс">Второй курс</Option>
@@ -225,14 +271,12 @@ const SignUpPage = (props) => {
             flex: "auto",
           }}
         >
-
-
-        <Form.Item
+          <Form.Item
             name="lvl"
+            hasFeedback
             value={lvl}
             style={{ margin: 5 }}
             rules={[{ required: true, message: "Введите уровень!" }]}
-            
           >
             <Input
               type="number"
@@ -243,7 +287,7 @@ const SignUpPage = (props) => {
               defaultValue={lvl}
             />
           </Form.Item>
-          
+
           <Form.Item name="lateness" style={{ margin: 5 }} value={lateness}>
             <Input
               type="number"

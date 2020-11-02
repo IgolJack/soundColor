@@ -68,6 +68,29 @@ class List extends React.Component {
     }
   };
   render() {
+
+    let filteredStidents
+        if (this.state.searchStudent === "") {
+            filteredStidents = this.state.students && this.state.students.filter(item => {
+                for (var key in this.state.filterName) {
+                    if (key === "missed" && this.state.filterName[key] === 0 && item[key] !== this.state.filterName[key]) {
+                        return false
+                    }
+                    if (key === "missed" && item[key] < this.state.filterName[key]) {
+                        return false
+                    }
+                    if (key !== "missed" && (item[key] === undefined || item[key] !== this.state.filterName[key])) {
+                        return false
+                    }
+                }
+                return true
+            });
+        }
+        else {
+            filteredStidents = this.state.students && this.state.students.filter(student => {
+                return student.name.toLowerCase().includes(this.state.searchStudent.toLowerCase())
+            })
+        }
     
     return (
       <div className="App">
@@ -105,17 +128,13 @@ class List extends React.Component {
             <TabPane tab="Карточки" key="1">
               {" "}
               <Students
-                students={this.state.students}
-                filterName={this.state.filterName}
-                searchStudent={this.state.searchStudent}
+                students={filteredStidents}
               />
             </TabPane>
             <TabPane tab="Компактный вид" key="2">
               {" "}
               <StudentList
-                students={this.state.students}
-                filterName={this.state.filterName}
-                searchStudent={this.state.searchStudent}
+                students={filteredStidents}
               />
             </TabPane>
           </Tabs>
