@@ -31,6 +31,7 @@ export default class InfoEvent extends React.Component {
       allNamesAndUidOfStudents: [],
       studentsEnrol: [],
       nowMember: [],
+      id: "",
     };
     this.addUserToEvent = this.addUserToEvent.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
@@ -63,7 +64,6 @@ export default class InfoEvent extends React.Component {
 
         let strings = [];
         let resultGroup = [];
-        let equip = [];
         if (data.equipment !== undefined) {
           for (let index = 0; index < data.equipment.length; index++) {
             strings.push(data.equipment[index]["group"]);
@@ -236,10 +236,13 @@ export default class InfoEvent extends React.Component {
               members={this.state.event.members}
               max={this.state.event.max}
             />
-
+          </div>
+          
+          <div style={{ paddingBottom: "10px" }}>
             <Equipment
               equipment={this.state.equipment}
               equipGroup={this.state.equipGroup}
+              id={this.state.id}
             />
           </div>
         </Skeleton>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../../../firebase/firebase";
+import * as firebase from "firebase";
 import {
   Cascader,
   Collapse,
@@ -42,9 +43,6 @@ const AddEquipment = (props) => {
   let selected = [];
   let quantityMax = [];
   let equipAdded = props.equipAdded;
-
-  console.log(equipment);
-  console.log(props.equipAdded);
 
   useEffect(() => {
     if (equipment !== null) {
@@ -92,21 +90,30 @@ const AddEquipment = (props) => {
 
   const onFinish = (values) => {
     console.log("Received values of form:", values);
-    equipData = [];
+    equipData = equipAdded;
+    let uid = firebase.auth().currentUser.uid;
 
     if (values.equipmentData !== undefined) {
       for (let index = 0; index < values.equipmentData.length; index++) {
-        equipData[index] = {
-          equipGroup: `${values.equipmentData[index]["equipment"][0]}`,
-          equipType: `${values.equipmentData[index]["equipment"][1]}`,
+        equipData.push({
+          group: `${values.equipmentData[index]["equipment"][0]}`,
+          type: `${values.equipmentData[index]["equipment"][1]}`,
           quantity: `${values.equipmentData[index]["quantity"]}`,
-        };
+          name: firebase.auth().currentUser.displayName,
+        });
       }
+      addNewEquip(props.id, equipData)
       message.success("Ваше оборудование сохранено!");
     }
     console.log(equipData);
     props.updateEdit();
   };
+
+  const addNewEquip = async (id, equipData) => {
+    let equip = JSON.stringify(equipData)
+    fetch(`/api/addEquip?id=${id}&equipment=${equip}`)
+  };
+
 
   const onChange = () => {
     //обнуление
@@ -152,9 +159,6 @@ const AddEquipment = (props) => {
     }
     console.log(quantityMax);
   };
-
-  console.log(equipGroup);
-  console.log(options);
 
   return (
     <Form

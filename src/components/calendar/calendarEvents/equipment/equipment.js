@@ -17,7 +17,7 @@ const Equipment = (props) => {
       <Collapse expandIconPosition="right" style={{ borderRadius: "10px" }}>
         <Panel header="Оборудование" key="3" style={{ borderRadius: "10px" }}>
           {edit ? (
-            <AddEquipment updateEdit={onChange} equipAdded={props.equipment} />
+            <AddEquipment updateEdit={onChange} equipAdded={props.equipment} id={props.id}/>
           ) : (
             <div>
               {props.equipGroup &&
@@ -30,7 +30,7 @@ const Equipment = (props) => {
                           if (equip["group"] === group) {
                             return (
                               <p>
-                                {equip["type"]}: {equip["quantity"]}
+                                {equip["type"]}: {equip["quantity"]} - {equip["name"]}
                               </p>
                             );
                           }

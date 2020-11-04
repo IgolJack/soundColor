@@ -35,6 +35,7 @@ const CalendarNewEvent = () => {
   let cast = [];
   let cloth = "Свободная";
   let children = [];
+  let max = 5;
 
   for (let i = 10; i < 36; i++) {
     children.push(
@@ -59,7 +60,8 @@ const CalendarNewEvent = () => {
       String(form.getFieldValue("eventDate")),
       String(form.getFieldValue("eventTime")),
       form.getFieldValue("eventPlace"),
-      form.getFieldValue("cast")
+      form.getFieldValue("cast"),
+      form.getFieldValue("max")
     );
   };
 
@@ -88,6 +90,10 @@ const CalendarNewEvent = () => {
         layout="auto"
         size="large"
         name="basic"
+        initialValues={{
+          cloth: cloth,
+          max: max,
+        }}
         onFinish={addNewEvent}
       >
         <Form.Item
@@ -117,6 +123,7 @@ const CalendarNewEvent = () => {
             <div style={{ padding: "0px 5px" }}>
               <Form.Item
                 label="Время сбора"
+                placeholder="Время сбора"
                 type="text"
                 name="meetTime"
                 value={meetTime}
@@ -141,7 +148,7 @@ const CalendarNewEvent = () => {
         </Row>
 
         <Row>
-          <Col flex={12}>
+          <Col flex={9}>
             <div style={{ padding: "0px 5px" }}>
               <Form.Item
                 type="text"
@@ -160,7 +167,7 @@ const CalendarNewEvent = () => {
               </Form.Item>
             </div>
           </Col>
-          <Col flex={12}>
+          <Col flex={8}>
             <div style={{ padding: "0px 20px" }}>
               <Form.Item label="Форма одежды" name="cloth" value={cloth}>
                 <Group
@@ -170,6 +177,13 @@ const CalendarNewEvent = () => {
                   optionType="button"
                   buttonStyle="solid"
                 />
+              </Form.Item>
+            </div>
+          </Col>
+          <Col flex={7}>
+            <div style={{ padding: "0px 20px" }}>
+              <Form.Item label="Количество участников" name="max" value={max}>
+                <Input type="number" style={{width: '70px'}}/>
               </Form.Item>
             </div>
           </Col>

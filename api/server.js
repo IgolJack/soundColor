@@ -184,6 +184,24 @@ app.get("/api/createEvent", (req, res) => {
 });
 
 
+//оборудование
+app.get("/api/addEquip", (req, res) => {
+  let id = String(JSON.parse(req.query.id));
+  let equipment = JSON.parse(req.query.equipment);
+  console.log(id, "___________", equipment);
+
+  db.collection("eventsCalendar")
+    .doc(id)
+    .update({
+      equipment: equipment,
+    })
+    .then(console.log("Удачно"))
+    .catch(function (error) {
+      console.log("Error getting documents: ", error);
+    });
+});
+
+
 
 
 //TO-DO получить last id students и lastid event
