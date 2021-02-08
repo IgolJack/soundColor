@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const nodemailer = require("nodemailer");
 const schedule = require('node-schedule');
-const { createCanvas } = require('canvas')
+
 
 
 require("dotenv").config({ path: __dirname + "/variables.env" });
@@ -448,40 +448,6 @@ app.get("/api/createStudent", (request, response) => {
 //       });
 //   });
 // }
-
-
-   function onStartServer () {
-
-    }
-
-
-
-
-
-
-    const width = 1200
-    const height = 600
-    
-    const canvas = createCanvas(width, height)
-    const context = canvas.getContext('2d')
-    context.fillStyle = '#fff'
-    context.fillRect(0, 0, width, height)
-    
-    const name = 'Hello, World!'
-    const pass = ''
-    context.font = 'bold 70pt Sans'
-    context.textAlign = 'center'
-    context.fillStyle = '#fff'
-    context.fillText(name, 600, 170)
-    context.fillText(pass, 600, 300)
-
-
-
-
-
-
-
-
 
 
 
