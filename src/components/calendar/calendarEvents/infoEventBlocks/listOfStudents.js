@@ -24,29 +24,17 @@ class ListOfStudents extends React.Component {
     //небходимо передать
     max: this.props.max,
     members: this.props.members,
+    id: this.props.id,
   };
 
-  // {
-  //   id: "27",
-  //   email: "iegolepic@8788.tu",
-  //   name: "Собака Куколдинго",
-  //   uid: "G6K5czYS1HgzBMN5xHJbtSnwzdG3",
-  //   lookForChange: "pCJ8AJihdnbDUB5XTHrzeoAvb0D2",
-  //   senior: true,
-  // },
-
   componentDidMount() {
-    console.log("this.props.members", this.props.members, this.props.max);
     console.log("=========ОБНОВЛЕНИЕ=========");
-
     this.getUser();
     this.getAllNamesAndUidOfStudentsFunc();
-    this.inMemberFunc();
-    this.createOptionsForSelect();
-    this.listOfEnrolledStudents();
   }
 
   getUser = () => {
+    console.log("-----------------GetUser-------------------")
     let user = {
       name: firebase.auth().currentUser.displayName,
       email: firebase.auth().currentUser.email,
@@ -54,18 +42,40 @@ class ListOfStudents extends React.Component {
     };
     this.setState({ user: user }, () => {
       console.log("User info > ", this.state.user);
+      this.inMemberFunc();
     });
   };
 
   getAllNamesAndUidOfStudentsFunc = async () => {
+    console.log("-----------------getAllNamesAndUidOfStudentsFunc-------------------")
     fetch("/api/studentsName")
       .then((response) => response.json())
       .then((jsondata) =>
         this.setState({ allNamesAndUidOfStudents: jsondata }, () => {
-          console.log("======", this.state.allNamesAndUidOfStudents);
           this.createOptionsForSelect();
         })
       );
+  };
+
+  updateMembersInEvent = async (mem) => {
+  console.log("-----------------updateMembersInEvent-------------------")
+   let members = JSON.stringify(mem)
+   let id = this.state.id
+    fetch(`/api/newListOfMembersInEvent?eventMembers=${members}&id=${id}`)
+      .then((response) => response.json())
+  };
+
+  inMemberFunc = () => {
+    console.log("-----------------inMemberFunc-------------------")
+    let mem = false;
+    this.state.members.map((member) => {
+      if (member.uid == this.state.user.uid) {
+        mem = true;
+      }
+    });
+    this.setState({ inMember: mem }, () => {
+      console.log("In member func = ", this.state.inMember);
+    });
   };
 
   pushEmail = async (email) => {
@@ -78,6 +88,7 @@ class ListOfStudents extends React.Component {
   };
 
   createOptionsForSelect = () => {
+    console.log("-----------------createOptionsForSelect-------------------")
     let studentsList = [];
     let uids = [];
     this.state.members.map((e) => uids.push(e.uid));
@@ -95,10 +106,13 @@ class ListOfStudents extends React.Component {
     });
     this.setState({ allStudentsList: studentsList }, () => {
       console.log("Подготовка option ", this.state.allStudentsList);
+      this.listOfEnrolledStudents();
     });
   };
 
   listOfEnrolledStudents = () => {
+    console.log("-----------------listOfEnrolledStudents-------------------")
+
     let allStudents = [];
     this.state.members.map((member) => {
       //ЗАМЕНИТЬ
@@ -132,6 +146,16 @@ class ListOfStudents extends React.Component {
       else if (member.uid == this.state.user.uid && member.lookForChange) {
         allStudents.push(
           <p key={member.email}>
+            {member.senior == true && (
+              <CrownTwoTone
+                twoToneColor="#ffc069"
+                style={{
+                  fontSize: "18.7px",
+                  verticalAlign: "0px",
+                  paddingRight: "3px",
+                }}
+              />
+            )}
             <NavLink className="navText" to={`/list/${member.id}`}>
               {member.uid == this.state.user.uid && (
                 <span style={{ textDecoration: "underline" }}>
@@ -146,7 +170,9 @@ class ListOfStudents extends React.Component {
         );
       }
       //ЗАМЕНИТЬСЯ
+     
       else if (this.state.user.uid == member.uid && !member.lookForChange) {
+      
         allStudents.push(
           <Popover
             content={
@@ -233,25 +259,12 @@ class ListOfStudents extends React.Component {
     });
   };
 
-  inMemberFunc = () => {
-    let mem = false;
-    this.state.members.map((member) => {
-      if (member.uid == this.state.user.uid) {
-        mem = true;
-      }
-    });
-    this.setState({ inMember: mem }, () => {
-      console.log("In member func = ", this.state.inMember);
-    });
-    this.createOptionsForSelect();
-    this.listOfEnrolledStudents();
-  };
-
   changePerson = (e, n) => {
+    console.log("-----------------changePerson-------------------")
     let nowMembers = this.state.members;
     console.log(nowMembers);
     console.log(n.senior, this.state.user.uid, n.lookForChange);
-    if ((n.senior = true)) {
+    if ((n.senior == true)) {
       if (this.state.user.uid == n.lookForChange) {
         nowMembers[nowMembers.indexOf(n)] = {
           email: this.state.user.email,
@@ -273,12 +286,13 @@ class ListOfStudents extends React.Component {
     this.setState({ members: nowMembers }, () => {
       console.log("Update ", this.state.members);
     });
-    this.createOptionsForSelect();
     this.listOfEnrolledStudents();
     this.inMemberFunc();
+    this.updateMembersInEvent(this.state.members)
   };
 
   changeMe = () => {
+    console.log("-----------------changeMe-------------------")
     let uid = this.state.emailer.uid;
     let email = this.state.emailer.email;
     let nowMembers = this.state.members;
@@ -295,12 +309,13 @@ class ListOfStudents extends React.Component {
         }
       });
     }
-    this.createOptionsForSelect();
     this.listOfEnrolledStudents();
     this.inMemberFunc();
+    this.updateMembersInEvent(this.state.members)
   };
 
   isPersonInMembers = () => {
+    console.log("-----------------isPersonInMembers-------------------")
     let newMembers = this.state.members;
     let id = 0;
 
@@ -326,17 +341,17 @@ class ListOfStudents extends React.Component {
         id: id,
         senior: false,
       });
-      this.setState(
-        { members: newMembers, inMember: true },
-        console.log(this.state.members)
-      );
-      this.createOptionsForSelect();
-      this.listOfEnrolledStudents();
-      this.inMemberFunc();
+      this.setState({ members: newMembers, inMember: true }, () => {
+        console.log(this.state.members);
+        this.updateMembersInEvent(this.state.members)
+        this.listOfEnrolledStudents();
+
+      });
     }
   };
 
   setSenior = () => {
+    console.log("-----------------setSenior-------------------")
     console.log("Возвышен");
 
     let uid = this.state.user.uid;
@@ -345,31 +360,36 @@ class ListOfStudents extends React.Component {
     nowMembers.map((member) => {
       if (member.uid == uid) {
         member.senior = true;
-        this.setState({ members: nowMembers }, () =>
-          console.log(this.state.members)
-        );
       }
     });
-
-    this.createOptionsForSelect();
+    this.setState({ members: nowMembers }, () =>
+    console.log(this.state.members)
+  );
     this.listOfEnrolledStudents();
-    this.inMemberFunc();
+    this.updateMembersInEvent(this.state.members)
   };
 
   render() {
     let button;
     let seniorButton;
     let isSenior = false;
+    let isLookForChange = false;
     this.state.members.map((member) => {
       if (member.senior == true) {
         isSenior = true;
       }
     });
 
-    if (!isSenior && this.state.inMember) {
+    this.state.members.map((member) => {
+      if (member.lookForChange != null) {
+        isLookForChange = true;
+      }
+    });
+
+    if (!isSenior && this.state.inMember && !isLookForChange) {
       seniorButton = (
         <Button
-        style={{ marginBottom: "10px", paddingLeft: '0px'}}
+          style={{ marginBottom: "10px", paddingLeft: "0px" }}
           type="link"
           size="small"
           onClick={this.setSenior}
@@ -380,10 +400,10 @@ class ListOfStudents extends React.Component {
     }
 
     if (this.state.members.length < this.state.max) {
-      if (!this.state.inMember) {
+      if (!this.state.inMember && !isLookForChange) {
         button = (
           <Button
-            style={{ marginBottom: "10px", paddingLeft: '0px'}}
+            style={{ marginBottom: "10px", paddingLeft: "0px" }}
             type="link"
             size="small"
             onClick={this.isPersonInMembers}
@@ -403,10 +423,6 @@ class ListOfStudents extends React.Component {
         <Collapse
           expandIconPosition="right"
           style={{ borderRadius: "10px" }}
-          onChange={() => {
-            this.createOptionsForSelect();
-            this.listOfEnrolledStudents();
-          }}
         >
           <Panel
             header="Студенты"

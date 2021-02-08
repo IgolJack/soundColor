@@ -1,106 +1,49 @@
 import React, { Component } from "react";
-import * as firebase from "firebase";
+
 class getInfoFromServer extends Component {
   state = {
-    allNamesAndUidOfStudents: [],
-    allStudents: [],
-    allStudentsWithoutPersons: [],
-    name: "",
-    emailDe: [],
-    calendarEvents: [],
+    event: {},
   };
+
+
+  componentDidUpdate() {
+    console.log("------0------")
+  }
+  
+
 
   componentDidMount() {
-    let event = {
-      cast: ["Рояль"],
-      cloth: "Свободная",
-      description: "444",
-      equipment: [{ group: "Микрофоны", quantity: 3, type: "Крутой" }],
-      eventDate: "Tue Oct 13 2020 18:34:15 GMT+0300",
-      eventPlace: "4444",
-      eventTime: "Thu Oct 15 2020 03:04:03 GMT+0300",
-      id: "120",
-      meetDate: "Tue Sep 29 2020 18:34:09 GMT+0300",
-      meetPlace: "4444",
-      meetTime: "Thu Oct 15 2020 03:02:00 GMT+0300",
-      title: "34534553454543",
-      typeOfEvent: "Третий курс",
-    };
+    this.getAllStudents()
 
-
-    //this.getAllNamesAndUidOfStudentsFunc();
-    //this.getNameFromUid('NDgEDIMDUZWO3eClal5WY8VPwow2');
-    //this.getAllStudents();
-    //this.getAllStudentsWithoutPersons(['Собака Куколдинго'], ['G6K5czYS1HgzBMN5xHJbtSnwzdG3', 'DFxuUpShFU6bzvJrhWFqFd3DoA2', '2K3wvhFALsPIKemqtatZjevLM8J2'])
-    //this.pushEmail('iegolepic@gmail.com')
-    //this.setCalendarEvent(event);
-    //this.getAllEvents();
-    this.deleteStudent('WKlsl5b5dIdvj1NUISJlR4e3dre2');
+    // window.setInterval(() => {
+    //   this.getAllStudents()
+    // }, 5000);
   }
 
-  getAllNamesAndUidOfStudentsFunc = async () => {
-    fetch("/api/studentsName")
+ 
+
+  
+
+   getAllStudents = async () => {
+    fetch("/api/pipi")
       .then((response) => response.json())
-      .then((jsondata) =>
-        this.setState({ allNamesAndUidOfStudents: jsondata })
-      );
+      .then((jsondata) => {
+        console.log(this.state.event)
+        if (jsondata.event != this.state.event) {
+          this.setState({ event:jsondata }); console.log(this.state)
+        }
+      });
   };
 
-  getNameFromUid = async (uid) => {
-    fetch(`/api/fromUidToName?uid=${uid}`)
-      .then((res) => res.json())
-      .then((jsondataA) => this.setState({ name: jsondataA }));
-  };
 
-  getAllStudents = async () => {
-    fetch("/api/getStudents")
-      .then((response) => response.json())
-      .then((jsondata) => this.setState({ allStudents: jsondata }));
-  };
-
-  setCalendarEvent = async (event) => {
-    let e = JSON.stringify(event)
-    fetch(`/api/createEvent?event=${e}`)
-      .then((response) => response.json())
-      .then((jsondata) => this.setState({ allStudents: jsondata }));
-  };
 
  
-  deleteStudent = async (uid) => {
-    let user =  firebase.auth().currentUser.uid;
-    fetch(`/api/deleteThisStudByAdmin?uid=${uid}&user=${user}`)
-      .then((response) => response.json())
-      .then((jsondata) => console.log(jsondata));
-  };
-
-  // getAllStudentsWithoutPersons = async (names, uids) => {
-  //     fetch(`/api/getStudentsOutPersons?names=${names}&uids=${uids}`)
-  //       .then((response) => response.json())
-  //       .then((jsondata) => this.setState({ allStudentsWithoutPersons: jsondata }));
-  //   };
-
-  pushEmail = async (email) => {
-    fetch(`/api/pushEmail?email=${email}`)
-      .then((response) => response.json())
-      .then((jsondata) => this.setState({ emailDe: jsondata }));
-  };
-
-
-  getAllEvents = async () => {
-    fetch('/api/getAllEvents')
-    .then(response => response.json())
-    .then(jsondata => this.setState({ calendarEvents: jsondata }));
-};
-
-
-  console = () => {
-    console.log(this.state);
-  };
 
   render() {
     return (
       <div className="App">
-        <button onClick={this.console}>Console</button>
+          
+          {this.state.event.description}
       </div>
     );
   }

@@ -1,6 +1,5 @@
 import React from "react";
 import { db } from "../../firebase/firebase";
-
 import { Skeleton, Popover, Input, Select } from "antd";
 
 class InfoStudent extends React.Component {
@@ -23,7 +22,6 @@ class InfoStudent extends React.Component {
       newCount: "",
       newExchange: "",
     };
-
     this.componentDidMount = this.componentDidMount.bind(this);
     this.outputInfo = this.outputInfo.bind(this);
   }

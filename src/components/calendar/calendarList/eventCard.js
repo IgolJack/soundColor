@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 export default class EventCard extends Component {
   render() {
     return (
-      <NavLink to={`/list/${this.props.event.id}`} style={{ color: '#000000' }}>
+      <NavLink to={`/Calendar/${this.props.event.id}`} style={{ color: '#000000' }}>
         <div
           style={{
             padding: "2px 5px 6px 5px",
@@ -13,7 +13,7 @@ export default class EventCard extends Component {
             margin: "0 5px 5px 0",
           }}
         >
-          {this.props.event.title} - {this.props.event.eventDate} - {this.props.event.eventTime}
+          {this.props.event.title} - {String(this.props.event.eventDate)} - {this.props.event.eventTime}
         </div>
       </NavLink>
     );

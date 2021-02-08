@@ -7,10 +7,11 @@ import {
   Col,
   Select,
   Radio,
+  Space,
+  Divider,
+  InputNumber,
 } from "antd";
 import StagePlan from "./stagePlan";
-import { addEvent } from "../../abstract/universalFirebase";
-
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -24,13 +25,10 @@ const CalendarNewEvent = () => {
   const [form] = Form.useForm();
   let title = "";
   let meetDate = "";
-  let meetTime = "";
   let meetPlace = "";
   let description = "";
-  let lastId = localStorage.getItem("EventLastId");
   let typeOfEvent = "";
   let eventDate = "";
-  let eventTime = "";
   let eventPlace = "";
   let cast = [];
   let cloth = "Свободная";
@@ -43,26 +41,31 @@ const CalendarNewEvent = () => {
     );
   }
 
+  const setCalendarEvent = async (event) => {
+    let e = JSON.stringify(event);
+    fetch(`/api/createEvent?event=${e}`)
+      .then((response) => response.json())
+      .then((jsondata) => console.log(jsondata));
+  };
+
   const addNewEvent = (values) => {
     onFinish(values);
-    localStorage.setItem("EventLastId", Number(lastId) + 1);
-    let id = localStorage.getItem("EventLastId");
-    let name = id;
-    addEvent(
-      name,
-      form.getFieldValue("title"),
-      String(form.getFieldValue("meetDate")),
-      String(form.getFieldValue("meetTime")),
-      form.getFieldValue("meetPlace"),
-      form.getFieldValue("description"),
-      form.getFieldValue("typeOfEvent"),
-      form.getFieldValue("cloth"),
-      String(form.getFieldValue("eventDate")),
-      String(form.getFieldValue("eventTime")),
-      form.getFieldValue("eventPlace"),
-      form.getFieldValue("cast"),
-      form.getFieldValue("max")
-    );
+ 
+    let event = {
+      title: form.getFieldValue("title"),
+      meetDateAndTime: String(form.getFieldValue("meetDateAndTime")),
+      meetPlace: form.getFieldValue("meetPlace"),
+      description: form.getFieldValue("description"),
+      typeOfEvent: form.getFieldValue("typeOfEvent"),
+      cloth: form.getFieldValue("cloth"),
+      eventDateAndTime: String(form.getFieldValue("eventDateAndTime")),
+      eventPlace: form.getFieldValue("eventPlace"),
+      cast: form.getFieldValue("cast"),
+      max: form.getFieldValue("max"),
+      createdDate: new Date(),
+    };
+
+    setCalendarEvent(event);
   };
 
   const onFinish = (values) => {
@@ -74,8 +77,8 @@ const CalendarNewEvent = () => {
   };
 
   return (
-    <div style={{ padding: "15px" }}>
-      <h2
+    <div>
+      <h3
         style={{
           display: "flex",
           alignItems: "center",
@@ -83,12 +86,11 @@ const CalendarNewEvent = () => {
         }}
       >
         Добавить мероприятие
-      </h2>
+      </h3>
 
       <Form
         form={form}
         layout="auto"
-        size="large"
         name="basic"
         initialValues={{
           cloth: cloth,
@@ -103,143 +105,82 @@ const CalendarNewEvent = () => {
         >
           <Input addonBefore="Название" name="title" />
         </Form.Item>
+        <Divider>Дата и время сбора</Divider>
 
-        <Row>
-          <Col xs={12} sm={12} md={8} lg={8} xl={8}>
-            <div style={{ padding: "0px 5px" }}>
-              <Form.Item
-                type="text"
-                name="meetDate"
-                value={meetDate}
-                placeholder="2020-08-01"
-                rules={[{ required: true, message: "Введите значение!" }]}
-                label="Дата сбора"
-              >
-                <Input type="date" />
-              </Form.Item>
-            </div>
-          </Col>
-          <Col xs={12} sm={12} md={8} lg={8} xl={8}>
-            <div style={{ padding: "0px 5px" }}>
-              <Form.Item
-                label="Время сбора"
-                placeholder="Время сбора"
-                type="text"
-                name="meetTime"
-                value={meetTime}
-                rules={[{ required: true, message: "Введите значение!" }]}
-              >
-                <Input type="time" />
-              </Form.Item>
-            </div>
-          </Col>
-          <Col flex={8}>
-            <div style={{ padding: "0px 5px" }}>
-              <Form.Item
-                name="meetPlace"
-                value={meetPlace}
-                label="Место сбора"
-                rules={[{ required: true, message: "Введите значение!" }]}
-              >
-                <Input name="meetPlace" />
-              </Form.Item>
-            </div>
-          </Col>
-        </Row>
+          <Form.Item
+            type="text"
+            name="meetDateAndTime"
+            value={meetDate}
+            placeholder="2020-08-01"
+            rules={[{ required: true, message: "Введите значение!" }]}
+          >
+            <Input type="datetime-local" />
+          </Form.Item>
 
-        <Row>
-          <Col flex={9}>
-            <div style={{ padding: "0px 5px" }}>
-              <Form.Item
-                type="text"
-                name="typeOfEvent"
-                label="Тип мероприятия"
-                value={typeOfEvent}
-                rules={[{ required: true, message: "Введите значение!" }]}
-              >
-                <Select name="typeOfEvent" value={typeOfEvent}>
-                  <Option value="Концерт">Концерт</Option>
-                  <Option value="Запись">Запись</Option>
-                  <Option value="Третий курс">Третий курс</Option>
-                  <Option value="Четвертый курс">Четвертый курс</Option>
-                  <Option value="Пятый курс">Пятый курс</Option>
-                </Select>
-              </Form.Item>
-            </div>
-          </Col>
-          <Col flex={8}>
-            <div style={{ padding: "0px 20px" }}>
-              <Form.Item label="Форма одежды" name="cloth" value={cloth}>
-                <Group
-                  options={radio}
-                  onChange={onChange4}
-                  defaultValue={cloth}
-                  optionType="button"
-                  buttonStyle="solid"
-                />
-              </Form.Item>
-            </div>
-          </Col>
-          <Col flex={7}>
-            <div style={{ padding: "0px 20px" }}>
-              <Form.Item label="Количество участников" name="max" value={max}>
-                <Input type="number" style={{width: '70px'}}/>
-              </Form.Item>
-            </div>
-          </Col>
-        </Row>
+        
+        <Form.Item
+          name="meetPlace"
+          value={meetPlace}
+          rules={[{ required: true, message: "Введите значение!" }]}
+        >
+          <Input name="meetPlace" placeholder="Место сбора" />
+        </Form.Item>
 
-        <Row>
-          <Col xs={12} sm={12} md={8} lg={8} xl={8}>
-            <div style={{ padding: "0px 5px" }}>
-              <Form.Item
-                type="text"
-                name="eventDate"
-                placeholder="2020-08-01"
-                value={eventDate}
-                label="Дата проведения"
-                rules={[{ required: true, message: "Введите значение!" }]}
-              >
-                <Input type="date" />
-              </Form.Item>
-            </div>
-          </Col>
-          <Col xs={12} sm={12} md={8} lg={8} xl={8}>
-            <div style={{ padding: "0px 5px" }}>
-              <Form.Item
-                type="text"
-                name="eventTime"
-                value={eventTime}
-                label="Время проведения"
-                placeholder="Время проведения"
-                rules={[{ required: true, message: "Введите значение!" }]}
-              >
-                <Input type="time" />
-              </Form.Item>
-            </div>
-          </Col>
-          <Col flex={8}>
-            <div style={{ padding: "0px 5px" }}>
-              <Form.Item
-                name="eventPlace"
-                label="Место проведения"
-                value={eventPlace}
-                rules={[{ required: true, message: "Введите значение!" }]}
-              >
-                <Input name="eventPlace" />
-              </Form.Item>
-            </div>
-          </Col>
-        </Row>
+        <Divider>Мероприятие</Divider>
 
         <Form.Item
           type="text"
-          label="Описание"
-          name="description"
-          value={description}
+          name="eventDateAndTime"
+          placeholder="2020-08-01"
+          value={eventDate}
+          label="Дата проведения"
+          rules={[{ required: true, message: "Введите значение!" }]}
         >
-          <TextArea name="description" rows={4} />
+          <Input type="datetime-local" />
         </Form.Item>
+
+
+        <Form.Item
+          name="eventPlace"
+          label="Место проведения"
+          value={eventPlace}
+          rules={[{ required: true, message: "Введите значение!" }]}
+        >
+          <Input name="eventPlace" />
+        </Form.Item>
+
+        <Form.Item
+          type="text"
+          name="typeOfEvent"
+          label="Тип мероприятия"
+          value={typeOfEvent}
+          rules={[{ required: true, message: "Введите значение!" }]}
+        >
+          <Select name="typeOfEvent" value={typeOfEvent}>
+            <Option value="Концерт">Концерт</Option>
+            <Option value="Запись">Запись</Option>
+            <Option value="Третий курс">Третий курс</Option>
+            <Option value="Четвертый курс">Четвертый курс</Option>
+            <Option value="Пятый курс">Пятый курс</Option>
+          </Select>
+        </Form.Item>
+
+        <Space>
+          <Form.Item label="Форма одежды" name="cloth" value={cloth}>
+            <Group
+              size="small"
+              options={radio}
+              onChange={onChange4}
+              defaultValue={cloth}
+              optionType="button"
+              buttonStyle="solid"
+            />
+          </Form.Item>
+
+          <Form.Item label="Участников" name="max" value={max}>
+            <InputNumber type="number" />
+          </Form.Item>
+        </Space>
 
         <Form.Item label="Состав исполнителей" name="cast" value={cast}>
           <Select
@@ -252,6 +193,15 @@ const CalendarNewEvent = () => {
             <OptionSel key={"Скрипка"}>Скрипка</OptionSel>
             <OptionSel key={"Гитара"}>Гитара</OptionSel>
           </Select>
+        </Form.Item>
+
+        <Form.Item
+          type="text"
+          label="Описание"
+          name="description"
+          value={description}
+        >
+          <TextArea name="description" rows={4} />
         </Form.Item>
 
         <div
@@ -271,7 +221,7 @@ const CalendarNewEvent = () => {
           </Button>
         </Form.Item>
       </Form>
-
+      <br/> <br/> 
     </div>
   );
 };

@@ -30,25 +30,47 @@ const CalendarApp = () => {
   useEffect(() => {
     fetch("/api/getAllEvents")
       .then((response) => response.json())
-      .then((jsondata) => setEventsCal(jsondata));
+      .then((jsondata) => {setEventsCal(jsondata); console.log(jsondata)});
   }, []);
 
-  console.log(eventsCal);
-
   const Event = ({ event }) => {
-    if (eventsCal)
+    let statusColor;
+    if (eventsCal) {
+      // if (event.status == "Подготовка") {
+      //   statusColor = "green";
+      // }
+      // if (event.status == "Проведен") {
+      //   statusColor = "black";
+      // }
+      // if (event.status == "Готовность") {
+      //   statusColor = "yellow";
+      // }
+      // if (event.status == "Проведен") {
+      //   statusColor = "blue";
+      // }
+      // if (event.status == "Отменен") {
+      //   statusColor = "red";
+      // }
+      // console.log(statusColor)
       return (
         <NavLink
-        style={{ textDecoration: "none", color: "white" }}
-        to={"/Calendar/" + event.id}
-      >
-        <div style={{boxSizing:'border-box'}}>
-      
-          {event.title}
-        </div>
+          style={{
+            textDecoration: "none",
+            color: "white",
+          }}
+          to={"/Calendar/" + String(event.id)}
+        >
+          <div
+            style={{
+              boxSizing: "border-box",
+              //backgroundColor: { statusColor },
+            }}
+          >
+            {event.title}
+          </div>
         </NavLink>
-        
       );
+    }
   };
 
   return (
@@ -67,8 +89,8 @@ const CalendarApp = () => {
             style={{ height: "calc(100vh - 110px)" }}
             localizer={localizer}
             events={eventsCal}
-            startAccessor="meetDate"
-            endAccessor="meetTime"
+            startAccessor="meetDateAndTime"
+            endAccessor="eventDateAndTime"
             components={{
               event: Event,
             }}
@@ -82,7 +104,6 @@ const CalendarApp = () => {
           />
         </TabPane>
         <TabPane tab="Список" key="2">
-          {" "}
           <CalendarList eventsCal={eventsCal} />
         </TabPane>
       </Tabs>

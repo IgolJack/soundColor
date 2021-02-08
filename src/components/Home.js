@@ -28,31 +28,12 @@ class Home extends React.Component {
             </Button>
           </NavLink>
 
-         
-          <NavLink
-            to="/Time"
-            style={{ width: "100%", "text-decoration": "none" }}
-          >
-            <Button block size="large" type="primary">
-              Time
-            </Button>
-          </NavLink>
-
           <NavLink
             to="/GetInfo"
             style={{ width: "100%", "text-decoration": "none" }}
           >
             <Button block size="large" type="primary">
               Проверка сервера
-            </Button>
-          </NavLink>
-
-          <NavLink
-            to="/Li"
-            style={{ width: "100%", "text-decoration": "none" }}
-          >
-            <Button block size="large" type="link">
-              Блок списка студнтов
             </Button>
           </NavLink>
 

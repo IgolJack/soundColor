@@ -13,9 +13,8 @@ import SignUpPage from "./components/registration/signUpPage";
 import HomeTeam from "./components/firebase/get";
 import CalendarNewEvent from "./components/calendar/calendarEvents/calendarNewEvent";
 import BackToHome from "./components/UI/backToHome";
-import WorkWithTime from "./components/email/timePage";
 import getInfoFromServer from "./components/abstract/getInfoFromServer"
-import listOfStudents from "./components/calendar/calendarEvents/infoEventBlocks/listOfStudents"
+import newListOfStudents from "./components/calendar/calendarEvents/infoEventBlocks/newListOfStudent"
 import './SoundColor.css'
 
 const SoundColor = () => {
@@ -45,10 +44,8 @@ const SoundColor = () => {
             />
             <PrivateRoute exact path="/Registration" component={SignUpPage} />
             <PrivateRoute exact path="/Get" component={HomeTeam} />
-            <PrivateRoute exact path="/Time" component={WorkWithTime} />
             <PrivateRoute exact path="/GetInfo" component={getInfoFromServer} />
-            <PrivateRoute exact path="/Li" component={listOfStudents} />
-            
+            <PrivateRoute exact path="/NewList" component={newListOfStudents} />
             <Route component={NotFound} />
           </Switch>
           <BackToHome />
