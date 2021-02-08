@@ -8,44 +8,29 @@ class Home extends React.Component {
     return (
       <div>
         <h1 style={{ textAlign: "center" }}>Меню</h1>
-       
-          <NavLink
-            to="/list"
-            style={{ width: "100%", "text-decoration": "none" }}
-          >
-            <Button block size="large" type="primary">
-              {" "}
-              Список студентов
-            </Button>
-          </NavLink>
 
-          <NavLink
-            to="/Calendar"
-            style={{ width: "100%", "text-decoration": "none" }}
-          >
-            <Button block size="large" type="primary">
-              Календарь
-            </Button>
-          </NavLink>
-
-          <NavLink
-            to="/GetInfo"
-            style={{ width: "100%", "text-decoration": "none" }}
-          >
-            <Button block size="large" type="primary">
-              Проверка сервера
-            </Button>
-          </NavLink>
-
-          <Button
-            type="danger"
-            block
-            size="large"
-            onClick={() => auth.signOut()}
-          >
-            Выйти
+        <NavLink
+          to="/list"
+          style={{ width: "100%", "text-decoration": "none" }}
+        >
+          <Button block size="large" type="primary">
+            {" "}
+            Список студентов
           </Button>
-      
+        </NavLink>
+
+        <NavLink
+          to="/Calendar"
+          style={{ width: "100%", "text-decoration": "none" }}
+        >
+          <Button block size="large" type="primary">
+            Календарь
+          </Button>
+        </NavLink>
+
+        <Button type="danger" block size="large" onClick={() => auth.signOut()}>
+          Выйти
+        </Button>
       </div>
     );
   }

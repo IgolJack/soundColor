@@ -4,23 +4,32 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { NavLink } from "react-router-dom";
 import moment from "moment";
 import ToPageButton from "../UI/toPageButton";
-import { Tabs } from "antd";
+import { Tabs, Button } from "antd";
 
-import './calendar.css'
+import "./calendar.css";
 import CalendarList from "./calendarList/calendarList";
 const TabPane = Tabs.TabPane;
 
 moment.updateLocale("ru", {
-  weekdaysShort : ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
-  months : [
-    "Январь", "Февраль", "Март", "Апрель", "May", "Июнь", "Июль",
-    "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
-],
+  weekdaysShort: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+  months: [
+    "Январь",
+    "Февраль",
+    "Март",
+    "Апрель",
+    "May",
+    "Июнь",
+    "Июль",
+    "Август",
+    "Сентябрь",
+    "Октябрь",
+    "Ноябрь",
+    "Декабрь",
+  ],
   week: {
     dow: 1,
     doy: 1,
   },
- 
 });
 const localizer = momentLocalizer(moment);
 
@@ -30,7 +39,10 @@ const CalendarApp = () => {
   useEffect(() => {
     fetch("/api/getAllEvents")
       .then((response) => response.json())
-      .then((jsondata) => {setEventsCal(jsondata); console.log(jsondata)});
+      .then((jsondata) => {
+        setEventsCal(jsondata);
+        console.log(jsondata);
+      });
   }, []);
 
   const Event = ({ event }) => {
@@ -73,15 +85,76 @@ const CalendarApp = () => {
     }
   };
 
+  const operations = (
+    <ToPageButton
+      size="small"
+      type="link"
+      toPage="/Registration/AddEvent"
+      Label="Создать меропр."
+    />
+  );
+
+  const CustomToolbar = (toolbar) => {
+    const goToBack = () => {
+      toolbar.date.setMonth(toolbar.date.getMonth() - 1);
+      toolbar.onNavigate("prev");
+    };
+
+    const goToNext = () => {
+      toolbar.date.setMonth(toolbar.date.getMonth() + 1);
+      toolbar.onNavigate("next");
+    };
+
+    const goToCurrent = () => {
+      const now = new Date();
+      toolbar.date.setMonth(now.getMonth());
+      toolbar.date.setYear(now.getFullYear());
+      toolbar.onNavigate("current");
+    };
+
+    const label = () => {
+      const date = moment(toolbar.date);
+      return (
+        <span>
+          
+            <b>{date.format("MMMM")}</b> {date.format("YYYY")}
+          
+
+          <Button
+            style={{ float: "right" }}
+            type="link"
+            size="small"
+            onClick={goToNext}
+          >
+            &#8250;
+          </Button>
+          <Button
+            style={{ float: "right" }}
+            type="link"
+            size="small"
+            onClick={goToCurrent}
+          >
+            Сегодня
+          </Button>
+          <Button
+            style={{ float: "right" }}
+            type="link"
+            size="small"
+            onClick={goToBack}
+          >
+            &#8249;
+          </Button>
+        </span>
+      );
+    };
+
+    return label();
+  };
+
   return (
     <div>
-      <ToPageButton
-        toPage="/Registration/AddEvent"
-        Label="Создать мероприятие"
-      />
-
-      <Tabs defaultActiveKey="1">
-        <TabPane tab="Календарь" key="1">
+      <Tabs size="small" defaultActiveKey="1" tabBarExtraContent={operations}>
+        <TabPane  tab="Календарь" key="1">
           {" "}
           <Calendar
             popup
@@ -92,15 +165,10 @@ const CalendarApp = () => {
             startAccessor="meetDateAndTime"
             endAccessor="eventDateAndTime"
             components={{
+              toolbar: CustomToolbar,
               event: Event,
             }}
-            messages={{
-              month: "My month word",
-              day: "My day word",
-              today: "Сегодня",
-              previous: "<",
-              next: ">",
-            }}
+
           />
         </TabPane>
         <TabPane tab="Список" key="2">

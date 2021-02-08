@@ -2,9 +2,8 @@ const express = require("express");
 const path = require("path");
 const nodemailer = require("nodemailer");
 const schedule = require('node-schedule');
+const { createCanvas } = require('canvas')
 
-
-let lastId
 
 require("dotenv").config({ path: __dirname + "/variables.env" });
 
@@ -17,10 +16,12 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 const db = admin.firestore();
+//const firebase = require("firebase");
 
 const bodyParser = require("body-parser");
-const { request } = require("express");
+const { request, response } = require("express");
 const { get } = require("http");
+const { Console } = require("console");
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -31,7 +32,8 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 
 
-
+let lastId 
+let studentsLastId 
 const getLastId = () => {
   let last = 0;
   db.collection("eventsCalendar")
@@ -43,11 +45,34 @@ const getLastId = () => {
        last = id
       }
     })
-    lastId = last + 1
-  
+    //console.log(last)
+    return lastId = last + 1
+    
   })
 }
+
+const StudentGetLastId = () => {
+  let last = 0;
+  db.collection("students")
+  .get()
+  .then((data) => {
+    data.forEach((doc) => {
+      let id = parseInt(doc.data().id)
+      if(id > last){
+       last = id
+      }
+    })
+    //console.log(last)
+    return studentsLastId = last + 1
+    
+  })
+}
+
+
+
 getLastId()
+
+StudentGetLastId()
 
 //======================================================================//
 //=============================GET=FIREBASE=============================//
@@ -290,7 +315,6 @@ app.get("/api/addEquip", (req, res) => {
     });
 });
 
-
 //====================обновление members in event================//
 app.get("/api/newListOfMembersInEvent", (request, response) => {
   let eventMembers = JSON.parse(request.query.eventMembers);
@@ -306,7 +330,6 @@ app.get("/api/newListOfMembersInEvent", (request, response) => {
     });
 });
 
-
 app.get("/api/pipi", (request, response) => {
 
   db.collection("eventsCalendar").doc("3")
@@ -318,7 +341,51 @@ app.get("/api/pipi", (request, response) => {
  
 })
 
-  
+
+app.get("/api/createStudent", (request, response) => {
+  let student = JSON.parse(request.query.student);
+  id = studentsLastId
+  console.log(id)
+  // admin.auth().createUser({
+  //   email: student.email,
+  //   password: student.password,
+  //   displayName: student.name,
+  // })
+  //     .then(function (result) {
+  //       //console.log(result)
+  //       uid = result.uid
+  //       console.log(uid)
+  //     })
+  //     uid &&
+      db.collection("students")
+        .doc(String(id))
+        .set({
+          email: student.email,
+          password: student.password,
+          name: student.name,
+          lateness: student.lateness || 0,
+          lvl: student.lvl || 0,
+          missed: student.missed || 0,
+          disgrace: student.disgrace || 0,
+          responsible: student.responsible || 0,
+          concert: student.concert || 0,
+          equipment: student.equipment || 0,
+          count: student.count || 0,
+          course: student.course || 0,
+          discharges: student.discharges || 0,
+          exchange: student.exchange || 0,
+          //uid: uid,
+          id: id,
+        })
+        .then(function () {
+          let str = "success"
+          return response.json(str)
+        })
+        .catch((err) => {
+          console.error(err);
+          return response.status(500).json({ error: err.code });
+        })
+})
 
 
 
@@ -392,8 +459,21 @@ app.get("/api/pipi", (request, response) => {
 
 
 
-
-
+    const width = 1200
+    const height = 600
+    
+    const canvas = createCanvas(width, height)
+    const context = canvas.getContext('2d')
+    context.fillStyle = '#fff'
+    context.fillRect(0, 0, width, height)
+    
+    const name = 'Hello, World!'
+    const pass = ''
+    context.font = 'bold 70pt Sans'
+    context.textAlign = 'center'
+    context.fillStyle = '#fff'
+    context.fillText(name, 600, 170)
+    context.fillText(pass, 600, 300)
 
 
 

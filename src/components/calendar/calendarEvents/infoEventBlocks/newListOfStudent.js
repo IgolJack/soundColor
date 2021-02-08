@@ -85,6 +85,9 @@ class NewListOfStudents extends React.Component {
           style={{ borderRadius: "10px" }}
         >
           {this.state.membersList}
+
+
+          
         </Panel>
       </Collapse>
     );

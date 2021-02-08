@@ -1,19 +1,7 @@
 import React, { useCallback, useState } from "react";
-import { auth, db } from "../firebase/firebase";
-import {
-  Form,
-  Input,
-  Button,
-  message,
-  Select,
-  AutoComplete,
-  Collapse,
-} from "antd";
+import { Form, Input, Button, message, Select, AutoComplete } from "antd";
 import { UserOutlined, LockOutlined, ToolTwoTone } from "@ant-design/icons";
-
 const { Option } = Select;
-const { Panel } = Collapse;
-
 const layout = {
   labelCol: { span: 0 },
   wrapperCol: { span: 0 },
@@ -54,6 +42,7 @@ const Password = {
       .join("");
   },
 };
+
 const SignUpPage = (props) => {
   const [form] = Form.useForm();
   let password = "";
@@ -70,61 +59,33 @@ const SignUpPage = (props) => {
   let count = "0";
   let exchange = "0";
   let course = "Первый курс";
-  let uid = "";
-  const [lastId, setLastId] = useState(localStorage.getItem("lastId"));
+
   const [result, setResult] = useState([]);
+
+  const onClipboardPass = (pass, email) => {
+    navigator.clipboard
+      .writeText("Email: " + email + " | Password: " + pass)
+      .then(() => {
+        message.success("Пароль был загружен в буфер обмена!", 5);
+      })
+      .catch((err) => {
+        console.log("Something went wrong", err);
+      });
+  };
 
   const succes = () => {
     message.success("Студент успешно создан", 2);
+    onClipboardPass(
+      form.getFieldValue("password"),
+      form.getFieldValue("email")
+    );
     form.resetFields();
   };
-  const succesRed = () => {
-    message.info("Регистрация прошла успешно");
-  };
+
   const errorRed = (error) => {
     message.error(String(error));
   };
-  const handleLogin = useCallback(async (values) => {
-    try {
-      await auth
-        .createUserWithEmailAndPassword(values.email, values.password)
-        .then(function (result) {
-          uid = result.user.uid;
-          succesRed();
-          return result.user.updateProfile({
-            displayName: values.name,
-          });
-        });
-      localStorage.setItem("lastId", Number(lastId) + 1);
-      setLastId(localStorage.getItem("lastId"));
 
-      db.collection("students")
-        .doc(localStorage.getItem("lastId"))
-        .set({
-          email: form.getFieldValue("email"),
-          password: form.getFieldValue("password"),
-          name: form.getFieldValue("name"),
-          lateness: form.getFieldValue("lateness"),
-          lvl: form.getFieldValue("lvl"),
-          missed: form.getFieldValue("missed"),
-          disgrace: form.getFieldValue("disgrace"),
-          responsible: form.getFieldValue("responsible"),
-          concert: form.getFieldValue("concert"),
-          equipment: form.getFieldValue("equipment"),
-          count: form.getFieldValue("count"),
-          course: form.getFieldValue("course"),
-          discharges: form.getFieldValue("discharges"),
-          exchange: form.getFieldValue("exchange"),
-          uid: uid,
-          id: localStorage.getItem("lastId"),
-        })
-        .then(function () {
-          succes();
-        });
-    } catch (error) {
-      errorRed(error);
-    }
-  });
   const onGenPass = () => {
     form.setFieldsValue({
       password: Password.generate(8),
@@ -147,8 +108,40 @@ const SignUpPage = (props) => {
           ]
     );
   };
+
+  const handleLogin = () => {
+    let student = {
+      email: form.getFieldValue("email"),
+      password: form.getFieldValue("password"),
+      name: form.getFieldValue("name"),
+      lateness: form.getFieldValue("lateness") || 0,
+      lvl: form.getFieldValue("lvl") || 0,
+      missed: form.getFieldValue("missed") || 0,
+      disgrace: form.getFieldValue("disgrace") || 0,
+      responsible: form.getFieldValue("responsible") || 0,
+      concert: form.getFieldValue("concert") || 0,
+      equipment: form.getFieldValue("equipment") || 0,
+      count: form.getFieldValue("count") || 0,
+      course: form.getFieldValue("course") || 0,
+      discharges: form.getFieldValue("discharges") || 0,
+      exchange: form.getFieldValue("exchange") || 0,
+    };
+    //console.log(student)
+    let e = JSON.stringify(student);
+    //console.log(e)
+    fetch(`/api/createStudent?student=${e}`)
+      .then((response) => response.json())
+      .then((jsondata) => {
+        if (jsondata == "success") {
+          succes();
+        } else {
+          errorRed();
+        }
+      });
+  };
+
   return (
-    <div style={{ padding: "15px" }}>
+    <div>
       <br />
       <Form
         form={form}
@@ -271,13 +264,7 @@ const SignUpPage = (props) => {
             flex: "auto",
           }}
         >
-          <Form.Item
-            name="lvl"
-            hasFeedback
-            value={lvl}
-            style={{ margin: 5 }}
-            rules={[{ required: true, message: "Введите уровень!" }]}
-          >
+          <Form.Item name="lvl" value={lvl} style={{ margin: 5 }}>
             <Input
               type="number"
               style={{ width: 150 }}
@@ -292,7 +279,7 @@ const SignUpPage = (props) => {
             <Input
               type="number"
               style={{ width: 150 }}
-              addonBefore="Опозданий"
+              addonBefore="Опазданий"
               name="lateness"
               min={0}
               defaultValue={lateness}
@@ -398,6 +385,7 @@ const SignUpPage = (props) => {
           </Button>
         </Form.Item>
       </Form>
+      <br />
     </div>
   );
 };
