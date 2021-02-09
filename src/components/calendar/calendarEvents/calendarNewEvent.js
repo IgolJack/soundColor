@@ -3,8 +3,6 @@ import {
   Form,
   Input,
   Button,
-  Row,
-  Col,
   Select,
   Radio,
   Space,
@@ -50,7 +48,7 @@ const CalendarNewEvent = () => {
 
   const addNewEvent = (values) => {
     onFinish(values);
- 
+
     let event = {
       title: form.getFieldValue("title"),
       meetDateAndTime: String(form.getFieldValue("meetDateAndTime")),
@@ -62,7 +60,6 @@ const CalendarNewEvent = () => {
       eventPlace: form.getFieldValue("eventPlace"),
       cast: form.getFieldValue("cast"),
       max: form.getFieldValue("max"),
-      createdDate: new Date(),
     };
 
     setCalendarEvent(event);
@@ -87,7 +84,6 @@ const CalendarNewEvent = () => {
       >
         Добавить мероприятие
       </h3>
-
       <Form
         form={form}
         layout="auto"
@@ -107,17 +103,16 @@ const CalendarNewEvent = () => {
         </Form.Item>
         <Divider>Дата и время сбора</Divider>
 
-          <Form.Item
-            type="text"
-            name="meetDateAndTime"
-            value={meetDate}
-            placeholder="2020-08-01"
-            rules={[{ required: true, message: "Введите значение!" }]}
-          >
-            <Input type="datetime-local" />
-          </Form.Item>
+        <Form.Item
+          type="text"
+          name="meetDateAndTime"
+          value={meetDate}
+          placeholder="2020-08-01"
+          rules={[{ required: true, message: "Введите значение!" }]}
+        >
+          <Input type="datetime-local" />
+        </Form.Item>
 
-        
         <Form.Item
           name="meetPlace"
           value={meetPlace}
@@ -138,7 +133,6 @@ const CalendarNewEvent = () => {
         >
           <Input type="datetime-local" />
         </Form.Item>
-
 
         <Form.Item
           name="eventPlace"
@@ -221,7 +215,7 @@ const CalendarNewEvent = () => {
           </Button>
         </Form.Item>
       </Form>
-      <br/> <br/> 
+      <br /> <br />
     </div>
   );
 };

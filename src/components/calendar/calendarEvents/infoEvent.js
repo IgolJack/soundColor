@@ -1,21 +1,16 @@
 import React from "react";
 import { db } from "../../firebase/firebase";
-import * as firebase from "firebase";
 import ListOfStudents from "./infoEventBlocks/listOfStudents";
 import MeetTimeAndDate from "./infoEventBlocks/meetTimeAndDate";
 import Cloth from "./infoEventBlocks/cloth";
 import CloseEvent from "./infoEventBlocks/closeEvent"
-import { Skeleton, Select, Tag, Button } from "antd";
-import {
-  studentsWithPass,
-  GetInformationWithPass,
-} from "../../abstract/universalFirebase";
+import { Skeleton, Tag, Button } from "antd";
 import Description from "./infoEventBlocks/description";
 import EventTimeAndDate from "./infoEventBlocks/eventTimeAndDate";
 import Equipment from "./equipment/equipment";
 import NewListOfStudents from "./infoEventBlocks/newListOfStudent";
 
-GetInformationWithPass();
+
 
 
 export default class InfoEvent extends React.Component {

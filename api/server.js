@@ -1,9 +1,7 @@
 const express = require("express");
 const path = require("path");
 const nodemailer = require("nodemailer");
-const schedule = require('node-schedule');
-
-
+const schedule = require("node-schedule");
 
 require("dotenv").config({ path: __dirname + "/variables.env" });
 
@@ -26,14 +24,13 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(express.static(__dirname));
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, "build")));
 
 
-
-
-
+let listOfPreEvents = []
 let lastId 
 let studentsLastId 
+
 const getLastId = () => {
   let last = 0;
   db.collection("eventsCalendar")
@@ -68,10 +65,7 @@ const StudentGetLastId = () => {
   })
 }
 
-
-
 getLastId()
-
 StudentGetLastId()
 
 //======================================================================//
@@ -208,6 +202,7 @@ app.get("/api/getStudents", (request, response) => {
 //====================создание calendar events================//
 app.get("/api/createEvent", (request, response) => {
   let event = JSON.parse(request.query.event);
+  let createdDate = new Date()
   console.log(event)
   getLastId()
   console.log(lastId)
@@ -228,9 +223,12 @@ app.get("/api/createEvent", (request, response) => {
       cast:  event.cast,
       max: event.max,
       status: "Подготовка",
-      createdDate:new Date(event.createdDate),
+      createdDate: createdDate
     })
-    .then(console.log("Удачно"))
+    .then(() => {
+      console.log("Удачно")
+      op.push(new Timerio(2, String(lastId), createdDate));
+    })
     .catch(function (error) {
       console.log("Error getting documents: ", error);
     });
@@ -297,7 +295,6 @@ app.get("/api/getEventByID", (request, response) => {
     });
 });
 
-
 //оборудование
 app.get("/api/addEquip", (req, res) => {
   let id = String(JSON.parse(req.query.id));
@@ -329,18 +326,6 @@ app.get("/api/newListOfMembersInEvent", (request, response) => {
       console.log("Error getting documents: ", error);
     });
 });
-
-app.get("/api/pipi", (request, response) => {
-
-  db.collection("eventsCalendar").doc("3")
-    .get((date) => {
-      let events = date.data()
-      console.log(events)
-      return response.send(events)
-    })
- 
-})
-
 
 app.get("/api/createStudent", (request, response) => {
   let student = JSON.parse(request.query.student);
@@ -388,82 +373,128 @@ app.get("/api/createStudent", (request, response) => {
 })
 
 
+const rule = new schedule.RecurrenceRule();
+
+let op = [];
+
+function onServerStartEvents() {
+  let events = [];
+  db.collection("eventsCalendar")
+    .where("status", "==", "Подготовка")
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        events.push({
+          id: doc.id,
+          date: doc.data().createdDate && doc.data().createdDate.toDate()
+        });
+      });
+    })
+    .then(() => {
+      listOfPreEvents = events;
+      listOfPreEvents.forEach((event) => {
+        console.log(event)
+        op.push(new Timerio(2, event.id, event.date));
+        console.log(op)
+      })
+      
+    });
+}
+onServerStartEvents(); 
+
+
+
+function Timerio(onDay, doc, createDate) {
+  let one = createDate
+  let two = new Date(one.setDate(one.getDate() + onDay))
+  let year = two.getFullYear()
+  let month = two.getMonth() 
+  let day = two.getDate() 
+  let hour = two.getHours() || 12
+  let minu = two.getMinutes() || 0
+   
+  rule.year = year;
+  rule.month = month;
+  rule.date = day;
+  rule.hour = hour;
+  rule.minute = minu;
+  
+  console.log(rule)
+  schedule.scheduleJob(rule, function () {
+    let members;
+    let suc = false;
+
+    db.collection("eventsCalendar")
+      .doc(String(doc))
+      .get()
+      .then((data) => {
+        if (data.data().status == "Подготовка" && data.data().members.length > 0) {
+          let max = data.data().members.length;
+          let min = 1;
+          members = data.data().members;
+          let succesor = Math.floor(Math.random() * (max - min + 1)) + min;
+          members[succesor - 1].senior = true;
+          suc = true;
+          console.log(members)
+        }
+      })
+     .then(() => {
+      if (suc == true && members) {
+        db.collection("eventsCalendar")
+          .doc(String(doc))
+          .update({
+            members: members,
+            status: "Готовность",
+          })
+          .then(
+            console.log(
+              "Готовность и отвественный для мероприятия ",
+              doc,
+              " выставленны."
+            )
+         );
+      }
+     })
+  });
+}
 
 
 
 
 
-// const rule = new schedule.RecurrenceRule();
-// rule.second = 5;
-
-// let op = [];
-
-// for (let index = 3; index < 4; index++) {
-//   op.push(new Timerio(index, "3"));
-// }
-// console.log(op);
-
-// function Timerio(day, doc) {
-//   schedule.scheduleJob(rule, function () {
-//     let one = new Date();
-//     let two = new Date(one.setDate(one.getDate() + day));
-//     console.log(two);
-
-//     let succesor;
-//     let members;
-//     db.collection("eventsCalendar")
-//       .doc("3")
-//       .get()
-//       .then((data) => {
-//         let max = data.data().members.length;
-//         members = data.data().members;
-//         let min = 1;
-//         succesor = Math.floor(Math.random() * (max - min + 1)) + min;
-//         console.log(succesor);
-//         console.log(members[succesor - 1].senior);
-//         console.log((members[succesor - 1].senior = true));
-//       })
-//       .then(() => Twoooo());
-
-//     function Twoooo() {
-//       db.collection("eventsCalendar").doc("3").update({
-//         members: members,
-//       });
-//     }
-
-//     db.collection("eventsCalendar")
-//       .doc(doc)
-//       .update({
-//         status: "Готовность",
-//       })
-//       .then(
-//         console.log(
-//           "Готовность и отвественный для мероприятия ",
-//           doc,
-//           " выставленны."
-//         )
-//       )
-//       .catch(function (error) {
-//         console.log("Error getting documents: ", error);
-//       });
-//   });
-// }
 
 
 
-//TO-DO получить last id students 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TO-DO получить last id students
 
 app.get("/api/time", (request, response) => {
   let id = request.query.id;
-  console.log(id)
-  const rocks = id => {
-    console.log(id + ' rocks');
+  console.log(id);
+  const rocks = (id) => {
+    console.log(id + " rocks");
   };
- setTimeout(rocks, id, 'Node.js');
-
-  
-  
+  setTimeout(rocks, id, "Node.js");
 });
 
 
