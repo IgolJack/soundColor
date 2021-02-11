@@ -415,7 +415,7 @@ function Timerio(onDay, doc, createDate) {
   rule.year = year;
   rule.month = month;
   rule.date = day;
-  rule.hour = hour;
+  rule.hour = hour + 3;
   rule.minute = minu + 1;
   
   console.log(rule)
