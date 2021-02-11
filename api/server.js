@@ -4,12 +4,10 @@ const nodemailer = require("nodemailer");
 const schedule = require("node-schedule");
 
 require("dotenv").config({ path: __dirname + "/variables.env" });
-
 const sound_pass = process.env.SOUNDCOLOR_PASS;
 const google = JSON.parse(process.env.GOOGLE);
 const admin = require("firebase-admin");
 const serviceAccount = google;
-
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
@@ -23,9 +21,9 @@ const { Console } = require("console");
 const app = express();
 const port = process.env.PORT || 5000;
 
+
 app.use(express.static(__dirname));
 app.use(express.static(path.join(__dirname, "build")));
-
 
 let listOfPreEvents = []
 let lastId 
@@ -405,8 +403,9 @@ onServerStartEvents();
 
 
 function Timerio(onDay, doc, createDate) {
-  let one = createDate
-  let two = new Date(one.setDate(one.getDate() + onDay))
+  //let one = createDate
+  let one = new Date()
+  let two = new Date(one.setDate(one.getDate() )) //+ onDay
   let year = two.getFullYear()
   let month = two.getMonth() 
   let day = two.getDate() 
@@ -417,7 +416,7 @@ function Timerio(onDay, doc, createDate) {
   rule.month = month;
   rule.date = day;
   rule.hour = hour;
-  rule.minute = minu;
+  rule.minute = minu + 1;
   
   console.log(rule)
   schedule.scheduleJob(rule, function () {
@@ -428,6 +427,7 @@ function Timerio(onDay, doc, createDate) {
       .doc(String(doc))
       .get()
       .then((data) => {
+        console.log(data.data().members.length)
         if (data.data().status == "Подготовка" && data.data().members.length > 0) {
           let max = data.data().members.length;
           let min = 1;
