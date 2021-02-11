@@ -1,7 +1,8 @@
-const express = require("express");
+
 const path = require("path");
 const nodemailer = require("nodemailer");
 const schedule = require("node-schedule");
+
 
 require("dotenv").config({ path: __dirname + "/variables.env" });
 const sound_pass = process.env.SOUNDCOLOR_PASS;
@@ -14,16 +15,24 @@ admin.initializeApp({
 const db = admin.firestore();
 //const firebase = require("firebase");
 
-const bodyParser = require("body-parser");
-const { request, response } = require("express");
-const { get } = require("http");
-const { Console } = require("console");
-const app = express();
+
+const app = require('express')();
+const http = require('http').Server(app);
 const port = process.env.PORT || 5000;
+const io = require('socket.io')(http);
 
+io.on('connection', (socket) => {
+  console.log('a user connected');
+});
 
-app.use(express.static(__dirname));
-app.use(express.static(path.join(__dirname, "build")));
+io.on('connection', (client) => {
+  client.on('subscribeToTimer', (interval) => {
+    console.log('client is subscribing to timer with interval ', interval);
+    setInterval(() => {
+      client.emit('timer', new Date());
+    }, interval);
+  });
+});
 
 let listOfPreEvents = []
 let lastId 
@@ -371,92 +380,94 @@ app.get("/api/createStudent", (request, response) => {
 })
 
 
-const rule = new schedule.RecurrenceRule();
+// const rule = new schedule.RecurrenceRule();
 
-let op = [];
+// let op = [];
 
-function onServerStartEvents() {
-  let events = [];
-  db.collection("eventsCalendar")
-    .where("status", "==", "Подготовка")
-    .get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        events.push({
-          id: doc.id,
-          date: doc.data().createdDate && doc.data().createdDate.toDate()
-        });
-      });
-    })
-    .then(() => {
-      listOfPreEvents = events;
-      listOfPreEvents.forEach((event) => {
-        console.log(event)
-        op.push(new Timerio(2, event.id, event.date));
-        console.log(op)
-      })
+// function onServerStartEvents() {
+//   let events = [];
+//   db.collection("eventsCalendar")
+//     .where("status", "==", "Подготовка")
+//     .get()
+//     .then((querySnapshot) => {
+//       querySnapshot.forEach((doc) => {
+//         events.push({
+//           id: doc.id,
+//           date: doc.data().createdDate && doc.data().createdDate.toDate()
+//         });
+//       });
+//     })
+//     .then(() => {
+//       listOfPreEvents = events;
+//       listOfPreEvents.forEach((event) => {
+//         console.log(event)
+//         op.push(new Timerio(2, event.id, event.date));
+//         console.log(op)
+//       })
       
-    });
-}
-onServerStartEvents(); 
+//     });
+// }
+// onServerStartEvents(); 
 
 
 
-function Timerio(onDay, doc, createDate) {
-  //let one = createDate
-  let one = new Date()
-  let two = new Date(one.setDate(one.getDate() )) //+ onDay
-  let year = two.getFullYear()
-  let month = two.getMonth() 
-  let day = two.getDate() 
-  let hour = two.getHours() || 12
-  let minu = two.getMinutes() || 0
+// function Timerio(onDay, doc, createDate) {
+//   //let one = createDate
+//   let one = new Date()
+//   let two = new Date(one.setDate(one.getDate() )) //+ onDay
+//   let year = two.getFullYear()
+//   let month = two.getMonth() 
+//   let day = two.getDate() 
+//   let hour = two.getHours() || 12
+//   let minu = two.getMinutes() || 0
    
-  rule.year = year;
-  rule.month = month;
-  rule.date = day;
-  rule.hour = hour + 3;
-  rule.minute = minu + 1;
+//   rule.year = year;
+//   rule.month = month;
+//   rule.date = day;
+//   rule.hour = hour + 3;
+//   rule.minute = minu + 1;
   
-  console.log(rule)
-  schedule.scheduleJob(rule, function () {
-    let members;
-    let suc = false;
+//  // console.log(rule)
+//   schedule.scheduleJob(rule, function () {
 
-    db.collection("eventsCalendar")
-      .doc(String(doc))
-      .get()
-      .then((data) => {
-        console.log(data.data().members.length)
-        if (data.data().status == "Подготовка" && data.data().members.length > 0) {
-          let max = data.data().members.length;
-          let min = 1;
-          members = data.data().members;
-          let succesor = Math.floor(Math.random() * (max - min + 1)) + min;
-          members[succesor - 1].senior = true;
-          suc = true;
-          console.log(members)
-        }
-      })
-     .then(() => {
-      if (suc == true && members) {
-        db.collection("eventsCalendar")
-          .doc(String(doc))
-          .update({
-            members: members,
-            status: "Готовность",
-          })
-          .then(
-            console.log(
-              "Готовность и отвественный для мероприятия ",
-              doc,
-              " выставленны."
-            )
-         );
-      }
-     })
-  });
-}
+//     //console.log("Вошло в таймер")
+//     let members;
+//     let suc = false;
+
+//     db.collection("eventsCalendar")
+//       .doc(String(doc))
+//       .get()
+//       .then((data) => {
+//         // console.log(data.data().members.length)
+//         // if (data.data().status == "Подготовка" && data.data().members.length > 0) {
+//         //   let max = data.data().members.length;
+//         //   let min = 1;
+//         //   members = data.data().members;
+//         //   let succesor = Math.floor(Math.random() * (max - min + 1)) + min;
+//         //   members[succesor - 1].senior = true;
+//         //   suc = true;
+//         //   console.log(members)
+//         // }
+//       })
+//       .then(() => {
+//     //   if (suc == true && members) {
+//     //     db.collection("eventsCalendar")
+//     //       .doc(String(doc))
+//     //       .update({
+//     //         members: members,
+//     //         status: "Готовность",
+//     //       })
+//     //       .then(
+//     //         console.log(
+//     //           "Готовность и отвественный для мероприятия ",
+//     //           doc,
+//     //           " выставленны."
+//     //         )
+//     //      );
+//     //   }
+//      })
+//   });
+// }
 
 
 
@@ -584,6 +595,6 @@ app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
+http.listen(port, () => console.log(`Listening on port ${port}`));
 
 
-app.listen(port, () => console.log(`Listening on port ${port}`));

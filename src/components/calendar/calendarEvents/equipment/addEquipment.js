@@ -1,18 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../../../firebase/firebase";
 import * as firebase from "firebase";
-import {
-  Cascader,
-  Collapse,
-  InputNumber,
-  Button,
-  Form,
-  Space,
-  message,
-} from "antd";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { max } from "moment";
-const { Panel } = Collapse;
+import { Cascader, InputNumber, Button, Form, Space, message } from "antd";
+import { MinusCircleOutlined, SearchOutlined } from "@ant-design/icons";
 
 function useEquipment() {
   const [equip, setEquip] = useState([]);
@@ -102,7 +92,7 @@ const AddEquipment = (props) => {
           name: firebase.auth().currentUser.displayName,
         });
       }
-      addNewEquip(props.id, equipData)
+      addNewEquip(props.id, equipData);
       message.success("Ваше оборудование сохранено!");
     }
     console.log(equipData);
@@ -110,10 +100,9 @@ const AddEquipment = (props) => {
   };
 
   const addNewEquip = async (id, equipData) => {
-    let equip = JSON.stringify(equipData)
-    fetch(`/api/addEquip?id=${id}&equipment=${equip}`)
+    let equip = JSON.stringify(equipData);
+    fetch(`/api/addEquip?id=${id}&equipment=${equip}`);
   };
-
 
   const onChange = () => {
     //обнуление
@@ -234,8 +223,9 @@ const AddEquipment = (props) => {
                     add();
                   }}
                   block
+                  icon={<SearchOutlined />}
                 >
-                  <PlusOutlined /> Добавить поле
+                  Добавить поле
                 </Button>
               </Form.Item>
             </div>
@@ -244,7 +234,7 @@ const AddEquipment = (props) => {
       </Form.List>
 
       <Form.Item>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" block htmlType="submit">
           Добавить выбранное
         </Button>
       </Form.Item>

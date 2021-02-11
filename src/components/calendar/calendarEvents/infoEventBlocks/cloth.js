@@ -11,7 +11,7 @@ class Cloth extends React.Component {
 
   render() {
     let cloth;
-    if (this.state.cloth == "Парадная") {
+    if (this.state.cloth === "Парадная") {
       cloth = <span style={{ color: "red" }}>{this.state.cloth}</span>;
     }
     return (

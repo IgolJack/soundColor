@@ -27,8 +27,7 @@ class SearchFilter extends Component {
         name="searchStudent"
         placeholder="Найти студента"
         variant="outlined"
-        size="Large"
-        fullWidth
+       
         value={this.state.searchStudent}
         onChange={this.search}
       />

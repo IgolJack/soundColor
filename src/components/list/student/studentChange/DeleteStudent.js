@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import { db } from "../../../firebase/firebase";
-import Modal from "react-bootstrap/Modal";
-import { Button } from "antd";
-
+import { Button, Modal} from "antd";
 import { DeleteTwoTone} from "@ant-design/icons";
+
 class DeleteStudent extends Component {
   constructor(props) {
     super(props);

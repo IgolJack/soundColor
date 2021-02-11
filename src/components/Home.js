@@ -11,7 +11,7 @@ class Home extends React.Component {
 
         <NavLink
           to="/list"
-          style={{ width: "100%", "text-decoration": "none" }}
+          style={{ width: "100%", "textDecoration": "none" }}
         >
           <Button block size="large" type="primary">
             {" "}
@@ -21,7 +21,7 @@ class Home extends React.Component {
 
         <NavLink
           to="/Calendar"
-          style={{ width: "100%", "text-decoration": "none" }}
+          style={{ width: "100%", "textDecoration": "none" }}
         >
           <Button block size="large" type="primary">
             Календарь

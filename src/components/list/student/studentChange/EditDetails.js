@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { db } from '../../../firebase/firebase'
-import Modal from 'react-bootstrap/Modal'
-import {Button} from "react-bootstrap";
-import Form from "react-bootstrap/Form";
+import {Button, Form, Modal} from "antd"
 import { EditTwoTone } from "@ant-design/icons";
 class EditDetails extends Component {
     constructor(props) {

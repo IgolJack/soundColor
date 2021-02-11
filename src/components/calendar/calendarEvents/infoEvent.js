@@ -94,7 +94,7 @@ export default class InfoEvent extends React.Component {
           <span style={{ fontSize: '18px', verticalAlign: 'center' }}> <Tag color="red" >{this.state.event.typeOfEvent}</Tag>{this.state.event.title}</span>
 
           <span style={{ textAlign: 'right' }}>{this.state.cast.map((cast) => (
-            <Tag color="cyan" style={{ fontWeight: 200 }}>{cast}</Tag>
+            <Tag color="cyan" key={cast + new Date()} style={{ fontWeight: 200 }}>{cast}</Tag>
           ))} </span>
 
           <Cloth cloth={this.state.event.cloth} />

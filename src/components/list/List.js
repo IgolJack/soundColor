@@ -3,8 +3,7 @@ import { db } from "../firebase/firebase";
 import PropertyFilter from "./student/filter/PropertyFilter";
 import Students from "./student/Students";
 import { Link } from "react-router-dom";
-import Navbar from "react-bootstrap/Navbar";
-import { Button, Skeleton } from "antd";
+import { Button, Skeleton, PageHeader } from "antd";
 import StudentList from "./student/studentChange/StudentList";
 import { Tabs } from "antd";
 import SearchFilter from "./student/filter/SearchFilter";
@@ -19,8 +18,8 @@ class List extends React.Component {
       lastId: "",
       loading: true,
       course: "",
-        lvl: "",
-        missed: "",
+      lvl: "",
+      missed: "",
     };
 
     this.getStudents = this.getStudents.bind(this);
@@ -61,55 +60,64 @@ class List extends React.Component {
       delete filterName.course;
       delete filterName.lvl;
       delete filterName.missed;
-      this.setState({ course: "", lvl: "", missed: "" })
+      this.setState({ course: "", lvl: "", missed: "" });
     }
     if (name === "filterName") {
       this.setState({ searchStudent: "" });
     }
   };
   render() {
+    let filteredStidents;
+    if (this.state.searchStudent === "") {
+      filteredStidents =
+        this.state.students &&
+        this.state.students.filter((item) => {
+          for (var key in this.state.filterName) {
+            if (
+              key === "missed" &&
+              this.state.filterName[key] === 0 &&
+              item[key] !== this.state.filterName[key]
+            ) {
+              return false;
+            }
+            if (key === "missed" && item[key] < this.state.filterName[key]) {
+              return false;
+            }
+            if (
+              key !== "missed" &&
+              (item[key] === undefined ||
+                item[key] !== this.state.filterName[key])
+            ) {
+              return false;
+            }
+          }
+          return true;
+        });
+    } else {
+      filteredStidents =
+        this.state.students &&
+        this.state.students.filter((student) => {
+          return student.name
+            .toLowerCase()
+            .includes(this.state.searchStudent.toLowerCase());
+        });
+    }
 
-    let filteredStidents
-        if (this.state.searchStudent === "") {
-            filteredStidents = this.state.students && this.state.students.filter(item => {
-                for (var key in this.state.filterName) {
-                    if (key === "missed" && this.state.filterName[key] === 0 && item[key] !== this.state.filterName[key]) {
-                        return false
-                    }
-                    if (key === "missed" && item[key] < this.state.filterName[key]) {
-                        return false
-                    }
-                    if (key !== "missed" && (item[key] === undefined || item[key] !== this.state.filterName[key])) {
-                        return false
-                    }
-                }
-                return true
-            });
-        }
-        else {
-            filteredStidents = this.state.students && this.state.students.filter(student => {
-                return student.name.toLowerCase().includes(this.state.searchStudent.toLowerCase())
-            })
-        }
-    
     return (
       <div className="App">
-        <Navbar>
-          <Link
-            to={{
-              pathname: "/Registration",
-              state: { lastId: this.state.lastId },
-            }}
-            style={{ "text-decoration": "none" }}
-          >
-            <Button type="link" size="small">
-              Регистрация
-            </Button>
-          </Link>
-
-       
-          <SearchFilter search={this.search} searchStudent={this.state.searchStudent} updateData={this.updateData} />
-        </Navbar>
+        <PageHeader
+        className="site-page-header-responsive"
+          ghost={false}
+          onBack={() => window.history.back()}
+          title="Title"
+          extra={[
+             <SearchFilter
+             key="2"
+             search={this.search}
+             searchStudent={this.state.searchStudent}
+             updateData={this.updateData}></SearchFilter>
+          ]}
+        ></PageHeader>
 
         <PropertyFilter
           course={this.state.course}
@@ -118,6 +126,7 @@ class List extends React.Component {
           onInputChange={this.onInputChange}
           updateData={this.updateData}
         />
+
         <Skeleton
           active
           loading={this.state.loading}
@@ -127,17 +136,14 @@ class List extends React.Component {
           <Tabs defaultActiveKey="1">
             <TabPane tab="Карточки" key="1">
               {" "}
-              <Students
-                students={filteredStidents}
-              />
+              <Students students={filteredStidents} />
             </TabPane>
             <TabPane tab="Компактный вид" key="2">
               {" "}
-              <StudentList
-                students={filteredStidents}
-              />
+              <StudentList students={filteredStidents} />
             </TabPane>
           </Tabs>
+          <br /> <br />
         </Skeleton>
       </div>
     );

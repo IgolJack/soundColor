@@ -1,6 +1,6 @@
 import React from "react";
 import { CrownTwoTone } from "@ant-design/icons";
-import { Collapse, Button, Input, Checkbox } from "antd";
+import { Collapse, Button, Input, Checkbox, Divider } from "antd";
 import "./newListOfStudent.css";
 const { Panel } = Collapse;
 const { TextArea } = Input;
@@ -49,10 +49,13 @@ class NewListOfStudents extends React.Component {
             bordered={false}
             className="site-collapse-custom-collapse"
           >
-            <Panel header={name} key="1" >
+            <Panel header={name} key={member.id} >
               {member.senior == true && (
-               <><Checkbox onChange={onChange}>Сдал</Checkbox><br/></>
+               <><Checkbox onChange={onChange}>Сдал</Checkbox><br/>
+               <Divider>ПУПУ</Divider>
+               </>
               )}
+              
               <Checkbox onChange={onChange}>Опоздал</Checkbox><br/>
               <Checkbox onChange={onChange}>Опозорил</Checkbox><br/>
               <Checkbox onChange={onChange}>Не пришел</Checkbox><br/>

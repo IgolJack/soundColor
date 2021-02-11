@@ -13,6 +13,7 @@ import SignUpPage from "./components/registration/signUpPage";
 import CalendarNewEvent from "./components/calendar/calendarEvents/calendarNewEvent";
 import BackToHome from "./components/UI/backToHome";
 import newListOfStudents from "./components/calendar/calendarEvents/infoEventBlocks/newListOfStudent"
+import HobaPage from "./components/abstract/hoba"
 import './SoundColor.css'
 
 const SoundColor = () => {
@@ -42,6 +43,7 @@ const SoundColor = () => {
             />
             <PrivateRoute exact path="/Registration" component={SignUpPage} />
             <PrivateRoute exact path="/NewList" component={newListOfStudents} />
+            <PrivateRoute exact path="/Hoba" component={HobaPage} />
             <Route component={NotFound} />
           </Switch>
           <BackToHome />

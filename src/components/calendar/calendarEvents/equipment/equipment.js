@@ -15,36 +15,41 @@ const Equipment = (props) => {
   return (
     <div style={{ paddingBottom: "10px" }}>
       <Collapse expandIconPosition="right" style={{ borderRadius: "10px" }}>
-        <Panel header="Оборудование" key="3" style={{ borderRadius: "10px" }}>
-          {edit ? (
-            <AddEquipment updateEdit={onChange} equipAdded={props.equipment} id={props.id}/>
-          ) : (
-            <div>
-              {props.equipGroup &&
-                props.equipGroup.map((group) => {
-                  return (
-                    <div>
-                      <Divider orientation="left">{group}</Divider>
-                      {props.equipment &&
-                        props.equipment.map((equip) => {
-                          if (equip["group"] === group) {
-                            return (
-                              <p>
-                                {equip["type"]}: {equip["quantity"]} - {equip["name"]}
-                              </p>
-                            );
-                          }
-                        })}
-                    </div>
-                  );
-                })}
+        <Panel header="Оборудование" style={{ borderRadius: "10px" }}>
+          <div>
+            {props.equipGroup &&
+              props.equipGroup.map((group) => {
+                return (
+                  <div key={group}>
+                    <Divider orientation="left">{group}</Divider>
+                    {props.equipment &&
+                      props.equipment.map((equip) => {
+                        if (equip["group"] === group) {
+                          return (
+                            <p key={equip.type + equip.name}>
+                              {equip["type"]}: {equip["quantity"]} -{" "}
+                              {equip["name"]}
+                            </p>
+                          );
+                        }
+                      })}
+                  </div>
+                );
+              })}
+            {edit ? (
+              <AddEquipment
+                updateEdit={onChange}
+                equipAdded={props.equipment}
+                id={props.id}
+              />
+            ) : (
               <div>
                 <Button block shape="round" type="primary" onClick={onChange}>
                   Добавить оборудование
                 </Button>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </Panel>
       </Collapse>
     </div>

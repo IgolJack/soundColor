@@ -118,7 +118,7 @@ class ListOfStudents extends React.Component {
       //ЗАМЕНИТЬ
       if (member.lookForChange == this.state.user.uid) {
         allStudents.push(
-          <p key={member.email}>
+          <p key={member.id}>
             <NavLink className="navText" to={`/list/${member.id}`}>
               {member.senior == true && (
                 <CrownTwoTone
@@ -145,7 +145,7 @@ class ListOfStudents extends React.Component {
       //ОЖИДАЕМ ОТВЕТА
       else if (member.uid == this.state.user.uid && member.lookForChange) {
         allStudents.push(
-          <p key={member.email}>
+          <p key={member.id}>
             {member.senior == true && (
               <CrownTwoTone
                 twoToneColor="#ffc069"
@@ -172,69 +172,69 @@ class ListOfStudents extends React.Component {
       //ЗАМЕНИТЬСЯ
      
       else if (this.state.user.uid == member.uid && !member.lookForChange) {
-      
+        
         allStudents.push(
-          <Popover
-            content={
-              <Select
-                allowClear
-                style={{ width: "100%" }}
-                showSearch
-                size="large"
-                onChange={(e) => {
-                  let en = e.split(",");
-                  en = { uid: en[0], email: en[1] };
-                  this.setState({ emailer: en }, () => {
-                    console.log(this.state.emailer);
-                  });
-                }}
-              >
-                {this.state.allStudentsList}
-              </Select>
-            }
-            title="Выберете себе замену. Этому человеку прийдет email и если он согласится все будет хорошо"
-            trigger="click"
-            onVisibleChange={(e) => {
-              if (e == false && this.state.emailer) {
-                this.changeMe();
+          <p key={member.id}>
+            <Popover
+              content={
+                <Select
+                  allowClear
+                  style={{ width: "100%" }}
+                  showSearch
+                  size="large"
+                  onChange={(e) => {
+                    let en = e.split(",");
+                    en = { uid: en[0], email: en[1] };
+                    this.setState({ emailer: en }, () => {
+                      console.log(this.state.emailer);
+                    });
+                  }}
+                >
+                  {this.state.allStudentsList}
+                </Select>
               }
-            }}
-          >
-            <p key={member.email}>
-              <NavLink className="navText" to={`/list/${member.id}`}>
-                {member.senior == true && (
-                  <CrownTwoTone
-                    twoToneColor="#ffc069"
-                    style={{
-                      fontSize: "18.7px",
-                      verticalAlign: "0px",
-                      paddingRight: "3px",
-                    }}
-                  />
-                )}
-                {member.uid == this.state.user.uid && (
-                  <span style={{ textDecoration: "underline" }}>
-                    {member.name}
-                  </span>
-                )}
-              </NavLink>
+              title="Выберете себе замену. Этому человеку прийдет email и если он согласится все будет хорошо"
+              trigger="click"
+              onVisibleChange={(e) => {
+                if (e == false && this.state.emailer) {
+                  this.changeMe();
+                }
+              }}
+            >
+                <NavLink className="navText" to={`/list/${member.id}`}>
+                  {member.senior == true && (
+                    <CrownTwoTone
+                      twoToneColor="#ffc069"
+                      style={{
+                        fontSize: "18.7px",
+                        verticalAlign: "0px",
+                        paddingRight: "3px",
+                      }}
+                    />
+                  )}
+                  {member.uid == this.state.user.uid && (
+                    <span style={{ textDecoration: "underline" }}>
+                      {member.name}
+                    </span>
+                  )}
+                </NavLink>
 
-              <span
-                style={{
-                  float: "right",
-                  cursor: "pointer",
-                  color: "red",
-                  fontSize: "14px",
-                }}
-              >
-                Замениться
-              </span>
-            </p>
-          </Popover>
+                <span
+                  style={{
+                    float: "right",
+                    cursor: "pointer",
+                    color: "red",
+                    fontSize: "14px",
+                  }}
+                >
+                  Замен.
+                </span>
+            </Popover>
+          </p>
         );
       } else {
         allStudents.push(
-          <p key={member.email}>
+          <p key={member.id}>
             {member.senior == true && (
               <CrownTwoTone
                 twoToneColor="#ffc069"

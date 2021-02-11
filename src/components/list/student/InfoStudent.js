@@ -1,6 +1,6 @@
 import React from "react";
 import { db } from "../../firebase/firebase";
-import { Skeleton, Popover, Input, Select } from "antd";
+import { Skeleton, Popover, Input, Select, Timeline} from "antd";
 
 class InfoStudent extends React.Component {
   constructor(props) {
@@ -389,7 +389,7 @@ class InfoStudent extends React.Component {
         style={{
           textAlign: "center",
           backgroundColor: colorPick,
-          display:'block'
+          display: "block",
         }}
       >
         <Skeleton
@@ -398,7 +398,7 @@ class InfoStudent extends React.Component {
           paragraph={{ rows: 25 }}
           title={false}
         >
-          <div style={{ width: '100%'}}>
+          <div style={{ width: "100%" }}>
             <Popover
               content={contentName}
               title="Задайте имя"
@@ -538,6 +538,17 @@ class InfoStudent extends React.Component {
               Замен - {this.state.student.exchange}
             </span>
           </Popover>
+
+          <Timeline mode="right">
+            <Timeline.Item label="2015-09-01">Create a services</Timeline.Item>
+            <Timeline.Item label="2015-09-01 09:12:11">
+              Solve initial network problems
+            </Timeline.Item>
+            <Timeline.Item>Technical testing</Timeline.Item>
+            <Timeline.Item label="2015-09-01 09:12:11">
+              Network problems being solved
+            </Timeline.Item>
+          </Timeline>
         </Skeleton>
       </div>
     );
