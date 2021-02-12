@@ -5,10 +5,15 @@ import { NavLink } from "react-router-dom";
 import moment from "moment";
 import ToPageButton from "../UI/toPageButton";
 import { Tabs, Button } from "antd";
-
+import openSocket from 'socket.io-client';
 import "./calendar.css";
 import CalendarList from "./calendarList/calendarList";
 const TabPane = Tabs.TabPane;
+
+const socket = openSocket('http://localhost:3000');
+
+
+
 
 moment.updateLocale("ru", {
   weekdaysShort: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
@@ -34,17 +39,20 @@ moment.updateLocale("ru", {
 const localizer = momentLocalizer(moment);
 
 const CalendarApp = () => {
+
+  
   const [eventsCal, setEventsCal] = useState([]);
+ 
+  
 
-  useEffect(() => {
-    fetch("/api/getAllEvents")
-      .then((response) => response.json())
-      .then((jsondata) => {
-        setEventsCal(jsondata);
-        console.log(jsondata);
-      });
-  }, []);
+  socket.on('newCalendarData', msg =>  {setEventsCal(msg)})
+  
+  if (eventsCal.length == 0){
+    socket.disconnect()
+    socket.connect()
+  }
 
+  console.log(eventsCal)
   const Event = ({ event }) => {
     let statusColor;
     if (eventsCal) {

@@ -1,8 +1,6 @@
-
 const path = require("path");
 const nodemailer = require("nodemailer");
 const schedule = require("node-schedule");
-
 
 require("dotenv").config({ path: __dirname + "/variables.env" });
 const sound_pass = process.env.SOUNDCOLOR_PASS;
@@ -14,27 +12,59 @@ admin.initializeApp({
 });
 const db = admin.firestore();
 //const firebase = require("firebase");
-
-
+const express = require("express");
 const app = require('express')();
 const http = require('http').Server(app);
 const port = process.env.PORT || 5000;
 const io = require('socket.io')(http);
 
-io.on('connection', (socket) => {
-  console.log('a user connected');
-});
+app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, "build")));
 
-io.on('connection', (client) => {
-  client.on('subscribeToTimer', (interval) => {
-    console.log('client is subscribing to timer with interval ', interval);
-    setInterval(() => {
-      client.emit('timer', new Date());
-    }, interval);
+
+io.on("connection", (socket) => {
+  console.log("a user connected");
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
   });
-});
+  
+  let events = [];
+  db.collection("eventsCalendar").onSnapshot((querySnapshot) => {
+    
+    querySnapshot.forEach((doc) => {
+      events.push({
+        todoId: doc.id,
+        title: doc.data().title,
+        typeOfEvent: doc.data().typeOfEvent,
+        members: doc.data().members,
+        meetPlace: doc.data().meetPlace,
+        meetDateAndTime: doc.data().meetDateAndTime && doc.data().meetDateAndTime.toDate(),
+        id: doc.data().id,
+        eventPlace: doc.data().eventPlace,
+        eventDateAndTime: doc.data().eventDateAndTime && doc.data().eventDateAndTime.toDate(),
+        equipment: doc.data().equipment,
+        description: doc.data().description,
+        cloth: doc.data().cloth,
+        cast: doc.data().cast,
+        status: doc.data().status,
+        createdDate: doc.data().createdDate,
+      });
+    });
+    //console.log(events);
+    socket.emit("newCalendarData", events)
+    events = [];
+  })
 
-let listOfPreEvents = []
+})
+
+
+  
+ 
+ 
+
+
+
+
 let lastId 
 let studentsLastId 
 
@@ -74,6 +104,24 @@ const StudentGetLastId = () => {
 
 getLastId()
 StudentGetLastId()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //======================================================================//
 //=============================GET=FIREBASE=============================//
@@ -540,8 +588,6 @@ transporter.sendMail(mailOptions, function(error, info){
 });
 
 });
-
-
 
 
 //получить данные всех студентов [{a,b,c...}] КРОМЕ админа И КРОМЕ ПЕРЕДЕННОГО ЗНАЧЕНИЯ ИЛИ МАССИВА
